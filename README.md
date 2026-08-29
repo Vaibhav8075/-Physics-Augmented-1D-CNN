@@ -1,4 +1,4 @@
-﻿# ⚙️ Physics-Augmented & Calibrated 1D-CNN for Industrial Bearing Diagnostics
+﻿# Physics-Augmented & Calibrated 1D-CNN for Industrial Bearing Diagnostics
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red.svg)](https://pytorch.org/)
@@ -10,7 +10,7 @@ An end-to-end **Physics-Informed Deep Learning & Edge AI** framework for robust 
 
 ---
 
-## 📌 Table of Contents
+## Table of Contents
 - [Executive Overview](#-executive-overview)
 - [The Lab-to-Factory Failure Gap](#-the-lab-to-factory-failure-gap)
 - [Architecture & Patent Innovations](#-architecture--patent-innovations)
@@ -22,14 +22,14 @@ An end-to-end **Physics-Informed Deep Learning & Edge AI** framework for robust 
 
 ---
 
-## 🎯 Executive Overview
+## Executive Overview
 Standard deep learning architectures report >99% classification accuracy on curated laboratory vibration datasets, but fail catastrophically when deployed in real factories due to **1/f pink background noise**, **sensor thermal baseline drift**, **transient electromagnetic shock spikes**, and **motor speed/load shifts (0 to 3 HP)**.
 
 This project implements a **Physics-Augmented Calibrated 1D-CNN (PAC-1DCNN)** that enforces kinematic physical inductive biases directly into the convolutional pipeline, achieving **87.58% cross-domain accuracy** and **0% false alarms** on unseen 3 HP industrial loads with 8.0 dB SNR plant noise, with an ultra-lightweight **120.4 KB INT8 ONNX edge footprint**.
 
 ---
 
-## 🔬 Architecture & Patent Innovations
+## Architecture & Patent Innovations
 
 ```
                                   INPUT VIBRATION STREAM (2 Channels: DE + FE, 1024 Points)
@@ -61,7 +61,7 @@ This project implements a **Physics-Augmented Calibrated 1D-CNN (PAC-1DCNN)** th
 
 ---
 
-## 📊 Key Results & Benchmarks
+## Key Results & Benchmarks
 
 ### 1. Cross-Load Domain Shift Benchmark (Unseen 3 HP Load + 8 dB Plant Noise)
 | Model Architecture | Test Accuracy | False Alarm Rate (FAR) | Calibration Error (ECE) | Latency (CPU) |
@@ -80,7 +80,7 @@ This project implements a **Physics-Augmented Calibrated 1D-CNN (PAC-1DCNN)** th
 
 ---
 
-## ⚡ Edge Microcontroller Deployment (Raspberry Pi 5)
+## Edge Microcontroller Deployment (Raspberry Pi 5)
 
 | Runtime Engine | Precision | Model Size | Mean Latency | Throughput | Test Accuracy |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -94,7 +94,7 @@ This project implements a **Physics-Augmented Calibrated 1D-CNN (PAC-1DCNN)** th
 
 ---
 
-## 🕹️ Interactive Live Diagnostic Dashboard
+## Interactive Live Diagnostic Dashboard
 Run the real-time Streamlit diagnostic visualizer locally or host it directly on your Raspberry Pi:
 
 ```bash
@@ -107,7 +107,7 @@ streamlit run app.py
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 ```
 industrial_fault_ai/
 ├── models.py                     # Baseline & Physics-Augmented 1D-CNN Architectures
@@ -126,7 +126,7 @@ industrial_fault_ai/
 
 ---
 
-## 🚀 Quick Start Guide
+## Quick Start Guide
 
 ### 1. Clone & Install Dependencies
 ```bash
@@ -154,7 +154,7 @@ streamlit run app.py
 
 ---
 
-## 📜 Author & Citation
+## Author & Citation
 **Vaibhav Goel**  
 *Department of Cyber-Physical Systems & Machine Learning Research*  
 Email: [vibhugoel407@gmail.com](mailto:vibhugoel407@gmail.com) | GitHub: [@Vaibhav8075](https://github.com/Vaibhav8075)
