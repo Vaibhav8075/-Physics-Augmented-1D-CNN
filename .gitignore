@@ -1,0 +1,19 @@
+﻿# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Temporary & Lock files
+~$*
+*.tmp
+*.lock
+
+# Raw & Large Processed Datasets (Exceeds GitHub Limits)
+cwru_fault_data/
+processed_data/*.npy
+
+# Environment
+.env
+venv/
+.venv/
+env/
