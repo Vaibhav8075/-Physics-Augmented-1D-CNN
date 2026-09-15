@@ -157,4 +157,4 @@ streamlit run app.py
 ## Author & Citation
 **Vaibhav Goel**  
 *Department of Cyber-Physical Systems & Machine Learning Research*  
-Email: [vibhugoel407@gmail.com](mailto:vibhugoel407@gmail.com) | GitHub: [@Vaibhav8075](https://github.com/Vaibhav8075)
+Email: [vaibhav.goel0531@gmail.com](mailto:vaibhav.goel0531@gmail.com) | GitHub: [@Vaibhav8075](https://github.com/Vaibhav8075)
