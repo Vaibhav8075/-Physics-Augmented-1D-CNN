@@ -35,6 +35,10 @@ def simulate_rul_degradation():
     print("=" * 80)
     print(" INDUSTRIAL PROGNOSTICS & REMAINING USEFUL LIFE (RUL) SIMULATION")
     print("=" * 80)
+    print(" NOTE: illustrative only. CWRU has no run-to-failure data, so the degradation")
+    print(" trajectory below is synthetic (sigmoid blend of healthy and faulty windows,")
+    print(" onset fixed at t=320 h). It demonstrates the HI pipeline, not RUL accuracy.")
+    rng = np.random.default_rng(0)
 
     # Load model
     model = PhysicsAugmentedCalibratedCNN()
@@ -58,8 +62,8 @@ def simulate_rul_degradation():
         # Transition from healthy to progressive wear
         alpha = 1.0 / (1.0 + np.exp(-(t - 320) / 40.0)) # Sigmoidal degradation onset around t=320h
         
-        h_idx = np.random.choice(healthy_indices)
-        f_idx = np.random.choice(fault_indices)
+        h_idx = rng.choice(healthy_indices)
+        f_idx = rng.choice(fault_indices)
         
         # Linear synthetic blend of vibration dynamics representing progressive spalling
         blended_signal = (1.0 - alpha) * X_test[h_idx] + alpha * X_test[f_idx]
@@ -79,8 +83,14 @@ def simulate_rul_degradation():
     hi_smoothed[-2:] = health_indices[-2:]
 
     # Estimate RUL at t=350h (Warning Threshold = HI < 70%, Critical Failure = HI < 20%)
-    warning_t = time_hours[np.where(hi_smoothed < 70.0)[0][0]]
-    critical_t = time_hours[np.where(hi_smoothed < 20.0)[0][0]]
+    below_warning = np.where(hi_smoothed < 70.0)[0]
+    below_critical = np.where(hi_smoothed < 20.0)[0]
+    if len(below_warning) == 0 or len(below_critical) == 0:
+        print(f"\n[PROGNOSTICS] HI never crossed the thresholds (min HI = {hi_smoothed.min():.1f}%). "
+              "No RUL estimate; check the model or thresholds.")
+        return
+    warning_t = time_hours[below_warning[0]]
+    critical_t = time_hours[below_critical[0]]
 
     print(f"\n[PROGNOSTICS ANALYSIS]")
     print(f"  • Normal Baseline Lifespan: 0 to {warning_t:.1f} Operating Hours")
@@ -136,6 +146,10 @@ def simulate_rul_degradation():
     with open(report_path, "w", encoding="utf-8") as f:
         f.write("# Industrial Prognostics & Health Index Trajectory Report\n\n")
         f.write("## 1. Executive Summary\n\n")
+        f.write("> **Simulation only.** The degradation trajectory is synthetic (sigmoid blend of healthy and "
+                "inner-race test windows with onset fixed at t = 320 h); CWRU contains no run-to-failure data. "
+                "The times below show the Health Index pipeline responding to that injected trajectory and are "
+                "not a validated RUL prediction.\n\n")
         f.write(f"The Physics-Augmented 1D-CNN was extended with a **Continuous Health Degradation Index ($HI(t) \\in [0, 100\\%]$)** and Remaining Useful Life (RUL) estimation engine. The system successfully detected incipient bearing surface spalling at **t = {warning_t:.1f} hours**, providing a **{critical_t - warning_t:.1f}-hour maintenance advisory window** before catastrophic mechanical failure at **t = {critical_t:.1f} hours**.\n\n")
         f.write("## 2. Mathematical Health Formulation\n\n")
         f.write("$$HI(t) = \\left[ 0.70 \\cdot P(\\text{Normal}|\\mathbf{x}(t)) + 0.30 \\cdot \\left(1 - \\frac{E_{\\text{residual}}}{E_{\\text{total}}}\\right) \\right] \\times 100\\%$$\n\n")

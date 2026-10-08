@@ -1,0 +1,304 @@
+{
+  "protocol": {
+    "train_loads": [
+      0,
+      1
+    ],
+    "val_loads": [
+      2
+    ],
+    "test_loads": [
+      3
+    ],
+    "impairments": {
+      "train": {
+        "snr_db": 15.0,
+        "drift_prob": 0.4,
+        "impulse_prob": 0.1
+      },
+      "val": {
+        "snr_db": 10.0,
+        "drift_prob": 0.6,
+        "impulse_prob": 0.2
+      },
+      "test": {
+        "snr_db": 8.0,
+        "drift_prob": 0.85,
+        "impulse_prob": 0.35
+      }
+    },
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "epochs": 15,
+    "n_train": 5673,
+    "n_val": 3307,
+    "n_test": 3317
+  },
+  "models": {
+    "baseline": {
+      "val": {
+        "accuracy": {
+          "mean": 100.0,
+          "std": 0.0
+        },
+        "macro_f1": {
+          "mean": 100.0,
+          "std": 0.0
+        },
+        "false_alarm_rate": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "missed_fault_rate": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "ece": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "nll": {
+          "mean": 6.438106403550137e-09,
+          "std": 5.422834681025586e-10
+        }
+      },
+      "test": {
+        "accuracy": {
+          "mean": 85.80042206813386,
+          "std": 0.0
+        },
+        "macro_f1": {
+          "mean": 66.73684210526316,
+          "std": 0.0
+        },
+        "false_alarm_rate": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "missed_fault_rate": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "ece": {
+          "mean": 14.187083955913703,
+          "std": 0.027810936438898207
+        },
+        "nll": {
+          "mean": 2.5779415369033813,
+          "std": 1.0621059776100714
+        }
+      },
+      "test_uncalibrated": {
+        "accuracy": {
+          "mean": 85.80042206813386,
+          "std": 0.0
+        },
+        "macro_f1": {
+          "mean": 66.73684210526316,
+          "std": 0.0
+        },
+        "false_alarm_rate": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "missed_fault_rate": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "ece": {
+          "mean": 12.024860702295564,
+          "std": 0.5511225528105922
+        },
+        "nll": {
+          "mean": 0.432451456785202,
+          "std": 0.11239230080056346
+        }
+      },
+      "temperature": {
+        "mean": 0.16424764394760133,
+        "std": 0.031416052773383364
+      },
+      "per_seed_test": [
+        {
+          "accuracy": 85.80042206813386,
+          "macro_f1": 66.73684210526316,
+          "false_alarm_rate": 0.0,
+          "missed_fault_rate": 0.0,
+          "ece": 14.199577931866148,
+          "nll": 3.096652030944824
+        },
+        {
+          "accuracy": 85.80042206813386,
+          "macro_f1": 66.73684210526316,
+          "false_alarm_rate": 0.0,
+          "missed_fault_rate": 0.0,
+          "ece": 14.137334549754076,
+          "nll": 1.0651289224624634
+        },
+        {
+          "accuracy": 85.80042206813386,
+          "macro_f1": 66.73684210526316,
+          "false_alarm_rate": 0.0,
+          "missed_fault_rate": 0.0,
+          "ece": 14.199351434216002,
+          "nll": 2.032060146331787
+        },
+        {
+          "accuracy": 85.80042206813386,
+          "macro_f1": 66.73684210526316,
+          "false_alarm_rate": 0.0,
+          "missed_fault_rate": 0.0,
+          "ece": 14.199577931866148,
+          "nll": 2.8627257347106934
+        },
+        {
+          "accuracy": 85.80042206813386,
+          "macro_f1": 66.73684210526316,
+          "false_alarm_rate": 0.0,
+          "missed_fault_rate": 0.0,
+          "ece": 14.199577931866148,
+          "nll": 3.8331408500671387
+        }
+      ],
+      "cpu_latency_batch1": {
+        "mean_ms": 0.9668211991956923,
+        "p95_ms": 1.1415049899369478
+      }
+    },
+    "physics": {
+      "val": {
+        "accuracy": {
+          "mean": 100.0,
+          "std": 0.0
+        },
+        "macro_f1": {
+          "mean": 100.0,
+          "std": 0.0
+        },
+        "false_alarm_rate": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "missed_fault_rate": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "ece": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "nll": {
+          "mean": 6.149729703253115e-09,
+          "std": 9.39882208865959e-10
+        }
+      },
+      "test": {
+        "accuracy": {
+          "mean": 85.82454024721133,
+          "std": 0.05392988791076231
+        },
+        "macro_f1": {
+          "mean": 66.83047520278531,
+          "std": 0.20936997100335517
+        },
+        "false_alarm_rate": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "missed_fault_rate": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "ece": {
+          "mean": 14.084934657116705,
+          "std": 0.25603700016015446
+        },
+        "nll": {
+          "mean": 2.010916590690613,
+          "std": 0.753431587422337
+        }
+      },
+      "test_uncalibrated": {
+        "accuracy": {
+          "mean": 85.82454024721133,
+          "std": 0.05392988791076231
+        },
+        "macro_f1": {
+          "mean": 66.83047520278531,
+          "std": 0.20936997100335517
+        },
+        "false_alarm_rate": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "missed_fault_rate": {
+          "mean": 0.0,
+          "std": 0.0
+        },
+        "ece": {
+          "mean": 11.949251151997746,
+          "std": 0.6992004324609484
+        },
+        "nll": {
+          "mean": 0.3857472151517868,
+          "std": 0.1066611911566464
+        }
+      },
+      "temperature": {
+        "mean": 0.1819667249917984,
+        "std": 0.013173865722185533
+      },
+      "per_seed_test": [
+        {
+          "accuracy": 85.80042206813386,
+          "macro_f1": 66.73684210526316,
+          "false_alarm_rate": 0.0,
+          "missed_fault_rate": 0.0,
+          "ece": 14.199577931866148,
+          "nll": 2.6822073459625244
+        },
+        {
+          "accuracy": 85.80042206813386,
+          "macro_f1": 66.73684210526316,
+          "false_alarm_rate": 0.0,
+          "missed_fault_rate": 0.0,
+          "ece": 14.199172620281676,
+          "nll": 1.9135023355484009
+        },
+        {
+          "accuracy": 85.92101296352126,
+          "macro_f1": 67.20500759287383,
+          "false_alarm_rate": 0.0,
+          "missed_fault_rate": 0.0,
+          "ece": 13.626921841779824,
+          "nll": 0.775766134262085
+        },
+        {
+          "accuracy": 85.80042206813386,
+          "macro_f1": 66.73684210526316,
+          "false_alarm_rate": 0.0,
+          "missed_fault_rate": 0.0,
+          "ece": 14.19942892025421,
+          "nll": 2.159512996673584
+        },
+        {
+          "accuracy": 85.80042206813386,
+          "macro_f1": 66.73684210526316,
+          "false_alarm_rate": 0.0,
+          "missed_fault_rate": 0.0,
+          "ece": 14.19957197140167,
+          "nll": 2.5235941410064697
+        }
+      ],
+      "cpu_latency_batch1": {
+        "mean_ms": 2.908480200363556,
+        "p95_ms": 3.108964996499708
+      }
+    }
+  }
+}

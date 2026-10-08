@@ -2,7 +2,6 @@ import os
 import urllib.request
 
 SAVE_DIR = "cwru_fault_data"
-os.makedirs(SAVE_DIR, exist_ok=True)
 
 # CWRU 12k Drive End Bearing Fault Data + Normal Data
 FILES = {
@@ -33,19 +32,31 @@ FILES = {
 
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
 
-print(f"Total files to download: {len(FILES)}")
-for filename, url in FILES.items():
-    filepath = os.path.join(SAVE_DIR, filename)
-    if os.path.exists(filepath) and os.path.getsize(filepath) > 1000:
-        print(f"[SKIP] {filename} already exists ({os.path.getsize(filepath)} bytes)")
-        continue
-    print(f"[DOWNLOADING] {filename} from {url}...")
-    try:
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req) as response, open(filepath, 'wb') as out_file:
-            out_file.write(response.read())
-        print(f"[OK] {filename} downloaded successfully ({os.path.getsize(filepath)} bytes)")
-    except Exception as e:
-        print(f"[ERROR] Failed to download {filename}: {e}")
 
-print("\nDownload process completed!")
+def recording_id(filename):
+    """CWRU recording number for a local file, e.g. 'Normal_2.mat' -> '099'."""
+    return os.path.splitext(os.path.basename(FILES[filename]))[0].zfill(3)
+
+
+def download_all():
+    os.makedirs(SAVE_DIR, exist_ok=True)
+    print(f"Total files to download: {len(FILES)}")
+    for filename, url in FILES.items():
+        filepath = os.path.join(SAVE_DIR, filename)
+        if os.path.exists(filepath) and os.path.getsize(filepath) > 1000:
+            print(f"[SKIP] {filename} already exists ({os.path.getsize(filepath)} bytes)")
+            continue
+        print(f"[DOWNLOADING] {filename} from {url}...")
+        try:
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req) as response, open(filepath, 'wb') as out_file:
+                out_file.write(response.read())
+            print(f"[OK] {filename} downloaded successfully ({os.path.getsize(filepath)} bytes)")
+        except Exception as e:
+            print(f"[ERROR] Failed to download {filename}: {e}")
+
+    print("\nDownload process completed!")
+
+
+if __name__ == "__main__":
+    download_all()
