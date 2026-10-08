@@ -87,3 +87,42 @@ def test_no_window_shared_between_splits():
     assert not (train & val)
     assert not (train & test)
     assert not (val & test)
+
+
+def test_batched_impairments_match_numpy_distribution():
+    """GPU training noise (impair_batch) must match the numpy val/test noise in distribution."""
+    from common import impair_batch
+    rng = np.random.default_rng(0)
+    X = rng.standard_normal((2000, 2, config.WINDOW_SIZE)).astype(np.float32)
+    params = config.IMPAIRMENTS["test"]
+
+    ref = np.stack([add_real_world_impairments(x, rng=rng, **params) for x in X]) - X
+    g = torch.Generator().manual_seed(0)
+    out = impair_batch(torch.from_numpy(X), generator=g, **params).numpy() - X
+
+    for name, stat in [("power", lambda d: np.mean(d ** 2)),
+                       ("abs-max", lambda d: np.mean(np.abs(d).max(axis=-1))),
+                       ("low-freq", lambda d: np.mean(d.mean(axis=-1) ** 2))]:
+        assert stat(out) == pytest.approx(stat(ref), rel=0.1), name
+
+
+def test_batched_impairment_snr_without_drift_or_spikes():
+    from common import impair_batch
+    x = torch.randn(64, 2, config.WINDOW_SIZE)
+    noisy = impair_batch(x, snr_db=0.0, drift_prob=0.0, impulse_prob=0.0)
+    snr = 10 * torch.log10(x.pow(2).mean((1, 2)) / (noisy - x).pow(2).mean((1, 2)))
+    assert torch.allclose(snr, torch.zeros_like(snr), atol=0.05)
+
+
+@pytest.mark.skipif(not os.path.exists(os.path.join(config.PROCESSED_DIR, "load0.npz")),
+                    reason="run preprocess_data.py first")
+def test_benchmark_calibration_split_does_not_overlap_training():
+    """Calibration windows come from a later time span than training windows, with no shared samples."""
+    data = dict(np.load(os.path.join(config.PROCESSED_DIR, "load1.npz")))
+    gap_windows = config.WINDOW_SIZE // config.STRIDE  # windows this far apart share no samples
+    cut = 1.0 - config.CALIB_FRACTION
+    for rec in np.unique(data["rec"]):
+        pos = data["pos"][data["rec"] == rec]
+        idx = np.round(pos * len(pos)).astype(int)
+        train_idx, calib_idx = idx[pos < cut - 0.01], idx[pos >= cut]
+        assert calib_idx.min() - train_idx.max() >= gap_windows, rec

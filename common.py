@@ -7,7 +7,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.utils.data import Dataset, DataLoader, TensorDataset
+from torch.utils.data import DataLoader, TensorDataset
 from sklearn.metrics import accuracy_score, f1_score
 
 import config
@@ -65,21 +65,43 @@ def impair_array(X_clean, split, seed):
     return np.stack([add_real_world_impairments(x, rng=rng, **params) for x in X_clean]).astype(np.float32)
 
 
-class OnlineImpairedDataset(Dataset):
-    """Draws fresh impairments for every sample on every epoch (training only)."""
+def impair_batch(x, snr_db, drift_prob, impulse_prob, generator=None):
+    """
+    Batched torch version of add_real_world_impairments (same distribution),
+    applied on the GPU to every training batch so impairments are fresh each epoch.
+    x: (B, C, L) tensor.
+    """
+    B, C, L = x.shape
+    dev, g = x.device, generator
+    rand = lambda *shape: torch.rand(*shape, device=dev, generator=g)
 
-    def __init__(self, X_clean, y, split="train", seed=0):
-        self.X = X_clean
-        self.y = y
-        self.params = config.IMPAIRMENTS[split]
-        self.rng = np.random.default_rng(seed)
+    # 1. Colored noise: np.convolve(..., mode="same") == conv1d with flipped kernel, padding 7
+    kernel = torch.exp(-torch.linspace(0, 3, 15, device=dev)).flip(0).view(1, 1, -1)
+    white = torch.randn(B * C, 1, L, device=dev, generator=g)
+    colored = F.conv1d(white, kernel, padding=7).view(B, C, L)
+    signal_power = x.pow(2).mean(dim=(1, 2), keepdim=True) + 1e-8
+    noise_power = colored.pow(2).mean(dim=(1, 2), keepdim=True) + 1e-8
+    target_power = signal_power / (10 ** (snr_db / 10.0))
+    out = x + colored * torch.sqrt(target_power / noise_power)
 
-    def __len__(self):
-        return len(self.X)
+    # 2. Baseline drift (same on all channels)
+    t = torch.linspace(0, 1, L, device=dev).view(1, 1, L)
+    cycles = 0.5 + 1.5 * rand(B, 1, 1)
+    amp = 0.3 + 0.5 * rand(B, 1, 1)
+    ramp_end = -0.5 + rand(B, 1, 1)
+    drift = torch.sin(2 * np.pi * cycles * t) * amp + ramp_end * t
+    out = out + drift * (rand(B, 1, 1) < drift_prob)
 
-    def __getitem__(self, i):
-        x = add_real_world_impairments(self.X[i], rng=self.rng, **self.params)
-        return torch.from_numpy(x), torch.tensor(self.y[i], dtype=torch.long)
+    # 3. 2-5 spikes of +/-U(2, 4), 3 samples wide, on all channels
+    n_spikes = torch.randint(2, 6, (B, 1), device=dev, generator=g)
+    active = (torch.arange(5, device=dev).view(1, 5) < n_spikes) & (rand(B, 1) < impulse_prob)
+    locs = torch.randint(0, L, (B, 5), device=dev, generator=g)
+    signs = torch.randint(0, 2, (B, 5), device=dev, generator=g) * 2 - 1
+    vals = signs * (2.0 + 2.0 * rand(B, 5)) * active
+    spikes = torch.zeros(B, L + 2, device=dev)
+    for offset in range(3):
+        spikes.scatter_add_(1, locs + offset, vals)
+    return out + spikes[:, :L].unsqueeze(1)
 
 
 def load_splits():
@@ -97,7 +119,8 @@ def load_splits():
 def make_loaders(X_train, y_train, X_val, y_val, seed):
     g = torch.Generator()
     g.manual_seed(seed)
-    train_loader = DataLoader(OnlineImpairedDataset(X_train, y_train, seed=seed),
+    # Clean windows; train_model adds fresh impairments to every batch
+    train_loader = DataLoader(TensorDataset(torch.from_numpy(X_train), torch.from_numpy(y_train)),
                               batch_size=config.BATCH_SIZE, shuffle=True, generator=g)
     val_loader = DataLoader(TensorDataset(torch.from_numpy(X_val), torch.from_numpy(y_val)),
                             batch_size=256, shuffle=False)
@@ -124,15 +147,23 @@ def predict_logits(model, X, calibrated=True, batch_size=256):
     return torch.cat(out)
 
 
-def train_model(model, train_loader, val_loader, y_train, epochs=config.EPOCHS, lr=config.LR, verbose=True):
-    """Trains with class-weighted CE; keeps the epoch with the best validation macro-F1."""
+def train_model(model, train_loader, val_loader, y_train, epochs=config.EPOCHS, lr=config.LR, verbose=True,
+                impairments=config.IMPAIRMENTS["train"], seed=0):
+    """
+    Trains with class-weighted CE on clean windows plus fresh per-batch impairments.
+    With a val_loader, keeps the epoch with the best validation macro-F1;
+    with val_loader=None, returns the final epoch.
+    """
     model = model.to(DEVICE)
     params = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.AdamW(params, lr=lr, weight_decay=config.WEIGHT_DECAY)
     criterion = nn.CrossEntropyLoss(weight=class_weights(y_train).to(DEVICE))
+    noise_gen = torch.Generator(device=DEVICE)
+    noise_gen.manual_seed(seed)
 
-    X_val = val_loader.dataset.tensors[0].numpy()
-    y_val = val_loader.dataset.tensors[1].numpy()
+    if val_loader is not None:
+        X_val = val_loader.dataset.tensors[0].numpy()
+        y_val = val_loader.dataset.tensors[1].numpy()
 
     best_f1, best_weights = -1.0, None
     for epoch in range(epochs):
@@ -140,6 +171,8 @@ def train_model(model, train_loader, val_loader, y_train, epochs=config.EPOCHS, 
         total_loss, total = 0.0, 0
         for X_batch, y_batch in train_loader:
             X_batch, y_batch = X_batch.to(DEVICE), y_batch.to(DEVICE)
+            if impairments is not None:
+                X_batch = impair_batch(X_batch, generator=noise_gen, **impairments)
             optimizer.zero_grad()
             logits, _, _ = model(X_batch, return_calibrated=False)
             loss = criterion(logits, y_batch)
@@ -147,6 +180,11 @@ def train_model(model, train_loader, val_loader, y_train, epochs=config.EPOCHS, 
             optimizer.step()
             total_loss += loss.item() * X_batch.size(0)
             total += X_batch.size(0)
+
+        if val_loader is None:
+            if verbose and ((epoch + 1) % 3 == 0 or epoch == epochs - 1):
+                print(f"Epoch {epoch+1:02d}/{epochs:02d} | Train Loss: {total_loss/total:.4f}")
+            continue
 
         val_preds = predict_logits(model, X_val, calibrated=False).argmax(1).numpy()
         val_f1 = f1_score(y_val, val_preds, average="macro")
@@ -158,7 +196,8 @@ def train_model(model, train_loader, val_loader, y_train, epochs=config.EPOCHS, 
             print(f"Epoch {epoch+1:02d}/{epochs:02d} | Train Loss: {total_loss/total:.4f} | "
                   f"Val Acc: {accuracy_score(y_val, val_preds)*100:.2f}% | Val Macro-F1: {val_f1*100:.2f}%")
 
-    model.load_state_dict(best_weights)
+    if best_weights is not None:
+        model.load_state_dict(best_weights)
     return model
 
 

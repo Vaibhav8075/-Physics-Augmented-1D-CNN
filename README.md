@@ -130,21 +130,25 @@ industrial_fault_ai/
 
 ### 1. Clone & Install Dependencies
 ```bash
-git clone https://github.com/Vaibhav8075/industrial-bearing-fault-ai.git
-cd industrial-bearing-fault-ai
-pip install torch numpy matplotlib scipy onnx onnxruntime streamlit
+git clone https://github.com/Vaibhav8075/-Physics-Augmented-1D-CNN.git
+cd -- -Physics-Augmented-1D-CNN
+pip install -r requirements.txt
 ```
 
 ### 2. Download Data & Preprocess
 ```bash
-python download_data.py
-python preprocess_data.py
+python download_data.py      # 40 CWRU recordings: normal + 0.007"/0.014"/0.021" faults, loads 0-3 HP
+python preprocess_data.py    # fixed split (0.007" only) + per-load arrays for the benchmark
+pytest tests                 # data-split and model sanity checks
 ```
 
 ### 3. Train & Evaluate
 ```bash
-python train_and_evaluate.py
+python train_and_evaluate.py   # fixed split: train 0-1 HP, validate 2 HP, test 3 HP (5 seeds)
+python run_ablation_study.py   # component ablation on the fixed split (5 seeds)
+python run_benchmark.py        # leave-one-load-out benchmark, all fault sizes, noise sweep (~1.5 h on GPU)
 ```
+Results are written to `results/metrics.json`, `results/ablation_metrics.json` and `results/benchmark_metrics.json`, with Markdown reports alongside.
 
 ### 4. Run Edge Quantization Benchmark & Launch UI
 ```bash

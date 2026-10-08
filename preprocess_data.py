@@ -20,6 +20,12 @@ def parse_filename(filename):
     return LABEL_PREFIXES[match.group(1)], int(stem.split("_")[-1])
 
 
+def fault_size_mils(filename):
+    """'IR014_2.mat' -> 14, 'Normal_0.mat' -> 0 (defect diameter in thousandths of an inch)."""
+    match = re.match(r"^(?:IR|B|OR)(\d{3})", filename)
+    return int(match.group(1)) if match else 0
+
+
 def load_recording(filepath):
     """
     Loads the DE/FE channels belonging to this file's own CWRU recording.
@@ -58,6 +64,8 @@ def create_real_world_dataset():
         label, load = parse_filename(os.path.basename(filepath))
         if label is None or load not in split_of_load:
             continue
+        if fault_size_mils(os.path.basename(filepath)) not in (0, *config.LEGACY_FAULT_SIZES):
+            continue
         windows = window_signal(load_recording(filepath))
         X_list, y_list = splits[split_of_load[load]]
         X_list.extend(windows)
@@ -71,7 +79,7 @@ def create_real_world_dataset():
         save(f"X_{split}_clean.npy", X)
         save(f"y_{split}.npy", y)
         if split != "train":
-            # Train impairments are drawn fresh every epoch (common.OnlineImpairedDataset);
+            # Train impairments are drawn fresh every epoch (common.train_model);
             # val/test impairments are fixed so every model is scored on identical inputs.
             seed = config.VAL_NOISE_SEED if split == "val" else config.TEST_NOISE_SEED
             save(f"X_{split}.npy", impair_array(X, split, seed))
@@ -83,5 +91,41 @@ def create_real_world_dataset():
         os.remove(stale)  # old pre-impaired training set is no longer used
 
 
+def create_per_load_dataset():
+    """
+    Clean windows for every recording, grouped by motor load, for the
+    leave-one-load-out benchmark (run_benchmark.py). Alongside each window we
+    store the fault size and the window's relative position in its recording,
+    so a calibration split can be cut by time rather than by random windows
+    (overlapping windows would otherwise leak between the two).
+    """
+    print("Generating per-load dataset (all fault sizes) for the cross-load benchmark...")
+    per_load = {}
+    for filepath in sorted(glob.glob(os.path.join(config.DATA_DIR, "*.mat"))):
+        filename = os.path.basename(filepath)
+        label, load = parse_filename(filename)
+        if label is None:
+            continue
+        windows = window_signal(load_recording(filepath))
+        n = len(windows)
+        entry = per_load.setdefault(load, {"X": [], "y": [], "size": [], "pos": [], "rec": []})
+        entry["X"].extend(windows)
+        entry["y"].extend([label] * n)
+        entry["size"].extend([fault_size_mils(filename)] * n)
+        entry["pos"].extend(np.arange(n) / n)
+        entry["rec"].extend([recording_id(filename)] * n)
+
+    os.makedirs(config.PROCESSED_DIR, exist_ok=True)
+    for load, entry in sorted(per_load.items()):
+        np.savez(os.path.join(config.PROCESSED_DIR, f"load{load}.npz"),
+                 X=np.asarray(entry["X"], dtype=np.float32), y=np.asarray(entry["y"], dtype=np.int64),
+                 size=np.asarray(entry["size"], dtype=np.int64), pos=np.asarray(entry["pos"], dtype=np.float32),
+                 rec=np.asarray(entry["rec"]))
+        y = np.asarray(entry["y"])
+        print(f"  • load {load} HP: {len(y)} windows, class counts {np.bincount(y, minlength=4).tolist()}, "
+              f"fault sizes {sorted(set(entry['size']))}")
+
+
 if __name__ == "__main__":
     create_real_world_dataset()
+    create_per_load_dataset()

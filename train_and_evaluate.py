@@ -55,7 +55,7 @@ def main():
             print("=" * 70)
             set_seed(seed)
             train_loader, val_loader = make_loaders(X_train, y_train, X_val, y_val, seed)
-            model = train_model(cls(), train_loader, val_loader, y_train, epochs=args.epochs)
+            model = train_model(cls(), train_loader, val_loader, y_train, epochs=args.epochs, seed=seed)
             model = calibrate_temperature(model, X_val, y_val)
             temperatures[name].append(model.temperature.item())
 

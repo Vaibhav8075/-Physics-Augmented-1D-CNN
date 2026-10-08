@@ -11,6 +11,7 @@ __pycache__/
 # Raw & Large Processed Datasets (Exceeds GitHub Limits)
 cwru_fault_data/
 processed_data/*.npy
+processed_data/*.npz
 
 # Environment
 .env
