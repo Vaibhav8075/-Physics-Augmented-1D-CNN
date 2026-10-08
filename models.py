@@ -20,12 +20,17 @@ class Baseline1DCNN(nn.Module):
         self.pool = nn.AdaptiveAvgPool1d(1)
         self.fc = nn.Linear(128, num_classes)
 
-    def forward(self, x):
+        # Post-hoc temperature so the baseline gets the same calibration treatment
+        self.register_buffer("temperature", torch.ones(1))
+
+    def forward(self, x, return_calibrated=True):
         x = F.relu(self.bn1(self.conv1(x)))
         x = F.relu(self.bn2(self.conv2(x)))
         x = F.relu(self.bn3(self.conv3(x)))
         x = self.pool(x).squeeze(-1)
         logits = self.fc(x)
+        if return_calibrated:
+            logits = logits / self.temperature.clamp(min=1e-3)
         return logits, None, None
 
 
@@ -86,73 +91,105 @@ class SensorTemporalAttention(nn.Module):
 
 
 class PhysicsAugmentedCalibratedCNN(nn.Module):
-    def __init__(self, in_channels=2, num_classes=4):
+    """
+    Full proposed model. The use_* flags exist only for the ablation study;
+    with all flags on, the module layout matches saved checkpoints.
+    Calibration is post-hoc (common.calibrate_temperature), so it needs no flag:
+    compare return_calibrated=True vs False on the same trained network.
+    """
+    def __init__(self, in_channels=2, num_classes=4,
+                 use_residual_filter=True, use_dual_stream=True, use_attention=True):
         super(PhysicsAugmentedCalibratedCNN, self).__init__()
-        
+        self.use_residual_filter = use_residual_filter
+        self.use_dual_stream = use_dual_stream
+        self.use_attention = use_attention
+
         # Novel Component 1: Physical Harmonic Residual Separator
         self.residual_filter = PhysicalHarmonicResidualFilter(in_channels=in_channels, filter_size=11)
-        
-        # Novel Component 2: Dual-Stream Multi-Scale Conv (Residual + Raw Features)
-        # Stream 1: High-frequency fault impact extractor (on physics residual)
-        self.stream_residual = nn.Sequential(
-            nn.Conv1d(in_channels, 32, kernel_size=5, stride=2, padding=2),
-            nn.BatchNorm1d(32),
-            nn.ReLU(),
-            nn.Conv1d(32, 64, kernel_size=5, stride=2, padding=2),
-            nn.BatchNorm1d(64),
-            nn.ReLU()
-        )
-        # Stream 2: Wide receptive field envelope extractor (on raw signal)
-        self.stream_envelope = nn.Sequential(
-            nn.Conv1d(in_channels, 32, kernel_size=15, stride=2, padding=7),
-            nn.BatchNorm1d(32),
-            nn.ReLU(),
-            nn.Conv1d(32, 64, kernel_size=15, stride=2, padding=7),
-            nn.BatchNorm1d(64),
-            nn.ReLU()
-        )
-        
-        # Feature Fusion & Dimensionality Reduction (64 + 64 = 128 channels)
-        self.fusion = nn.Sequential(
-            nn.Conv1d(128, 128, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm1d(128),
-            nn.ReLU()
-        )
-        
+
+        if use_dual_stream:
+            # Novel Component 2: Dual-Stream Multi-Scale Conv (Residual + Raw Features)
+            # Stream 1: High-frequency fault impact extractor (on physics residual)
+            self.stream_residual = nn.Sequential(
+                nn.Conv1d(in_channels, 32, kernel_size=5, stride=2, padding=2),
+                nn.BatchNorm1d(32),
+                nn.ReLU(),
+                nn.Conv1d(32, 64, kernel_size=5, stride=2, padding=2),
+                nn.BatchNorm1d(64),
+                nn.ReLU()
+            )
+            # Stream 2: Wide receptive field envelope extractor (on raw signal)
+            self.stream_envelope = nn.Sequential(
+                nn.Conv1d(in_channels, 32, kernel_size=15, stride=2, padding=7),
+                nn.BatchNorm1d(32),
+                nn.ReLU(),
+                nn.Conv1d(32, 64, kernel_size=15, stride=2, padding=7),
+                nn.BatchNorm1d(64),
+                nn.ReLU()
+            )
+            # Feature Fusion & Dimensionality Reduction (64 + 64 = 128 channels)
+            self.fusion = nn.Sequential(
+                nn.Conv1d(128, 128, kernel_size=3, stride=2, padding=1),
+                nn.BatchNorm1d(128),
+                nn.ReLU()
+            )
+        else:
+            # Ablation: single-scale stream with the same output shape (128, L/8)
+            self.single_stream = nn.Sequential(
+                nn.Conv1d(in_channels, 32, kernel_size=15, stride=2, padding=7),
+                nn.BatchNorm1d(32),
+                nn.ReLU(),
+                nn.Conv1d(32, 64, kernel_size=7, stride=2, padding=3),
+                nn.BatchNorm1d(64),
+                nn.ReLU(),
+                nn.Conv1d(64, 128, kernel_size=3, stride=2, padding=1),
+                nn.BatchNorm1d(128),
+                nn.ReLU()
+            )
+
         # Novel Component 3: Sensor & Temporal Explainability Attention
-        self.attention = SensorTemporalAttention(in_channels=128)
-        
+        if use_attention:
+            self.attention = SensorTemporalAttention(in_channels=128)
+
         self.pool = nn.AdaptiveAvgPool1d(1)
         self.fc = nn.Linear(128, num_classes)
-        
-        # Novel Component 4: Temperature Calibration Parameter
-        self.temperature = nn.Parameter(torch.tensor([1.2]))
+
+        # Novel Component 4: Temperature, fitted post-hoc on validation NLL (not trained)
+        self.register_buffer("temperature", torch.ones(1))
 
     def forward(self, x, return_calibrated=True):
         # 1. Physical residual extraction
-        residual, baseline = self.residual_filter(x)
-        
-        # 2. Dual-stream processing
-        feat_res = self.stream_residual(residual)
-        feat_env = self.stream_envelope(x)
-        fused = torch.cat([feat_res, feat_env], dim=1) # (B, 128, L/4)
-        fused = self.fusion(fused)                     # (B, 128, L/8)
-        
+        if self.use_residual_filter:
+            residual, _ = self.residual_filter(x)
+        else:
+            residual = x
+
+        # 2. Feature extraction
+        if self.use_dual_stream:
+            feat_res = self.stream_residual(residual)
+            feat_env = self.stream_envelope(x)
+            fused = torch.cat([feat_res, feat_env], dim=1) # (B, 128, L/4)
+            features = self.fusion(fused)                  # (B, 128, L/8)
+        else:
+            features = self.single_stream(residual)
+
         # 3. Sensor & Temporal Attention
-        attended, (c_weights, t_weights) = self.attention(fused)
-        
+        if self.use_attention:
+            attended, (c_weights, t_weights) = self.attention(features)
+        else:
+            attended, c_weights, t_weights = features, None, None
+
         # 4. Pooling & Classification
         pooled = self.pool(attended).squeeze(-1)
         raw_logits = self.fc(pooled)
-        
+
         # 5. Output Calibration
-        temp = torch.clamp(self.temperature, min=0.01)
-        calibrated_logits = raw_logits / temp if return_calibrated else raw_logits
-            
+        logits = raw_logits / self.temperature.clamp(min=1e-3) if return_calibrated else raw_logits
+
         attn_info = {
             "channel_attention": c_weights,
             "temporal_attention": t_weights,
             "residual_norm": torch.norm(residual, dim=-1)
         }
-        
-        return calibrated_logits, attn_info, residual
+
+        return logits, attn_info, residual if self.use_residual_filter else None

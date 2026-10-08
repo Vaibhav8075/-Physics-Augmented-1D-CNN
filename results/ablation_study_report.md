@@ -1,43 +1,18 @@
-# Systematic Ablation Study: Component Impact Verification
+# Ablation Study: Component Impact
 
-## 1. Executive Summary
+Trained on loads [0, 1] HP, calibrated/selected on load [2] HP, tested on unseen load [3] HP with 8 dB plant noise. Each configuration was trained with 5 seeds ([0, 1, 2, 3, 4]); values are mean ± std and p-values are paired t-tests against M0 across seeds.
 
-This ablation experiment isolates each novel architectural component to quantify its exact contribution under harsh industrial cross-load domain shift (trained on 0/1 HP, tested on unseen 3 HP + 8 dB plant noise).
+| Configuration | Accuracy (%) | Macro-F1 (%) | Δ Macro-F1 (p) | ECE (%) | NLL | FAR (%) |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| M0: Full Proposed Architecture | 85.82 ± 0.05 | 66.83 ± 0.21 | --- | 14.09 ± 0.25 | 2.03 ± 0.75 | 0.00 ± 0.00 |
+| M1: w/o Kinematic Residual Filter | 86.08 ± 0.62 | 67.74 ± 2.24 | +0.91 (p=0.37) | 13.61 ± 1.31 | 1.75 ± 0.78 | 0.00 ± 0.00 |
+| M2: w/o Dual-Stream Conv | 85.80 ± 0.00 | 66.74 ± 0.00 | -0.09 (p=0.37) | 14.20 ± 0.00 | 3.11 ± 1.02 | 0.00 ± 0.00 |
+| M3: w/o Sensor-Temporal Attention | 85.80 ± 0.00 | 66.74 ± 0.00 | -0.09 (p=0.37) | 14.19 ± 0.01 | 2.73 ± 0.99 | 0.00 ± 0.00 |
+| M4: w/o Temperature Calibration | 85.82 ± 0.05 | 66.83 ± 0.21 | +0.00 (p=1.00) | 11.95 ± 0.70 | 0.39 ± 0.11 | 0.00 ± 0.00 |
 
-## 2. Quantitative Ablation Matrix
+## Findings (generated from the numbers above)
 
-| Architecture Configuration | Test Accuracy (%) | Accuracy Drop (Delta) | Expected Calibration Error (ECE) | False Alarm Rate (%) |
-| :--- | :--- | :--- | :--- | :--- |
-| **Full Proposed Architecture (M0)** | **87.58%** | Baseline (Full) | 7.95% | 0.00% |
-| **w/o Kinematic Residual Filter (M1)** | **88.85%** | +1.27% | 6.15% | 0.00% |
-| **w/o Dual-Stream Conv (M2)** | **85.80%** | -1.78% | 13.59% | 0.00% |
-| **w/o Sensor-Temporal Attention (M3)** | **92.10%** | +4.52% | 2.71% | 0.00% |
-| **w/o Temperature Calibration (M4)** | **96.35%** | +8.77% | 1.41% | 0.00% |
-
-## 3. Key Research Insights
-
-1. **Kinematic Residual Filter Impact**: Removing the residual filter causes a **-1.27% drop in accuracy**, proving that non-linear thermal baseline drift heavily distorts raw deep neural representations.
-2. **Dual-Stream Conv Impact**: Without concurrent micro-impact and envelope processing, accuracy drops by **1.78%**.
-3. **Attention Impact**: Removing channel and temporal attention results in a **-4.52% degradation** and eliminates operator explainability.
-4. **Temperature Calibration Impact**: While accuracy remains similar, uncalibrated models exhibit an **ECE surge from 7.95% to 1.41%**, leading to overconfident false alarms during transient plant spikes.
-
-## 4. LaTeX Table Code (Ready for IEEE Submission)
-
-```latex
-\begin{table}[htbp]
-\centering
-\caption{Ablation Study of Proposed Architecture Components on Unseen 3 HP Industrial Load}
-\begin{tabular}{lcccc}
-\hline
-\textbf{Model Configuration} & \textbf{Accuracy (\%)} & \textbf{$\Delta$ Acc (\%)} & \textbf{ECE (\%)} & \textbf{FAR (\%)} \\
-\hline
-Full Proposed Architecture (M0) & 87.58 & --- & 7.95 & 0.00 \\
-w/o Kinematic Residual Filter (M1) & 88.85 & +1.27 & 6.15 & 0.00 \\
-w/o Dual-Stream Conv (M2) & 85.80 & -1.78 & 13.59 & 0.00 \\
-w/o Sensor-Temporal Attention (M3) & 92.10 & +4.52 & 2.71 & 0.00 \\
-w/o Temperature Calibration (M4) & 96.35 & +8.77 & 1.41 & 0.00 \\
-\hline
-\end{tabular}
-\label{tab:ablation}
-\end{table}
-```
+- **Removing Kinematic Residual Filter**: no statistically significant change in macro_f1 (+0.91, p=0.37); ECE: no statistically significant change in ece (-0.47, p=0.37).
+- **Removing Dual-Stream Conv**: no statistically significant change in macro_f1 (-0.09, p=0.37); ECE: no statistically significant change in ece (+0.11, p=0.37).
+- **Removing Sensor-Temporal Attention**: no statistically significant change in macro_f1 (-0.09, p=0.37); ECE: no statistically significant change in ece (+0.11, p=0.37).
+- **Removing temperature calibration** (same networks, T=1): accuracy is unchanged by construction; ECE: ece changes by -2.14 (p=0.001) — the model is better WITHOUT this component; NLL: nll changes by -1.64 (p=0.005) — the model is better WITHOUT this component.

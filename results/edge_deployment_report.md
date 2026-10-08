@@ -1,20 +1,23 @@
-# Edge Microcontroller & Embedded Deployment Benchmark
+# Edge Deployment Benchmark
 
-## 1. Executive Summary
+## 1. Summary
 
-The Physics-Augmented Calibrated 1D-CNN was exported and dynamically quantized to INT8 precision. The INT8 ONNX model achieves **17.195 ms latency** (<1 millisecond per sensor window) and consumes only **120.4 KB** on disk, while preserving **86.07% accuracy** on the unseen 3 HP noisy industrial test domain.
+Measured on `Intel64 Family 6 Model 183 Stepping 1, GenuineIntel`. ONNX Runtime uses 1 thread; PyTorch/TorchScript use default threading. Batch size 1, 50 warm-up runs, 1,000 timed runs. Accuracy is on the full impaired 3317-window test set. The fastest ONNX variant here is **ONNX Runtime INT8 Static** at 0.293 ms.
 
 ## 2. Quantitative Performance Matrix
 
-| Runtime Engine | Precision | Model Size (KB) | Mean Latency (ms) | P95 Jitter (ms) | Throughput (Windows/s) | Test Accuracy |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| PyTorch FP32 | FP32 | 401.1 KB | 11.867 ms | 15.728 ms | 84 | 86.16% |
-| TorchScript C++ | FP32 | 441.0 KB | 13.813 ms | 19.145 ms | 72 | 86.16% |
-| ONNX Runtime FP32 | FP32 | 386.8 KB | 1.678 ms | 4.268 ms | 596 | 86.16% |
-| ONNX Runtime INT8 (Quantized) | INT8 | 120.4 KB | 17.195 ms | 29.533 ms | 58 | 86.07% |
+| Runtime Engine | Precision | Model Size (KB) | Mean Latency (ms) | P95 (ms) | Throughput (windows/s) | Test Accuracy | Acc. vs ORT FP32 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| PyTorch FP32 | FP32 | 401.1 | 1.688 | 1.878 | 592 | 85.80% | +0.00 pp |
+| TorchScript | FP32 | 441.5 | 1.431 | 1.564 | 699 | 85.80% | +0.00 pp |
+| ONNX Runtime FP32 | FP32 | 386.8 | 0.419 | 0.493 | 2,388 | 85.80% | +0.00 pp |
+| ONNX Runtime INT8 Dynamic | INT8 | 120.4 | 5.206 | 5.567 | 192 | 85.80% | +0.00 pp |
+| ONNX Runtime INT8 Static | INT8 | 132.5 | 0.293 | 0.393 | 3,413 | 85.80% | +0.00 pp |
 
-## 3. Industrial Edge Feasibility Analysis
+## 3. Real-Time Feasibility
 
-- **Sampling Window**: 1024 points @ 12 kHz = **85.33 ms** physical sampling window.
-- **Inference Budget**: The INT8 model completes inference in **17.195 ms**, consuming **< 1% of the available processing budget**, leaving >99% of CPU cycles free for RTOS tasks, telemetry, and MQTT streaming.
-- **Zero Accuracy Degradation**: Dynamic INT8 quantization preserves identical fault classification boundaries without catastrophic quantization loss.
+- **Sampling window**: 1024 points @ 12 kHz = 85.33 ms.
+- **ONNX Runtime FP32**: 0.419 ms = 0.49% of the window period; 1.00x the FP32 latency.
+- **ONNX Runtime INT8 Dynamic**: 5.206 ms = 6.10% of the window period; 12.43x the FP32 latency.
+- **ONNX Runtime INT8 Static**: 0.293 ms = 0.34% of the window period; 0.70x the FP32 latency.
+- These are host-PC figures. Run `rpi_edge_diagnostic.py` on the target board for edge numbers.

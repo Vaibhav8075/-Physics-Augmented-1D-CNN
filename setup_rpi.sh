@@ -9,14 +9,19 @@ echo " Processor: Broadcom BCM2712 Quad-Core Cortex-A76 @ 2.4 GHz"
 echo "========================================================================="
 
 # 1. Update system packages
-sudo apt update && sudo apt install -y python3-pip python3-numpy python3-matplotlib python3-scipy git
+sudo apt update && sudo apt install -y python3-pip python3-numpy git
 
-# 2. Install lightweight edge runtime
-pip3 install onnxruntime streamlit torch torchvision --break-system-packages
+# 2. Install the edge runtime (all rpi_edge_diagnostic.py needs is the ONNX model)
+pip3 install onnxruntime psutil --break-system-packages
+
+# Optional: the Streamlit dashboard additionally needs PyTorch and Streamlit.
+if [ "$1" == "--with-dashboard" ]; then
+    pip3 install torch streamlit matplotlib seaborn scikit-learn scipy --break-system-packages
+fi
 
 echo ""
 echo "========================================================================="
 echo " [OK] Installation Complete! You can now run:"
 echo " 1. Terminal Real-Time Diagnostic Test:  python3 rpi_edge_diagnostic.py"
-echo " 2. Web Visual Diagnostic Dashboard:    streamlit run app.py --server.port 8501"
+echo " 2. Web Dashboard (needs --with-dashboard): streamlit run app.py --server.port 8501"
 echo "========================================================================="

@@ -1,4 +1,5 @@
 ﻿import os
+import json
 import time
 import numpy as np
 import streamlit as st
@@ -7,7 +8,8 @@ import torch
 import torch.nn.functional as F
 
 from models import Baseline1DCNN, PhysicsAugmentedCalibratedCNN
-from preprocess_data import add_real_world_impairments
+import config
+from common import add_real_world_impairments
 
 st.set_page_config(
     page_title="Industrial Fault AI Diagnostic Console",
@@ -56,9 +58,10 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-CLASS_NAMES = ["Normal (Healthy)", "Inner Race Fault", "Ball Fault", "Outer Race Fault"]
-RESULTS_DIR = "results"
-PROCESSED_DIR = "processed_data"
+CLASS_NAMES = config.CLASS_NAMES
+RESULTS_DIR = config.RESULTS_DIR
+PROCESSED_DIR = config.PROCESSED_DIR
+TEST_SNR_DB = config.IMPAIRMENTS["test"]["snr_db"]
 
 @st.cache_resource
 def load_models():
@@ -79,13 +82,22 @@ def load_models():
 
 @st.cache_data
 def load_test_data():
-    x_path = os.path.join(PROCESSED_DIR, "X_test.npy")
+    # Clean windows: impairments are injected below from the sidebar controls
+    x_path = os.path.join(PROCESSED_DIR, "X_test_clean.npy")
     y_path = os.path.join(PROCESSED_DIR, "y_test.npy")
     if os.path.exists(x_path) and os.path.exists(y_path):
         X_test = np.load(x_path)
         y_test = np.load(y_path)
         return X_test, y_test
     return None, None
+
+@st.cache_data
+def load_metrics():
+    path = os.path.join(RESULTS_DIR, "metrics.json")
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    return None
 
 base_model, phys_model = load_models()
 X_test, y_test = load_test_data()
@@ -112,9 +124,11 @@ sample_idx = st.sidebar.selectbox("Select Sample Index:", candidate_indices, ind
 
 st.sidebar.markdown("---")
 st.sidebar.subheader("🏭 Factory Noise & Drift Injection")
-add_noise = st.sidebar.checkbox("Inject 1/f Pink Factory Noise (8 dB SNR)", value=True)
+add_noise = st.sidebar.checkbox(f"Inject Colored Factory Noise ({TEST_SNR_DB:.0f} dB SNR)", value=True)
 add_drift = st.sidebar.checkbox("Inject Non-Linear Thermal Drift", value=True)
 add_spikes = st.sidebar.checkbox("Inject Transient Electrical Spikes", value=True)
+noise_seed = st.sidebar.number_input("Noise Seed", min_value=0, value=0, step=1,
+                                     help="Same seed = same impairment, so the view is stable across reruns.")
 
 # Process signal
 raw_sample = X_test[sample_idx].copy()
@@ -123,9 +137,10 @@ true_label = y_test[sample_idx]
 if add_noise or add_drift or add_spikes:
     impaired_sample = add_real_world_impairments(
         raw_sample, 
-        snr_db=8.0 if add_noise else 100.0,
+        snr_db=TEST_SNR_DB if add_noise else 100.0,
         drift_prob=1.0 if add_drift else 0.0,
-        impulse_prob=1.0 if add_spikes else 0.0
+        impulse_prob=1.0 if add_spikes else 0.0,
+        rng=np.random.default_rng(int(noise_seed) * 100003 + int(sample_idx))
     )
 else:
     impaired_sample = raw_sample
@@ -133,12 +148,13 @@ else:
 # Run Inference
 input_tensor = torch.from_numpy(impaired_sample).unsqueeze(0).float()
 
-t0 = time.time()
 with torch.no_grad():
+    phys_model(input_tensor)  # warm-up so the displayed latency excludes first-call overhead
+    t0 = time.perf_counter()
     p_logits, p_attn, p_res = phys_model(input_tensor)
+    latency_ms = (time.perf_counter() - t0) * 1000.0
     p_probs = F.softmax(p_logits, dim=1).numpy()[0]
     p_pred = np.argmax(p_probs)
-latency_ms = (time.time() - t0) * 1000.0
 
 with torch.no_grad():
     b_logits, _, _ = base_model(input_tensor)
@@ -160,7 +176,7 @@ with col3:
     st.metric("Calibrated Confidence", f"{p_probs[p_pred]*100:.1f}%", f"{'✔ Match' if is_correct else '✖ Mismatch'}")
 
 with col4:
-    st.metric("Inference Latency", f"{latency_ms:.2f} ms", "Edge Real-Time")
+    st.metric("Inference Latency (this PC)", f"{latency_ms:.2f} ms")
 
 st.markdown("---")
 
@@ -175,8 +191,8 @@ with tab1:
     
     # 1. Raw sensor stream
     axes[0].plot(impaired_sample[0], color="#0284c7", linewidth=1.1, label="Drive End (DE) Feed with Industrial Drift & Noise")
-    axes[0].set_title(f"Input Sensor Stream: 1024-point Sliding Window @ 12 kHz (Sample #{sample_idx})", fontsize=11, fontweight="bold")
-    axes[0].set_ylabel("Amplitude (g)", fontsize=10)
+    axes[0].set_title(f"Input Sensor Stream: 1024-point Sliding Window @ {config.SAMPLING_RATE_HZ // 1000} kHz (Sample #{sample_idx})", fontsize=11, fontweight="bold")
+    axes[0].set_ylabel("Normalized amplitude", fontsize=10)
     axes[0].legend(loc="upper right", fontsize=9)
     axes[0].grid(True, linestyle="--", alpha=0.5)
 
@@ -186,7 +202,7 @@ with tab1:
         axes[1].plot(res_sig, color="#e11d48", linewidth=1.1, label="Kinematic Residual r(t) = x(t) - Smooth(x(t)) [Drift Eliminated]")
     else:
         axes[1].plot(impaired_sample[0], color="#e11d48", label="Signal")
-    axes[1].set_ylabel("Residual (g)", fontsize=10)
+    axes[1].set_ylabel("Residual", fontsize=10)
     axes[1].legend(loc="upper right", fontsize=9)
     axes[1].grid(True, linestyle="--", alpha=0.5)
 
@@ -228,15 +244,23 @@ with tab2:
         plt.close(fig_p)
 
 with tab3:
-    st.subheader("Cross-Load Experimental Benchmark Summary (3 HP Heavy Load + 8 dB Plant Noise)")
-    st.table({
-        "Model Architecture": ["Standard Baseline 1D-CNN", "Physics-Augmented Calibrated CNN (Proposed)"],
-        "Noise Resistance": ["Degrades on transient plant spikes", "High (Kinematic drift decoupled)"],
-        "False Alarm Rate": ["High (Overconfident on noise)", "Suppressed via Temperature Calibration"],
-        "Explainability": ["Black-box", "Kinematic Residual + Temporal Saliency"],
-        "Inference Latency": ["< 0.4 ms / window", "< 0.5 ms / window"]
-    })
-    
+    metrics = load_metrics()
+    if metrics is None:
+        st.info("Run `python train_and_evaluate.py` to generate results/metrics.json.")
+    else:
+        proto = metrics["protocol"]
+        st.subheader(f"Measured Benchmark: Unseen {proto['test_loads']} HP Load + "
+                     f"{proto['impairments']['test']['snr_db']:.0f} dB Plant Noise "
+                     f"(mean ± std over {len(proto['seeds'])} seeds)")
+        rows = {"Metric": ["Accuracy (%)", "Macro-F1 (%)", "False Alarm Rate (%)", "Missed Fault Rate (%)",
+                           "ECE (%)", "CPU Latency, batch 1 (ms)"]}
+        for name, label in [("baseline", "Standard 1D-CNN"), ("physics", "PAC-1DCNN (Proposed)")]:
+            m = metrics["models"][name]
+            cell = lambda k: f"{m['test'][k]['mean']:.2f} ± {m['test'][k]['std']:.2f}"
+            rows[label] = [cell("accuracy"), cell("macro_f1"), cell("false_alarm_rate"),
+                           cell("missed_fault_rate"), cell("ece"), f"{m['cpu_latency_batch1']['mean_ms']:.3f}"]
+        st.table(rows)
+
     col_cm, col_saliency = st.columns(2)
     with col_cm:
         cm_file = os.path.join(RESULTS_DIR, "patent_figure_confusion_matrix.png")
