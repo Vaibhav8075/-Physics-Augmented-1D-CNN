@@ -210,6 +210,7 @@ streamlit run app.py
 ## Data and references
 - Vibration data: Case Western Reserve University Bearing Data Center (bearing geometry and fault frequencies from its "Bearing Information" page).
 - Lessmeier, Kimotho, Zimmer & Sextro, "Condition Monitoring of Bearing Damage in Electromechanical Drive Systems by Using Motor Current Signals of Electric Motors: A Benchmark Data Set for Data-Driven Classification", PHM Society European Conference 3(1) (2016), doi:10.36001/phme.2016.v3i1.1577. Data: KAt-DataCenter, Paderborn University (CC BY-NC 4.0).
+- Smith & Randall, "Rolling element bearing diagnostics using the Case Western Reserve University data: A benchmark study", *Mechanical Systems and Signal Processing* 64-65 (2015) 100-131.
 - Hendriks, Dumond & Knox, "Towards better benchmarking using the CWRU bearing fault dataset", *Mechanical Systems and Signal Processing* 169 (2022) 108732.
 - Abburi et al., "A Closer Look at Bearing Fault Classification Approaches", [arXiv:2309.17001](https://arxiv.org/abs/2309.17001) (2023).
 - Vieira, Bauler, Rosa & Silva, "Towards a more realistic evaluation of machine learning models for bearing fault diagnosis", *Mechanical Systems and Signal Processing* 258 (2026) 114640 ([arXiv:2509.22267](https://arxiv.org/abs/2509.22267)).
