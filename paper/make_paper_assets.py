@@ -682,6 +682,18 @@ def shortcut_numbers():
             put(f"shortcut-{tag}-{key.replace('_', '')}", max(v[key] for v in loads), "{:.2f}")
         put(f"shortcut-{tag}-edgedb-healthy", float(np.median([v["edge_clean_healthy_db"] for v in loads])), "{:.0f}")
         put(f"shortcut-{tag}-edgedb-faulty", float(np.median([v["edge_clean_faulty_db"] for v in loads])), "{:.0f}")
+        if "line_band_hz" not in sc:
+            continue
+        # Interference line near 4.2 kHz (Smith and Randall 2015): separability, worst load and
+        # noise condition; median share of window power per load (%); absolute level healthy - faulty
+        put(f"shortcut-{tag}-line-sep-min",
+            min(min(v["line_clean"], v["line_lowpass_15dB"], v["line_white_15dB"]) for v in loads), "{:.2f}")
+        for cls in ("healthy", "faulty"):
+            shares = [100 * 10 ** (v[f"line_clean_{cls}_db"] / 10) for v in loads]
+            put(f"shortcut-{tag}-line-{cls}-pct-min", min(shares), "{:.2f}" if cls == "faulty" else "{:.1f}")
+            put(f"shortcut-{tag}-line-{cls}-pct-max", max(shares), "{:.2f}" if cls == "faulty" else "{:.1f}")
+        put(f"shortcut-{tag}-line-absdb-min", min(v["line_abs_healthy_vs_faulty_db"] for v in loads), "{:.0f}")
+        put(f"shortcut-{tag}-line-absdb-max", max(v["line_abs_healthy_vs_faulty_db"] for v in loads), "{:.0f}")
 
 
 def fold_numbers():
