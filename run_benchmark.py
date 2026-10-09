@@ -159,6 +159,15 @@ def collect(results, model, snr, metric, calibrated=True, load=None):
     return np.array([r["test"][snr]["calibrated" if calibrated else "uncalibrated"][metric] for r in rows])
 
 
+def holm(pvals):
+    pvals = np.asarray(pvals, dtype=float)
+    adj, running = np.empty(len(pvals)), 0.0
+    for rank, i in enumerate(np.argsort(pvals)):
+        running = max(running, min(1.0, (len(pvals) - rank) * pvals[i]))
+        adj[i] = running
+    return adj
+
+
 def paired_test(a, b):
     diff = a - b
     if len(diff) < 2 or np.allclose(diff, 0):
@@ -184,6 +193,11 @@ def summarize(results, model_keys):
             entry["macro_f1_by_load"] = {str(l): float(collect(results, key, snr, "macro_f1", load=l).mean())
                                          for l in config.ALL_LOADS}
             summary[key][snr] = entry
+    # Holm correction per metric over every (model vs PAC) x SNR comparison
+    for metric in SUMMARY_METRICS:
+        cells = [summary[k][s][metric] for k in model_keys if k != REFERENCE for s in snrs]
+        for cell, p_adj in zip(cells, holm([c["p_value"] for c in cells])):
+            cell["p_holm"] = float(p_adj)
     results["summary"] = summary
     with open(OUT_JSON, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=1)
@@ -242,7 +256,8 @@ def write_report(results, summary, model_keys, snrs):
                 f"Test windows get drift (p={proto['test_drift_prob']}) and spikes (p={proto['test_impulse_prob']}) "
                 f"plus colored noise at each SNR; \"clean\" has no impairments. Values are mean ± std over "
                 f"{n_runs} runs ({len(config.ALL_LOADS)} folds × {len(proto['seeds'])} seeds). p-values: paired "
-                f"Wilcoxon signed-rank test against the full PAC-1DCNN over the same runs.\n\n")
+                f"Wilcoxon signed-rank test against the full PAC-1DCNN over the same runs; \"Holm\" is the "
+                f"p-value Holm-adjusted over all model × SNR comparisons in the table.\n\n")
 
         f.write("## Macro-F1 (%)\n\n| Model | " + " | ".join(snrs) + " |\n|" + " :--- |" * (len(snrs) + 1) + "\n")
         for key in model_keys:
@@ -251,7 +266,7 @@ def write_report(results, summary, model_keys, snrs):
                 m = summary[key][s]["macro_f1"]
                 cell = fmt(m)
                 if key != REFERENCE:
-                    cell += f" ({m['delta_vs_physics']:+.2f}, p={m['p_value']:.3f})"
+                    cell += f" ({m['delta_vs_physics']:+.2f}, p={m['p_value']:.3f}, Holm {m['p_holm']:.3f})"
                 cells.append(cell)
             f.write(f"| {MODEL_SPECS[key][0]} | " + " | ".join(cells) + " |\n")
 
@@ -276,17 +291,20 @@ def write_report(results, summary, model_keys, snrs):
         for s in snrs:
             if "baseline" in model_keys:
                 m = summary["baseline"][s]["macro_f1"]
-                if m["p_value"] < 0.05:
+                if m["p_holm"] < 0.05:
                     better = "PAC-1DCNN" if m["delta_vs_physics"] < 0 else "the baseline"
-                    f.write(f"- **{s}**: {better} is significantly better "
-                            f"(baseline − PAC = {m['delta_vs_physics']:+.2f} macro-F1, p={m['p_value']:.3f}).\n")
+                    f.write(f"- **{s}**: {better} is significantly better after Holm correction "
+                            f"(baseline − PAC = {m['delta_vs_physics']:+.2f} macro-F1, p={m['p_value']:.3f}, "
+                            f"Holm {m['p_holm']:.3f}).\n")
                 else:
-                    f.write(f"- **{s}**: no significant difference between baseline and PAC-1DCNN "
-                            f"({m['delta_vs_physics']:+.2f}, p={m['p_value']:.3f}).\n")
+                    f.write(f"- **{s}**: no significant difference between baseline and PAC-1DCNN after Holm "
+                            f"correction (baseline − PAC = {m['delta_vs_physics']:+.2f}, p={m['p_value']:.3f}, "
+                            f"Holm {m['p_holm']:.3f}).\n")
         for key in [k for k in model_keys if k.startswith("no_")]:
-            sig = [s for s in snrs if summary[key][s]["macro_f1"]["p_value"] < 0.05]
+            sig = [s for s in snrs if summary[key][s]["macro_f1"]["p_holm"] < 0.05]
             if not sig:
-                f.write(f"- **{MODEL_SPECS[key][0]}**: no significant macro-F1 change at any noise level.\n")
+                f.write(f"- **{MODEL_SPECS[key][0]}**: no significant macro-F1 change at any noise level "
+                        f"after Holm correction.\n")
             else:
                 parts = [f"{s}: {summary[key][s]['macro_f1']['delta_vs_physics']:+.2f}" for s in sig]
                 f.write(f"- **{MODEL_SPECS[key][0]}**: significant change vs full model at "
