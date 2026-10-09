@@ -167,3 +167,47 @@ def test_fault_size_folds_hold_out_whole_bearings():
         assert set(np.unique(data["size"][test])) == {0, held_out}
         assert held_out not in set(np.unique(data["size"][train]))
         assert set(np.unique(data["y"][test])) == {0, 1, 2, 3}
+
+
+def test_spectral_features_unchanged_for_cwru_windows():
+    """Generalised RF features must equal the original 1024-sample / 12 kHz implementation."""
+    import scipy.signal
+    from run_robustness_study import spectral_features
+    X = np.random.default_rng(0).standard_normal((5, 2, 1024)).astype(np.float32)
+    win = np.hanning(1024).astype(np.float32)
+    spec = np.abs(np.fft.rfft(X * win, axis=-1))[..., :512]
+    bands = np.log1p(spec.reshape(5, 2, 64, 8).mean(-1))
+    env = np.abs(scipy.signal.hilbert(X, axis=-1))
+    env -= env.mean(-1, keepdims=True)
+    env_spec = np.log1p(np.abs(np.fft.rfft(env * win, axis=-1))[..., 1:53])
+    expected = np.concatenate([bands, env_spec], axis=-1).reshape(5, -1)
+    np.testing.assert_allclose(spectral_features(X), expected, rtol=1e-6)
+
+
+def test_models_accept_paderborn_windows():
+    from models import WideKernelCNN, PhysicsAugmentedCalibratedCNN
+    x = torch.randn(4, 1, 2048)
+    for model in (Baseline1DCNN(1, 3), Baseline1DCNN(1, 3, highpass_input=True), WideKernelCNN(1, 3),
+                  PhysicsAugmentedCalibratedCNN(1, 3), PhysicsAugmentedCalibratedCNN(1, 3, use_residual_filter=False)):
+        assert model(x)[0].shape == (4, 3)
+    assert WideKernelCNN()(torch.randn(4, 2, 1024))[0].shape == (4, 4)
+
+
+def test_paderborn_folds_separate_physical_bearings():
+    from run_paderborn_study import folds_for, label_of
+    cv = folds_for("real_cv")
+    assert len(cv) == 10 and len({f[0] for f in cv}) == 10
+    for _, train, test in cv + folds_for("a2r"):
+        assert not set(train) & set(test)
+        assert {label_of(b) for b in train} == {label_of(b) for b in test} == {0, 1, 2}
+    for _, train, test in cv:
+        assert np.bincount([label_of(b) for b in train]).tolist() == [3, 3, 3]
+        assert np.bincount([label_of(b) for b in test]).tolist() == [2, 2, 2]
+
+
+def test_measurement_accuracy_averages_window_probabilities():
+    from run_paderborn_study import measurement_accuracy
+    probs = np.array([[0.9, 0.1, 0.0], [0.2, 0.8, 0.0], [0.4, 0.6, 0.0], [0.0, 0.0, 1.0]])
+    y = np.array([0, 0, 1, 2])
+    meas = np.array(["a", "a", "b", "c"])
+    assert measurement_accuracy(probs, y, meas) == pytest.approx(100.0)  # a: mean [0.55, 0.45] -> 0

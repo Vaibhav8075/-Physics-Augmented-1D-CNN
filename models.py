@@ -59,6 +59,7 @@ class WideKernelCNN(nn.Module):
             *block(32, 64, 3, 1, 1),              # -> 8
             *block(64, 64, 3, 1, 1),              # -> 4
             *block(64, 64, 3, 1, 0),              # -> 2 -> 1
+            nn.AdaptiveAvgPool1d(1),              # identity at 1024 samples; lets longer windows through
         )
         self.fc = nn.Sequential(nn.Flatten(), nn.Linear(64, 100), nn.ReLU(), nn.Linear(100, num_classes))
         self.register_buffer("temperature", torch.ones(1))

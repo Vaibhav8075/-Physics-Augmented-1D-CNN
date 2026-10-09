@@ -109,23 +109,25 @@ def impair_fixed(X, seed, spectrum="lowpass", **params):
 # -------------------------------------------------------------
 # Classical baseline: band spectrum + envelope spectrum features
 # -------------------------------------------------------------
-def spectral_features(X):
-    """Per channel: log band energies of the spectrum (64 bands, 0-6 kHz) and of the
-    Hilbert envelope spectrum (bins 1-52, ~12-610 Hz at 12 kHz / 1024 samples)."""
-    win = np.hanning(X.shape[-1]).astype(np.float32)
-    spec = np.abs(np.fft.rfft(X * win, axis=-1))[..., :512]
-    bands = np.log1p(spec.reshape(*spec.shape[:-1], 64, 8).mean(-1))
+def spectral_features(X, fs=config.SAMPLING_RATE_HZ, env_max_hz=610.0):
+    """Per channel: log band energies of the spectrum (64 equal bands up to Nyquist) and of the
+    Hilbert envelope spectrum up to ~env_max_hz (at 12 kHz / 1024 samples: bins 1-52, ~12-610 Hz)."""
+    L = X.shape[-1]
+    win = np.hanning(L).astype(np.float32)
+    spec = np.abs(np.fft.rfft(X * win, axis=-1))[..., :L // 2]
+    bands = np.log1p(spec.reshape(*spec.shape[:-1], 64, L // 128).mean(-1))
     env = np.abs(scipy.signal.hilbert(X, axis=-1))
     env -= env.mean(-1, keepdims=True)
-    env_spec = np.log1p(np.abs(np.fft.rfft(env * win, axis=-1))[..., 1:53])
+    n_env = int(round(env_max_hz / (fs / L)))
+    env_spec = np.log1p(np.abs(np.fft.rfft(env * win, axis=-1))[..., 1:n_env + 1])
     return np.concatenate([bands, env_spec], axis=-1).reshape(len(X), -1).astype(np.float32)
 
 
-def train_rf(X_train, y_train, impairments, seed, copies=2):
+def train_rf(X_train, y_train, impairments, seed, copies=2, fs=config.SAMPLING_RATE_HZ):
     feats, labels = [], []
     for c in range(copies):
         Xi = impair_fixed(X_train, seed * 100 + c, **impairments)
-        feats.append(spectral_features(Xi))
+        feats.append(spectral_features(Xi, fs=fs))
         labels.append(y_train)
     rf = RandomForestClassifier(n_estimators=300, class_weight="balanced", n_jobs=-1, random_state=seed)
     return rf.fit(np.concatenate(feats), np.concatenate(labels))
@@ -137,7 +139,7 @@ def train_rf(X_train, y_train, impairments, seed, copies=2):
 def score(probs, y):
     m = classification_metrics(probs, y)
     preds = probs.argmax(1)
-    m["recall_per_class"] = [float((preds[y == c] == c).mean() * 100.0) for c in range(4)]
+    m["recall_per_class"] = [float((preds[y == c] == c).mean() * 100.0) for c in range(probs.shape[1])]
     return {k: m[k] for k in METRICS + ["recall_per_class"]}
 
 

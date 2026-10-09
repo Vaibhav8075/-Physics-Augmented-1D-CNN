@@ -192,7 +192,7 @@ def train_model(model, train_loader, val_loader, y_train, epochs=config.EPOCHS, 
     model = model.to(DEVICE)
     params = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.AdamW(params, lr=lr, weight_decay=config.WEIGHT_DECAY)
-    criterion = nn.CrossEntropyLoss(weight=class_weights(y_train).to(DEVICE))
+    criterion = nn.CrossEntropyLoss(weight=class_weights(y_train, int(y_train.max()) + 1).to(DEVICE))
     noise_gen = torch.Generator(device=DEVICE)
     noise_gen.manual_seed(seed)
 

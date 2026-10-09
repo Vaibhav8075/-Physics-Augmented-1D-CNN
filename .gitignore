@@ -18,3 +18,6 @@ processed_data/*.npz
 venv/
 .venv/
 env/
+
+# Paderborn bearing data (CC BY-NC 4.0, download with download_paderborn.py)
+paderborn_data/
