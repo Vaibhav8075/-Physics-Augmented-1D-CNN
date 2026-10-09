@@ -89,7 +89,14 @@
 }
 
 % --- Datasets and evaluation methodology --------------------------------------------------
-% verified: Crossref (DOI 10.1016/j.ymssp.2015.04.021)
+% verified: Crossref (DOI 10.1016/j.ymssp.2015.04.021) and the published PDF (supplied by the author, 2026-10-09).
+% Statements used in main.tex were checked against: abstract and Sec. 1 (three methods, every record categorised);
+% Sec. 2 (slip shifts fault frequencies by up to 1-2%); Sec. 4 (load mainly lowers speed, by almost 4%, no radial
+% load); Sec. 6.1.1 (EMI at harmonics of about 4.2 kHz from the dynamometer controller); Sec. 6.2 (outcome depends
+% more on assembly than on fault size or speed/load); Table 2 (6205 BSF 2.357; 6203 BPFI 4.947, BPFO 3.053,
+% BSF 1.994); Table 3 (records 236DE, 237DE clipped); Table A1 (normal baseline at 48 kHz; 98: 1772 rpm,
+% 99: 1750 rpm); Table B2 (DE diagnosis categories of records 118-120, 185-188, 224-225, 198-200 are P or N
+% under all three methods; all other fault records used here reach Y1/Y2 with at least one method).
 @article{smith2015cwru,
   author  = {Smith, Wade A. and Randall, Robert B.},
   title   = {Rolling element bearing diagnostics using the {Case Western Reserve University} data: A benchmark study},
@@ -100,8 +107,10 @@
   doi     = {10.1016/j.ymssp.2015.04.021}
 }
 
-% verified: Crossref (DOI 10.1016/j.ymssp.2021.108732). Full text not accessible here; the fault-size division and the
-% over-optimism finding attributed to it were checked against the description in Rosa et al. (arXiv:2407.14625).
+% verified: Crossref (DOI 10.1016/j.ymssp.2021.108732) and the published PDF (supplied by the author, 2026-10-09).
+% Checked: abstract and Sec. 1 (load-wise "original framework" reuses the same faulted bearings; speeds vary only
+% slightly; proposed framework groups data by fault size so no bearing is in both sets); Table 2 and Fig. 4
+% (train on one size, e.g. E -> D); Sec. 5 (accuracy decreases on average by approximately 45%).
 @article{hendriks2022cwru,
   author  = {Hendriks, Jacob and Dumond, Patrick and Knox, D. A.},
   title   = {Towards better benchmarking using the {CWRU} bearing fault dataset},
@@ -206,14 +215,13 @@
   doi       = {10.1007/978-3-030-01234-2_1}
 }
 
-% verified: arXiv API record (ICLR venue not checked; cited as preprint)
-@misc{loshchilov2019adamw,
-  author        = {Loshchilov, Ilya and Hutter, Frank},
-  title         = {Decoupled Weight Decay Regularization},
-  year          = {2017},
-  eprint        = {1711.05101},
-  archivePrefix = {arXiv},
-  howpublished  = {arXiv preprint arXiv:1711.05101}
+% verified: arXiv abstract page of 1711.05101 (v3, 4 Jan 2019), Comments field: "Published as a conference paper
+% at ICLR 2019" (checked 2026-10-09; OpenReview and dblp were not reachable from here).
+@inproceedings{loshchilov2019adamw,
+  author    = {Loshchilov, Ilya and Hutter, Frank},
+  title     = {Decoupled Weight Decay Regularization},
+  booktitle = {Proc. International Conference on Learning Representations (ICLR)},
+  year      = {2019}
 }
 
 % verified: Crossref (DOI 10.1023/A:1010933404324)
