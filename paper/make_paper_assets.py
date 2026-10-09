@@ -36,9 +36,11 @@ TBD = r"\textit{TBD}"
 plt.rcParams.update({"font.family": "serif", "font.size": 8, "axes.titlesize": 8, "axes.labelsize": 8,
                      "legend.fontsize": 6.5, "xtick.labelsize": 7, "ytick.labelsize": 7, "pdf.fonttype": 42})
 COLORS = {"baseline": "#475569", "baseline_hp": "#0ea5e9", "no_residual": "#dc2626", "physics": "#059669",
-          "wdcnn": "#7c3aed", "rf": "#d97706", "no_dual": "#f97316", "no_attention": "#ca8a04"}
+          "wdcnn": "#7c3aed", "rf": "#d97706", "no_dual": "#f97316", "no_attention": "#ca8a04",
+          "baseline_lhp": "#1d4ed8", "kin": "#92400e"}
 SHORT = {"baseline": "CNN", "baseline_hp": "CNN+HP", "no_residual": "PAC$-$HP", "physics": "PAC",
-         "wdcnn": "WDCNN-s", "rf": "Env-RF", "no_dual": "PAC$-$dual", "no_attention": "PAC$-$att"}
+         "wdcnn": "WDCNN-s", "rf": "Env-RF", "no_dual": "PAC$-$dual", "no_attention": "PAC$-$att",
+         "baseline_lhp": "CNN+LHP", "kin": "Kin-RF"}
 
 
 def put(key, value, fmt="{:.1f}"):
@@ -82,19 +84,24 @@ def rel_p(p):
 def model_table():
     from models import Baseline1DCNN, WideKernelCNN, PhysicsAugmentedCalibratedCNN
     count = lambda m: sum(p.numel() for p in m.parameters())
+    # (key, name, constructor(channels, classes, window length)); CWRU: 2 ch, 4 classes, 1024; PU: 1, 3, 2048
     specs = [
-        ("baseline", "Standard 1D-CNN (3 conv layers)", lambda c, k: Baseline1DCNN(c, k)),
-        ("baseline_hp", "Standard 1D-CNN with fixed HP front end", lambda c, k: Baseline1DCNN(c, k, highpass_input=True)),
-        ("no_residual", "PAC-1DCNN without fixed HP front end", lambda c, k: PhysicsAugmentedCalibratedCNN(c, k, use_residual_filter=False)),
-        ("physics", "PAC-1DCNN (full)", lambda c, k: PhysicsAugmentedCalibratedCNN(c, k)),
-        ("wdcnn", "WDCNN-style wide-kernel CNN", lambda c, k: WideKernelCNN(c, k)),
+        ("baseline", "Standard 1D-CNN (3 conv layers)", lambda c, k, n: Baseline1DCNN(c, k)),
+        ("baseline_hp", "Standard 1D-CNN with fixed HP front end", lambda c, k, n: Baseline1DCNN(c, k, highpass_input=True)),
+        ("baseline_lhp", "Standard 1D-CNN with learnable HP front end",
+         lambda c, k, n: Baseline1DCNN(c, k, highpass_input=True, learnable_highpass=True)),
+        ("no_residual", "PAC-1DCNN without fixed HP front end", lambda c, k, n: PhysicsAugmentedCalibratedCNN(c, k, use_residual_filter=False)),
+        ("physics", "PAC-1DCNN (full)", lambda c, k, n: PhysicsAugmentedCalibratedCNN(c, k)),
+        ("no_dual", "PAC-1DCNN, single stream on the residual", lambda c, k, n: PhysicsAugmentedCalibratedCNN(c, k, use_dual_stream=False)),
+        ("wdcnn", "WDCNN-style wide-kernel CNN", lambda c, k, n: WideKernelCNN(c, k, input_length=n)),
     ]
     rows = []
     for key, name, make in specs:
-        cw, pu = count(make(2, 4)), count(make(1, 3))
+        cw, pu = count(make(2, 4, 1024)), count(make(1, 3, 2048))
         put(f"params-{key}-cwru", f"{cw:,}".replace(",", "{,}"))
         rows.append(f"{name} & {SHORT[key]} & {cw:,} & {pu:,} \\\\".replace(",", "{,}"))
     rows.append("Envelope spectrum + random forest (300 trees) & Env-RF & -- & -- \\\\")
+    rows.append("Kinematic envelope features + random forest (300 trees) & Kin-RF & -- & -- \\\\")
     write("tab_models.tex", "\n".join(rows) + "\n")
 
 
@@ -220,10 +227,14 @@ def lolo():
     put("lolo-T-max", max(np.mean([r["temperature"] for r in runs if r["model"] == m]) for m in LOLO_MODELS), "{:.2f}")
     put("lolo-calibacc-min", min(np.mean([r["calib_accuracy"] for r in runs if r["model"] == m]) for m in LOLO_MODELS))
 
-    # false alarms at -5 dB (LOLO)
-    for m in ("baseline", "physics"):
-        put(f"lolo-{m}--5dB-far", vals(m, "-5dB", "false_alarm_rate").mean())
-        put(f"lolo-{m}-0dB-far", vals(m, "0dB", "false_alarm_rate").mean())
+    # false alarms and missed faults under strong noise (LOLO)
+    for s in ("0dB", "-5dB"):
+        for m in LOLO_MODELS:
+            put(f"lolo-{m}-{s}-far", vals(m, s, "false_alarm_rate").mean())
+            put(f"lolo-{m}-{s}-miss", vals(m, s, "missed_fault_rate").mean())
+        put(f"lolo-{s}-far-max", max(vals(m, s, "false_alarm_rate").mean() for m in LOLO_MODELS))
+        put(f"lolo-{s}-miss-min", min(vals(m, s, "missed_fault_rate").mean() for m in LOLO_MODELS))
+        put(f"lolo-{s}-miss-max", max(vals(m, s, "missed_fault_rate").mean() for m in LOLO_MODELS))
     return vals
 
 
@@ -242,6 +253,49 @@ CONTRAST_LABELS = {("baseline_hp", "baseline"): "CNN+HP $-$ CNN",
 
 def cond_key(c):
     return c.replace("@", "").replace("+", "")
+
+
+SECONDARY_TABLE = {}  # protocol -> rows of tab_secondary.tex
+
+
+def primary(rows):
+    """Contrasts of the primary Holm family (results saved before families existed are all primary)."""
+    return [r for r in rows if r.get("family", "primary") == "primary"]
+
+
+# Secondary analyses (added models): (added model, reference model, label)
+SECONDARY = [("baseline_lhp", "baseline_hp", "CNN+LHP $-$ CNN+HP"),
+             ("no_dual", "physics", "PAC$-$dual $-$ PAC"),
+             ("kin", "rf", "Kin-RF $-$ Env-RF")]
+
+
+def secondary_rows(means, contrasts, regimes, conds, prefix, title):
+    """Rows of the secondary-analysis table for one protocol: mean macro-F1 of each added model, with
+    the difference to its reference model and the runs in which it is better (bold: significant after
+    Holm within the secondary family). Also writes the matching keys."""
+    rows = [f"\\multicolumn{{{len(conds) + 2}}}{{@{{}}l}}{{\\textbf{{{title}}}}} \\\\"]
+    for a, b, label in SECONDARY:
+        sub = [r for reg in regimes for r in contrasts[reg] if r["a"] == a and r["b"] == b]
+        if not sub:
+            continue
+        put(f"{prefix}-sec-{a}-{b}-ntests", len(sub), "{:d}")
+        sig = [r for r in sub if r["p_holm"] < 0.05]
+        put(f"{prefix}-sec-{a}-{b}-nsig", len(sig), "{:d}")
+        put(f"{prefix}-sec-{a}-{b}-npos", sum(r["delta"] > 0 for r in sig), "{:d}")
+        for regime in regimes:
+            rs = {r["condition"]: r for r in contrasts[regime] if r["a"] == a and r["b"] == b}
+            cells = []
+            for c in conds:
+                r, m = rs[c], means[regime][a][c]["macro_f1"]["mean"]
+                put(f"{prefix}-{regime}-{a}-{cond_key(c)}-f1", m)
+                put(f"{prefix}-{regime}-{a}-{b}-{cond_key(c)}-delta", sgn(r["delta"]))
+                put(f"{prefix}-{regime}-{a}-{b}-{cond_key(c)}-absdelta", abs(r["delta"]))
+                put(f"{prefix}-{regime}-{a}-{b}-{cond_key(c)}-wins", f"{r['a_wins']}/{r['n']}")
+                put(f"{prefix}-{regime}-{a}-{b}-{cond_key(c)}-pholm", fmt_p(r["p_holm"]))
+                diff = f"{sgn(r['delta'])}"
+                cells.append(f"{m:.1f} (\\textbf{{{diff}}})" if r["p_holm"] < 0.05 else f"{m:.1f} ({diff})")
+            rows.append(f"{SHORT[a]} & {regime} & " + " & ".join(cells) + " \\\\")
+    return rows
 
 
 def results_table(summary_means, regimes, models, conds, prefix):
@@ -287,12 +341,14 @@ def fault_size():
     regimes = list(rb["protocol"]["regimes"])
     write("tab_faultsize.tex", results_table(s["means"], regimes, FS_MODELS, FS_CONDS, "fs"))
     write("tab_faultsize_contrasts.tex", contrast_table(s["contrasts"], regimes, FS_CONDS, "fs"))
+    SECONDARY_TABLE["P2"] = secondary_rows(s["means"], s["contrasts"], regimes, FS_CONDS, "fs",
+                                           "P2: fault-size hold-out (CWRU)")
 
-    n_tests = sum(len(s["contrasts"][r]) for r in regimes)
+    n_tests = sum(len(primary(s["contrasts"][r])) for r in regimes)
     pac_cnn = [r for reg in regimes for r in s["contrasts"][reg] if r["a"] == "physics" and r["b"] == "baseline"]
     filt = [r for reg in regimes for r in s["contrasts"][reg]
             if (r["a"], r["b"]) in (("baseline_hp", "baseline"), ("physics", "no_residual"))]
-    put("fs-ntests-per-regime", len(s["contrasts"][regimes[0]]), "{:d}")
+    put("fs-ntests-per-regime", len(primary(s["contrasts"][regimes[0]])), "{:d}")
     put("fs-pac-cnn-ntests", len(pac_cnn), "{:d}")
     put("fs-pac-cnn-nsig", sum(r["p_holm"] < 0.05 for r in pac_cnn), "{:d}")
     put("fs-filter-ntests", len(filt), "{:d}")
@@ -304,11 +360,26 @@ def fault_size():
         put(f"fs-filter-{name}-absmax", max(abs(r["delta"]) for r in sub))
     put("fs-nruns", rb["summary"]["contrasts"][regimes[0]][0]["n"], "{:d}")
     put("fs-ntests-total", n_tests, "{:d}")
+    # per primary contrast, over both regimes and all 14 conditions: counts and ranges of significant effects
+    all_rows = [r for reg in regimes for r in primary(s["contrasts"][reg])]
+    for (a, b) in CONTRAST_LABELS:
+        rows = [r for r in all_rows if r["a"] == a and r["b"] == b]
+        sig = [r for r in rows if r["p_holm"] < 0.05]
+        put(f"fs-{a}-{b}-ntests", len(rows), "{:d}")
+        put(f"fs-{a}-{b}-nsig", len(sig), "{:d}")
+        put(f"fs-{a}-{b}-npos", sum(r["delta"] > 0 for r in sig), "{:d}")
+        for regime in regimes:
+            put(f"fs-{regime}-{a}-{b}-nsig", sum(r["p_holm"] < 0.05 for r in sig if r in primary(s["contrasts"][regime])), "{:d}")
+        if sig:
+            put(f"fs-{a}-{b}-sig-absmin", min(abs(r["delta"]) for r in sig))
+            put(f"fs-{a}-{b}-sig-absmax", max(abs(r["delta"]) for r in sig))
+            put(f"fs-{a}-{b}-sig-maxwins", max(r["a_wins"] for r in sig), "{:d}")
     rf_sig = [r for r in s["contrasts"]["mixed"] if r["a"] == "physics" and r["b"] == "rf" and r["p_holm"] < 0.05]
     put("fs-rf-nsig-mixed", len(rf_sig), "{:d}")
     if rf_sig:
         put("fs-rf-sig-min", min(-r["delta"] for r in rf_sig))
         put("fs-rf-sig-max", max(-r["delta"] for r in rf_sig))
+        put("fs-rf-sig-maxwins-mixed", max(r["a_wins"] for r in rf_sig), "{:d}")
 
     # per-fold clean macro-F1 and per-class recall (mixed regime)
     runs = rb["runs"]
@@ -467,8 +538,11 @@ def paderborn():
         models = [m for m in FS_MODELS if m in means[regimes[0]]]
         write(f"tab_pu_{protocol}.tex", results_table(means, regimes, models, PU_CONDS, prefix))
         write(f"tab_pu_{protocol}_contrasts.tex", contrast_table(contrasts, regimes, PU_CONDS, prefix))
+        SECONDARY_TABLE["P4" if protocol == "real_cv" else "P3"] = secondary_rows(
+            means, contrasts, regimes, PU_CONDS + ["drift+spikes"], prefix,
+            "P4: real-damage bearing cross-validation" if protocol == "real_cv" else "P3: artificial $\\rightarrow$ real damage")
         for regime in regimes:
-            for m in models:
+            for m in means[regime]:
                 put(f"{prefix}-{regime}-{m}-measacc", means[regime][m]["clean"]["measurement_accuracy"]["mean"])
                 rec = np.mean([r["test"]["clean"]["recall_per_class"] for r in res["runs"]
                                if r["regime"] == regime and r["model"] == m], axis=0)
@@ -494,7 +568,7 @@ def paderborn():
         filt = [r for r in all_rows if (r["a"], r["b"]) in (("baseline_hp", "baseline"), ("physics", "no_residual"))]
         put(f"{prefix}-filter-ntests", len(filt), "{:d}")
         put(f"{prefix}-filter-nsig", sum(r["p_holm"] < 0.05 for r in filt), "{:d}")
-        put(f"{prefix}-ntests-per-regime", len(contrasts[regimes[0]]), "{:d}")
+        put(f"{prefix}-ntests-per-regime", len(primary(contrasts[regimes[0]])), "{:d}")
         put(f"{prefix}-nruns", contrasts[regimes[0]][0]["n"], "{:d}")
         put(f"{prefix}-status", "complete")
         out[protocol] = (res, regimes, models)
@@ -508,7 +582,8 @@ def measacc_table(pu, sanity):
         write("tab_pu_measacc.tex", f"\\multicolumn{{5}}{{c}}{{{TBD}: experiment running}} \\\\\n")
         return
     rows = []
-    for m in FS_MODELS:
+    extra = ["kin"] if all("kin" in pu[p][0]["summary"]["means"][reg] for p, reg in cols) else []
+    for m in FS_MODELS + extra:
         cells = []
         for p, reg in cols:
             e = pu[p][0]["summary"]["means"][reg][m]["clean"]["measurement_accuracy"]
@@ -567,6 +642,7 @@ def paderborn_figure(pu):
     res, regimes, models = pu["real_cv"]
     regime = "mixed" if "mixed" in regimes else regimes[0]
     means = res["summary"]["means"][regime]
+    models = models + [m for m in ("kin",) if m in means]
     sanity = load(os.path.join("results", "paderborn_sanity.json"))
     chance = sanity["chance"]["real_cv"]["random_macro_f1"] if sanity and "chance" in sanity else None
     fig, axes = plt.subplots(1, 3, figsize=(7.1, 1.9), sharey=True)
@@ -593,6 +669,70 @@ def paderborn_figure(pu):
 # ---------------------------------------------------------------------------
 # Dataset facts (computed from the processed arrays where available)
 # ---------------------------------------------------------------------------
+def shortcut_numbers():
+    """CWRU preprocessing-artefact check (cwru_shortcut_check.py): separability of healthy vs faulty
+    windows, max over the four loads, without and with the common band limit."""
+    sc = load(os.path.join("results", "cwru_shortcut_check.json"))
+    if sc is None:
+        return
+    put("cwru-bandlimit-hz", sc["band_limit_hz"], "{:d}")
+    for variant, tag in (("without_band_limit", "before"), ("with_band_limit", "after")):
+        loads = sc[variant].values()
+        for key in ("edge_clean", "distinct_values", "edge_lowpass_15dB", "edge_white_15dB"):
+            put(f"shortcut-{tag}-{key.replace('_', '')}", max(v[key] for v in loads), "{:.2f}")
+        put(f"shortcut-{tag}-edgedb-healthy", float(np.median([v["edge_clean_healthy_db"] for v in loads])), "{:.0f}")
+        put(f"shortcut-{tag}-edgedb-faulty", float(np.median([v["edge_clean_faulty_db"] for v in loads])), "{:.0f}")
+
+
+def fold_numbers():
+    """Fold-level view (fold_level_stats.py): for the contrasts that are significant at run level, how
+    many folds agree in sign; for P4, how many contrasts the corrected resampled t-test confirms."""
+    fs = load(os.path.join("results", "fold_level_stats.json"))
+    if fs is None:
+        return
+    significant = lambda p: p.startswith("<") or float(p) < 0.05
+    if "p1_lolo" in fs:
+        rows = [r for r in fs["p1_lolo"]
+                if significant(NUM.get(f"lolo-{r['b'].replace('_', '')}-{r['condition']}-pholm", "1"))]
+        put("foldstats-p1-runsig", len(rows), "{:d}")
+        put("foldstats-p1-runsig-allfolds", sum(r["folds_agree"] == r["n_folds"] for r in rows), "{:d}")
+    for key, results_file, tag in (("p2_fault_size", "robustness_metrics.json", "p2"),
+                                   ("p4_real_cv", "paderborn_real_cv_metrics.json", "p4")):
+        res = load(os.path.join("results", results_file))
+        if key not in fs or res is None:
+            continue
+        sig = {(reg, r["a"], r["b"], r["condition"]) for reg, rows in res["summary"]["contrasts"].items()
+               for r in rows if r["p_holm"] < 0.05}
+        fold_rows = [(reg, r) for reg, rows in fs[key].items() for r in rows]
+        runsig = [r for reg, r in fold_rows if (reg, r["a"], r["b"], r["condition"]) in sig]
+        put(f"foldstats-{tag}-ntests", len(fold_rows), "{:d}")
+        put(f"foldstats-{tag}-runsig", len(runsig), "{:d}")
+        put(f"foldstats-{tag}-runsig-allfolds", sum(r["folds_agree"] == r["n_folds"] for r in runsig), "{:d}")
+        put(f"foldstats-{tag}-runsig-minagree", min((r["folds_agree"] for r in runsig), default=0), "{:d}")
+        put(f"foldstats-{tag}-nfolds", fold_rows[0][1]["n_folds"], "{:d}")
+        if tag == "p4":
+            put("foldstats-p4-nbsig", sum(r["p_nb_holm"] < 0.05 for _, r in fold_rows), "{:d}")
+            put("foldstats-p4-nb-minp", min(r["p_nb"] for _, r in fold_rows), "{:.3f}")
+
+
+def curve_numbers():
+    """Convergence check (training_curves.py): training loss at epoch 15 and how test macro-F1 at the
+    last epoch and at its best epoch compare with epoch 15 (one fold per data set, seed 0)."""
+    tc = load(os.path.join("results", "training_curves.json"))
+    if tc is None:
+        return
+    logs = [log for key in ("cwru_p2_fold14", "pu_p4_fold1") for log in tc[key].values()]
+    put("curves-epochs", tc["epochs"], "{:d}")
+    put("curves-loss15-max", max(log["loss"][14] for log in logs), "{:.3f}")
+    d_last = [log["test_macro_f1"][-1] - log["test_macro_f1"][14] for log in logs]
+    d_best = [max(log["test_macro_f1"]) - log["test_macro_f1"][14] for log in logs]
+    put("curves-dlast-min", min(d_last))
+    put("curves-dlast-max", max(d_last))
+    put("curves-nlast-lower", sum(d < 0 for d in d_last), "{:d}")
+    put("curves-nruns", len(logs), "{:d}")
+    put("curves-dbest-max", max(d_best))
+
+
 def dataset_numbers():
     total = 0
     for load in config.ALL_LOADS:
@@ -632,5 +772,12 @@ if __name__ == "__main__":
         parts = [NUM.get(f"{p}-filter-{stat}", TBD) for p in ("fs", "pu-realcv", "pu-a2r")]
         put(f"heldout-filter-{stat}", sum(map(int, parts)) if all(s.isdigit() for s in parts) else TBD, "{}")
         put(f"pu-filter-{stat}", sum(map(int, parts[1:])) if all(s.isdigit() for s in parts[1:]) else TBD, "{}")
+    # secondary analyses (added models), one table over P2-P4; rows only for protocols that have them
+    sec = [row for p in ("P2", "P4", "P3") for row in SECONDARY_TABLE.get(p, []) if len(SECONDARY_TABLE[p]) > 1]
+    if sec:
+        write("tab_secondary.tex", "\n".join(sec) + "\n")
+    shortcut_numbers()
+    fold_numbers()
+    curve_numbers()
     dataset_numbers()
     write_numbers()

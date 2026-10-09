@@ -1,0 +1,75 @@
+{
+  "edge_band_hz": [
+    5200,
+    6000
+  ],
+  "band_limit_hz": 4000,
+  "without_band_limit": {
+    "load0": {
+      "edge_clean": 0.9852953527435611,
+      "edge_clean_healthy_db": -39.58987865079037,
+      "edge_clean_faulty_db": -30.619838932138084,
+      "distinct_values": 1.0,
+      "edge_lowpass_15dB": 0.9257858742601184,
+      "edge_white_15dB": 0.7323318269076948
+    },
+    "load1": {
+      "edge_clean": 0.8138976094848904,
+      "edge_clean_healthy_db": -35.47087059179516,
+      "edge_clean_faulty_db": -30.46834310561715,
+      "distinct_values": 1.0,
+      "edge_lowpass_15dB": 0.8082416522390565,
+      "edge_white_15dB": 0.7348475016223232
+    },
+    "load2": {
+      "edge_clean": 0.5955395690651404,
+      "edge_clean_healthy_db": -32.59306252358743,
+      "edge_clean_faulty_db": -31.666643044741996,
+      "distinct_values": 1.0,
+      "edge_lowpass_15dB": 0.640598626251307,
+      "edge_white_15dB": 0.6745871499967482
+    },
+    "load3": {
+      "edge_clean": 0.8108246380147076,
+      "edge_clean_healthy_db": -36.35765249504168,
+      "edge_clean_faulty_db": -32.73138532340302,
+      "distinct_values": 1.0,
+      "edge_lowpass_15dB": 0.7896295809210113,
+      "edge_white_15dB": 0.6953320759867729
+    }
+  },
+  "with_band_limit": {
+    "load0": {
+      "edge_clean": 0.5907984722444409,
+      "edge_clean_healthy_db": -119.9362485173624,
+      "edge_clean_faulty_db": -122.64629435759471,
+      "distinct_values": 0.5030545112781954,
+      "edge_lowpass_15dB": 0.5099144136938091,
+      "edge_white_15dB": 0.5091075427931531
+    },
+    "load1": {
+      "edge_clean": 0.5214545035440558,
+      "edge_clean_healthy_db": -121.96495998954568,
+      "edge_clean_faulty_db": -122.27134062353733,
+      "distinct_values": 0.5027027027027027,
+      "edge_lowpass_15dB": 0.5290076393256147,
+      "edge_white_15dB": 0.5386794414698373
+    },
+    "load2": {
+      "edge_clean": 0.5016328899250091,
+      "edge_clean_healthy_db": -121.41875533573858,
+      "edge_clean_faulty_db": -121.83026714048876,
+      "distinct_values": 0.5034036049647057,
+      "edge_lowpass_15dB": 0.526047695994317,
+      "edge_white_15dB": 0.5281368345748434
+    },
+    "load3": {
+      "edge_clean": 0.5345371779045751,
+      "edge_clean_healthy_db": -122.57201239793781,
+      "edge_clean_faulty_db": -121.95936617154635,
+      "distinct_values": 0.5001345022073307,
+      "edge_lowpass_15dB": 0.5273428042813546,
+      "edge_white_15dB": 0.5270972132138954
+    }
+  }
+}

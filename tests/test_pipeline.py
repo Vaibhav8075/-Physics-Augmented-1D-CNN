@@ -89,7 +89,20 @@ def test_recordings_are_at_12khz_after_loading(name, rpm):
     f, p = welch(x, fs=config.SAMPLING_RATE_HZ, nperseg=2 ** 16)
     band = (f > 26) & (f < 32)
     assert f[band][np.argmax(p[band])] == pytest.approx(rpm / 60, abs=0.4)
-    assert len(x) / config.SAMPLING_RATE_HZ == pytest.approx(10.1, abs=0.4)  # ~10-s recordings
+    assert len(x) / config.SAMPLING_RATE_HZ == pytest.approx(10.1, abs=0.4)
+
+
+@pytest.mark.skipif(not HAS_RAW, reason="raw CWRU data not downloaded")
+@pytest.mark.parametrize("name", ["Normal_1.mat", "IR007_1.mat", "B014_1.mat", "OR021_6_1.mat"])
+def test_band_above_decimation_edge_is_empty_for_every_class(name):
+    """Only the healthy recordings are decimated from 48 kHz, and that filter rolls off above
+    4.8 kHz; the common band limit must leave nothing there in any class, or the roll-off alone
+    identifies healthy windows (cwru_shortcut_check.py)."""
+    from scipy.signal import welch
+    from preprocess_data import load_recording
+    x = load_recording(os.path.join(config.DATA_DIR, name))[0].astype(np.float64)
+    f, p = welch(x, fs=config.SAMPLING_RATE_HZ, window="blackmanharris", nperseg=1024)
+    assert p[f >= 5200].sum() / p.sum() < 1e-9  # below -90 dB  # ~10-s recordings
 
 
 @pytest.mark.skipif(not HAS_DATA, reason="run preprocess_data.py first")
@@ -201,8 +214,11 @@ def test_spectral_features_unchanged_for_cwru_windows():
 def test_models_accept_paderborn_windows():
     from models import WideKernelCNN, PhysicsAugmentedCalibratedCNN
     x = torch.randn(4, 1, 2048)
-    for model in (Baseline1DCNN(1, 3), Baseline1DCNN(1, 3, highpass_input=True), WideKernelCNN(1, 3),
-                  PhysicsAugmentedCalibratedCNN(1, 3), PhysicsAugmentedCalibratedCNN(1, 3, use_residual_filter=False)):
+    for model in (Baseline1DCNN(1, 3), Baseline1DCNN(1, 3, highpass_input=True),
+                  Baseline1DCNN(1, 3, highpass_input=True, learnable_highpass=True),
+                  WideKernelCNN(1, 3, input_length=2048), PhysicsAugmentedCalibratedCNN(1, 3),
+                  PhysicsAugmentedCalibratedCNN(1, 3, use_residual_filter=False),
+                  PhysicsAugmentedCalibratedCNN(1, 3, use_dual_stream=False)):
         assert model(x)[0].shape == (4, 3)
     assert WideKernelCNN()(torch.randn(4, 2, 1024))[0].shape == (4, 4)
 
@@ -225,3 +241,36 @@ def test_measurement_accuracy_averages_window_probabilities():
     y = np.array([0, 0, 1, 2])
     meas = np.array(["a", "a", "b", "c"])
     assert measurement_accuracy(probs, y, meas) == pytest.approx(100.0)  # a: mean [0.55, 0.45] -> 0
+
+
+def test_learnable_front_end_starts_as_the_fixed_filter():
+    from models import PhysicalHarmonicResidualFilter
+    x = torch.randn(3, 2, 1024)
+    fixed, learn = PhysicalHarmonicResidualFilter(2), PhysicalHarmonicResidualFilter(2, learnable=True)
+    torch.testing.assert_close(fixed(x)[0], learn(x)[0])
+    assert learn.smooth_kernel.requires_grad and not any(p.requires_grad for p in fixed.parameters())
+
+
+def test_ball_bearing_orders_reproduce_published_cwru_values():
+    from kinematic_features import ball_bearing_orders, CWRU_DE_ORDERS
+    # CWRU drive-end bearing 6205-2RS: ball 0.3126 in, pitch 1.537 in, 9 balls (CWRU bearing page)
+    computed = ball_bearing_orders(1.537, 0.3126, 9)
+    for k, v in CWRU_DE_ORDERS.items():
+        assert computed[k] == pytest.approx(v, abs=2e-4)
+
+
+@pytest.mark.parametrize("fault", ["inner", "outer", "ball"])
+def test_kinematic_features_peak_at_the_simulated_fault(fault):
+    """Decaying 3 kHz bursts repeated at one fault frequency: that order's features must be largest."""
+    from kinematic_features import kinematic_features, CWRU_DE_ORDERS, HARMONICS
+    fs, L, shaft = 12000, 1024, 29.0
+    rng = np.random.default_rng(0)
+    t = np.arange(L) / fs
+    burst = np.exp(-t[:60] * 2000) * np.sin(2 * np.pi * 3000 * t[:60])
+    x = 0.05 * rng.standard_normal((8, 1, L))
+    period = fs / (CWRU_DE_ORDERS[fault] * shaft)
+    for n in np.arange(0, L - 60, period):
+        x[:, 0, int(n):int(n) + 60] += burst
+    f = kinematic_features(x, shaft, CWRU_DE_ORDERS, fs).reshape(8, len(CWRU_DE_ORDERS), HARMONICS)
+    first_harmonic = f[:, :, 0].mean(0)
+    assert list(CWRU_DE_ORDERS)[int(np.argmax(first_harmonic))] == fault

@@ -1,3 +1,13 @@
+"""
+Trains the demonstration models used by the dashboard (app.py) and the edge export
+(export_edge.py) on the legacy fixed split: loads 0-1 for training, 2 for validation (model
+selection and temperature), 3 for testing, 0.007 in. faults only.
+
+This split is NOT an evaluation of generalisation: every CWRU bearing is recorded at all loads,
+so the test windows come from the same physical bearings as the training windows. The
+evaluation protocols of the paper are in run_benchmark.py, run_robustness_study.py and
+run_paderborn_study.py.
+"""
 import os
 import sys
 import json
@@ -119,22 +129,24 @@ def generate_figures(figure_results, X_test, y_test):
     # 1. Confusion matrices (first seed)
     fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
     for ax, res, cmap, title in [(axes[0], base_res, "Reds", "(A) Standard 1D-CNN"),
-                                 (axes[1], phys_res, "Greens", "(B) Proposed PAC-1DCNN")]:
+                                 (axes[1], phys_res, "Greens", "(B) PAC-1DCNN")]:
         cm = confusion_matrix(y_test, res['preds'], normalize='true', labels=range(4)) * 100
         sns.heatmap(cm, annot=True, fmt=".1f", cmap=cmap, ax=ax, xticklabels=CLASS_NAMES,
                     yticklabels=CLASS_NAMES, cbar=False)
-        ax.set_title(f"{title} (Unseen 3 HP Load + Plant Noise)\nAccuracy: {res['accuracy']:.1f}% | "
+        ax.set_title(f"{title} (3 HP load, synthetic noise; same bearings as training)\n"
+                     f"Accuracy: {res['accuracy']:.1f}% | "
                      f"Macro-F1: {res['macro_f1']:.1f}% | False Alarms: {res['false_alarm_rate']:.1f}%",
                      fontsize=11, fontweight='bold')
         ax.set_ylabel("True Condition", fontweight='bold')
         ax.set_xlabel("Predicted Condition", fontweight='bold')
     plt.tight_layout()
-    cm_path = os.path.join(RESULTS_DIR, "patent_figure_confusion_matrix.png")
+    cm_path = os.path.join(RESULTS_DIR, "fixedsplit_confusion_matrix.png")
     plt.savefig(cm_path, dpi=300)
     plt.close()
     print(f"\n[SAVED] Confusion Matrix -> {cm_path}")
 
-    # 2. Explainability saliency for one inner-race test window
+    # 2. Front-end output and temporal attention for one inner-race test window (illustration only;
+    #    the attention weights were not evaluated as explanations)
     model = figure_results["physics"][0].eval()
     sample_idx = np.where(y_test == 1)[0][10]
     x = torch.from_numpy(X_test[sample_idx:sample_idx + 1]).to(DEVICE)
@@ -146,11 +158,11 @@ def generate_figures(figure_results, X_test, y_test):
 
     fig, axes = plt.subplots(3, 1, figsize=(12, 7.5), sharex=True)
     axes[0].plot(raw_signal, color='#1f77b4', linewidth=1.2, label='Impaired vibration window (noise, drift, spikes)')
-    axes[0].set_title(f"Explainability (Target Fault: {CLASS_NAMES[y_test[sample_idx]]} @ 3 HP Load)",
+    axes[0].set_title(f"Example window ({CLASS_NAMES[y_test[sample_idx]]}, 3 HP load)",
                       fontsize=12, fontweight='bold')
     axes[0].set_ylabel("Normalized amplitude", fontweight='bold')
     axes[0].legend(loc='upper right')
-    axes[1].plot(residual_signal, color='#d62728', linewidth=1.2, label='Kinematic residual r(t) = x(t) - Smooth(x(t))')
+    axes[1].plot(residual_signal, color='#d62728', linewidth=1.2, label='Residual r(t) = x(t) - MA11(x)(t)')
     axes[1].set_ylabel("Residual", fontweight='bold')
     axes[1].legend(loc='upper right')
     axes[2].plot(t_attn_full, color='#2ca02c', linewidth=2.0, label='Learned temporal attention')
@@ -160,10 +172,10 @@ def generate_figures(figure_results, X_test, y_test):
                        fontweight='bold')
     axes[2].legend(loc='upper right')
     plt.tight_layout()
-    saliency_path = os.path.join(RESULTS_DIR, "patent_figure_explainability.png")
+    saliency_path = os.path.join(RESULTS_DIR, "fixedsplit_attention_example.png")
     plt.savefig(saliency_path, dpi=300)
     plt.close()
-    print(f"[SAVED] Explainability Saliency -> {saliency_path}")
+    print(f"[SAVED] Attention example -> {saliency_path}")
 
 
 if __name__ == "__main__":

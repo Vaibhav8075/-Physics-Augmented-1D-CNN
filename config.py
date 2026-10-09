@@ -7,6 +7,10 @@ RESULTS_DIR = "results"
 CLASS_NAMES = ["Normal (Healthy)", "Inner Race Fault", "Ball Fault", "Outer Race Fault"]
 
 SAMPLING_RATE_HZ = 12000
+# Every CWRU recording is low-passed to this band limit (preprocess_data.py). The healthy
+# recordings are decimated from 48 kHz, and their anti-aliasing filter rolls off from 4.8 kHz;
+# without a common band limit that roll-off alone identifies the healthy class.
+BAND_LIMIT_HZ = 4000
 WINDOW_SIZE = 1024
 STRIDE = 256
 

@@ -17,6 +17,13 @@ LABEL_PREFIXES = {"Normal": 0, "IR": 1, "B": 2, "OR": 3}
 # order-8 Chebyshev type I anti-aliasing filter as the Paderborn data (scipy.signal.decimate).
 NATIVE_FS_HZ = {"097": 48000, "098": 48000, "099": 48000, "100": 48000}
 
+# That filter is flat to 4.8 kHz and then rolls off, while the 12 kHz fault recordings keep their
+# content up to 6 kHz, so the 4.8-6 kHz band alone would separate healthy from faulty windows.
+# Every recording is therefore low-passed to a common band limit (same filter family, zero phase),
+# which attenuates all of them by at least 56 dB above 4.8 kHz.
+BAND_LIMIT_SOS = scipy.signal.cheby1(8, 0.05, config.BAND_LIMIT_HZ / (config.SAMPLING_RATE_HZ / 2),
+                                     output="sos")
+
 
 def parse_filename(filename):
     """'OR007_6_3.mat' -> (label=3, load=3). Matches the fault-type prefix exactly."""
@@ -33,11 +40,25 @@ def fault_size_mils(filename):
     return int(match.group(1)) if match else 0
 
 
-def load_recording(filepath):
+# Approximate speeds of the normal-baseline recordings whose files store no RPM value
+# (CWRU Bearing Data Center, "Normal Baseline Data" page: 1772 rpm at 1 hp, 1750 rpm at 2 hp).
+NORMAL_RPM_FALLBACK = {"098": 1772.0, "099": 1750.0}
+
+
+def recording_rpm(filepath):
+    """Shaft speed (rpm) stored in the file, or the published approximate speed if it has none."""
+    rid = recording_id(os.path.basename(filepath))
+    mat = sio.loadmat(filepath, variable_names=[f"X{rid}RPM"])
+    key = f"X{rid}RPM"
+    return float(mat[key].ravel()[0]) if key in mat else NORMAL_RPM_FALLBACK[rid]
+
+
+def load_recording(filepath, band_limit=True):
     """
-    Loads the DE/FE channels belonging to this file's own CWRU recording.
+    Loads the DE/FE channels belonging to this file's own CWRU recording at 12 kHz.
     Some files (e.g. 99.mat) also contain channels from a neighbouring recording
     (X098_*), so the key is matched by recording ID, not by position.
+    band_limit=False skips the common low-pass (only for cwru_shortcut_check.py).
     """
     mat = sio.loadmat(filepath)
     rid = recording_id(os.path.basename(filepath))
@@ -52,6 +73,8 @@ def load_recording(filepath):
     if native_fs != config.SAMPLING_RATE_HZ:
         factor = native_fs // config.SAMPLING_RATE_HZ
         signal = scipy.signal.decimate(signal, factor, ftype="iir", zero_phase=True, axis=-1)
+    if band_limit:
+        signal = scipy.signal.sosfiltfilt(BAND_LIMIT_SOS, signal, axis=-1)
     return signal.astype(np.float32)
 
 
@@ -120,19 +143,20 @@ def create_per_load_dataset():
             continue
         windows = window_signal(load_recording(filepath))
         n = len(windows)
-        entry = per_load.setdefault(load, {"X": [], "y": [], "size": [], "pos": [], "rec": []})
+        entry = per_load.setdefault(load, {"X": [], "y": [], "size": [], "pos": [], "rec": [], "rpm": []})
         entry["X"].extend(windows)
         entry["y"].extend([label] * n)
         entry["size"].extend([fault_size_mils(filename)] * n)
         entry["pos"].extend(np.arange(n) / n)
         entry["rec"].extend([recording_id(filename)] * n)
+        entry["rpm"].extend([recording_rpm(filepath)] * n)
 
     os.makedirs(config.PROCESSED_DIR, exist_ok=True)
     for load, entry in sorted(per_load.items()):
         np.savez(os.path.join(config.PROCESSED_DIR, f"load{load}.npz"),
                  X=np.asarray(entry["X"], dtype=np.float32), y=np.asarray(entry["y"], dtype=np.int64),
                  size=np.asarray(entry["size"], dtype=np.int64), pos=np.asarray(entry["pos"], dtype=np.float32),
-                 rec=np.asarray(entry["rec"]))
+                 rec=np.asarray(entry["rec"]), rpm=np.asarray(entry["rpm"], dtype=np.float32))
         y = np.asarray(entry["y"])
         print(f"  • load {load} HP: {len(y)} windows, class counts {np.bincount(y, minlength=4).tolist()}, "
               f"fault sizes {sorted(set(entry['size']))}")

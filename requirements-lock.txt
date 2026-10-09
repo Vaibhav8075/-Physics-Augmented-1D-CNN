@@ -1,0 +1,15 @@
+# Exact versions the published results were produced with (Python 3.14.3, Windows 11,
+# NVIDIA RTX 5050 Laptop GPU). torch was the CUDA 12.9 build:
+#   pip install torch==2.9.0 --index-url https://download.pytorch.org/whl/cu129
+# requirements.txt gives the minimum versions; this file pins the tested ones.
+numpy==2.3.5
+scipy==1.17.1
+scikit-learn==1.8.0
+torch==2.9.0
+matplotlib==3.10.8
+seaborn==0.13.2
+onnx==1.22.0
+onnxruntime==1.27.0
+streamlit==1.58.0
+pytest==9.1.1
+pypdf==6.7.1
