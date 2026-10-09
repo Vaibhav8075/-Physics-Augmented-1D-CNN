@@ -14,6 +14,17 @@
 \usepackage{algpseudocode}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,fit,calc}
+\usepackage{eso-pic}
+
+% Review-draft banner on every page. Set \reviewdraftfalse for a submission build;
+% check_paper.py --submission reports a problem while it is on.
+\newif\ifreviewdraft
+\reviewdrafttrue
+\ifreviewdraft
+\AddToShipoutPictureFG{\AtPageUpperLeft{\put(\LenToUnit{0.5\paperwidth},\LenToUnit{-0.9cm}){%
+  \makebox[0pt][c]{\footnotesize\sffamily\bfseries\color{red!55!black}%
+  Review Draft --- Venue and Authorship Pending\quad(\today)}}}}
+\fi
 
 \input{generated/numbers.tex}
 \makeatletter
@@ -30,7 +41,9 @@
 
 \title{Does a Fixed Physics-Motivated Front End Make 1D-CNN Bearing Fault Classifiers Robust to Noise? A Leakage-Controlled Evaluation}
 
-% If the venue uses double-blind review, replace this block by an anonymous one.
+% Author details as confirmed by the author for the review draft. If the chosen venue uses
+% double-blind review, replace this block by an anonymous one and anonymise the repository URL
+% in the Implementation subsection. Authorship or acknowledgement of the supervisor is pending.
 \author{
 \IEEEauthorblockN{Vaibhav Goel}
 \IEEEauthorblockA{

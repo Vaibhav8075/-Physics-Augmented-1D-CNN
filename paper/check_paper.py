@@ -4,7 +4,7 @@ citations vs. references.bib, \\res{} keys vs. generated/numbers.tex, labels vs.
 missing figure/table files, generated assets older than the results, TBD and author placeholders,
 errors/warnings in the LaTeX and BibTeX logs, and fonts not embedded in main.pdf.
 Exit code 1 if anything that would be wrong in a submitted paper is found; with --submission,
-remaining placeholders (e.g. the author's department) also count as problems.
+remaining placeholders and the review-draft banner also count as problems.
 Usage (from the repository root):  python paper/check_paper.py [--submission]
 """
 import glob
@@ -48,6 +48,10 @@ if set(labels) - refs:
 pending = len(re.findall(r"\\pending\{", tex)) + tex.count("[PENDING")
 if pending:
     notes.append(f"{pending} PENDING blocks remain in the text")
+
+if re.search(r"\\reviewdrafttrue", tex):
+    msg = "review-draft banner is on (set \\reviewdraftfalse in main.tex for a submission build)"
+    (problems if "--submission" in sys.argv else notes).append(msg)
 
 placeholders = re.findall(r"\[[^\]]*to be (?:completed|provided)[^\]]*\]", tex, re.I)
 if placeholders:
