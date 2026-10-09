@@ -57,7 +57,7 @@ No experimental result was altered, and every new number in the text is a genera
 3. **Abstract.** It is exactly 250 words, the common IEEE maximum.
 4. **Review mode.** If the venue is double-blind, the author block and the GitHub URL must be anonymised.
 5. **Authorship and acknowledgements.** Pending; nothing was added.
-6. **Repository URL.** The paper's GitHub URL opens `main`, which does not yet contain this version (branch `feat/harder-benchmark`). Merge, or cite a tagged release, before submission.
+6. **Repository URL.** The paper's GitHub URL opens `main`. Merge each shared version into `main` before sending the PDF, and for submission consider citing a tagged release so the link always matches the paper.
 7. **Scope of reference checks.** Full text was checked for Lessmeier et al. 2016, Zhang et al. 2017, Hendriks et al. 2022 and Smith and Randall 2015. The others were checked against Crossref, arXiv or publisher records (per-entry notes in `references.bib`).
 8. **Kin-RF explanation.** Why Kin-RF helps on Paderborn but not CWRU remains an untested hypothesis, and the paper says so.
 9. **Rounding.** Tables print "−0.0" for tiny negative differences. This is cosmetic.

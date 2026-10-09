@@ -48,8 +48,8 @@ while `\reviewdrafttrue` is set; `check_paper.py --submission` reports it as a p
 - the 4.2 kHz interference line that survives the CWRU band limit (main README, "Known remaining
   cue"): either repeat the CWRU experiments with a band limit below 4 kHz or keep it as the
   stated limitation;
-- the repository URL points at `main`, which does not yet contain this version (branch
-  `feat/harder-benchmark`).
+- the repository URL opens `main`: merge each shared version into `main` first, and for
+  submission consider citing a tagged release so the link matches the paper.
 
 The earlier drafts in `archive/` (`IEEE_Research_Paper_Physics_1DCNN.*`) contain claims these
 results do not support and are superseded by this manuscript.
