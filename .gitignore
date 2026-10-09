@@ -32,3 +32,6 @@ paper/*.log
 paper/*.out
 paper/*.synctex.gz
 paper/main.pdf
+
+# Review PDFs (shared directly, not via the public repository)
+paper/review/*.pdf
