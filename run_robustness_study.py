@@ -139,8 +139,10 @@ def train_rf(X_train, y_train, impairments, seed, copies=2, fs=config.SAMPLING_R
 def score(probs, y):
     m = classification_metrics(probs, y)
     preds = probs.argmax(1)
-    m["recall_per_class"] = [float((preds[y == c] == c).mean() * 100.0) for c in range(probs.shape[1])]
-    return {k: m[k] for k in METRICS + ["recall_per_class"]}
+    k = probs.shape[1]
+    m["recall_per_class"] = [float((preds[y == c] == c).mean() * 100.0) for c in range(k)]
+    m["confusion"] = np.bincount(y * k + preds, minlength=k * k).reshape(k, k).tolist()  # rows: true class
+    return {key: m[key] for key in METRICS + ["recall_per_class", "confusion"]}
 
 
 def run(seeds, epochs, regimes, model_keys, folds=FAULT_SIZES, resume=False):

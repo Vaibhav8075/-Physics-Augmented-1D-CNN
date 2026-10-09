@@ -4,7 +4,7 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red.svg)](https://pytorch.org/)
 [![ONNX Runtime](https://img.shields.io/badge/ONNX_Runtime-INT8_Quantized-green.svg)](https://onnxruntime.ai/)
 
-A 1D-CNN with a fixed "physics" residual filter, dual-stream convolutions, sensor-temporal attention and post-hoc temperature scaling (**PAC-1DCNN**), evaluated on the [CWRU bearing data](https://engineering.case.edu/bearingdatacenter) and the [Paderborn University (KAt) bearing data](https://mb.uni-paderborn.de/kat/forschung/kat-datacenter/bearing-datacenter) against a standard CNN, a WDCNN-style wide-kernel CNN and an envelope-spectrum Random Forest, under evaluation protocols of increasing strictness. The manuscript in [`paper/`](paper/) is generated from these results.
+A 1D-CNN with a fixed "physics" residual filter, dual-stream convolutions, sensor-temporal attention and post-hoc temperature scaling (**PAC-1DCNN**), evaluated on the [CWRU bearing data](https://engineering.case.edu/bearingdatacenter) and the [Paderborn University (KAt) bearing data](https://mb.uni-paderborn.de/kat/forschung/bearing-datacenter) against a standard CNN, a WDCNN-style wide-kernel CNN and an envelope-spectrum Random Forest, under evaluation protocols of increasing strictness. The manuscript in [`paper/`](paper/) is generated from these results.
 
 ---
 
@@ -12,12 +12,14 @@ A 1D-CNN with a fixed "physics" residual filter, dual-stream convolutions, senso
 
 Earlier versions of this README reported 87.58% cross-load accuracy, 0% false alarms and gains from every component. Those numbers came from a split that leaked validation data into training and could not be reproduced. All results below are regenerated from the scripts in this repository (5 seeds each; reports in `results/`).
 
-1. **The evaluation protocol decides the result.** On CWRU each faulty bearing is recorded at all four motor loads, so splitting by load still tests on bearings seen in training (see Hendriks et al., MSSP 2022; Abburi et al., arXiv 2023; Vieira et al., MSSP 2026). Under leave-one-load-out every model scores ~100% macro-F1 on clean data. When whole defect sizes are held out (unseen bearings), every model drops to **~45–60% macro-F1** and labels most unseen inner- and outer-race faults as ball faults.
-2. **No statistically confirmed robustness gain for PAC-1DCNN.** Under leave-one-load-out, PAC-1DCNN was ahead of the standard CNN at 0 dB (+4.0 macro-F1, 17/20 runs) and −5 dB (+16.4, 16/20 runs) of low-pass noise (Wilcoxon p = 0.003 each), but neither survives Holm correction over the 24 comparisons of that benchmark (adjusted p = 0.065 and 0.073). Under the fault-size split, none of 28 PAC-vs-CNN comparisons is significant after Holm correction.
-3. **The fixed residual filter shows no significant effect.** Its direction depends on the noise spectrum: it tends to help with low-pass noise (the kind the training augmentation uses, and which the filter removes) and to hurt with white or high-pass noise. Not significant after correction.
-4. **Simpler baselines do as well or better.** A WDCNN-style CNN beats PAC-1DCNN by ~18–26 macro-F1 under high-pass noise at 0 dB (15/15 runs). An envelope-spectrum Random Forest beats it on clean and moderate-noise data when trained on mixed noise, driven mainly by one fold.
-5. **On Paderborn, where every test bearing is a different physical specimen, all networks are close to chance.** Clean macro-F1 is 37–43% (real-damage cross-validation; random guessing 33.3%) and 30–35% (artificial→real damage; random guessing 30.4%). The same envelope-spectrum features separate the bearings almost perfectly (99.9% macro-F1) when windows of the same bearings appear in training and test, but reach 50% when bearings are held out. So the models learn bearing identity, not transferable fault features. The fixed filter is not significant in any of 112 Paderborn comparisons, and the Random Forest has the highest clean scores. Our measurement-level accuracy (best 50.2%) is far below the 98.3% that Lessmeier et al. (2016, Table 11) report with different features and classifiers on the same bearing split.
-6. **Temperature scaling does not fix calibration under noise.** The calibration data is classified 100% correctly, so the fitted temperature cannot anticipate errors on noisy or unseen data. This matches the known limitation of temperature scaling under dataset shift (Ovadia et al., NeurIPS 2019).
+**Data correction (October 2026).** The four CWRU normal-baseline recordings (files 97-100) exist only at 48 kHz, while the fault recordings used here are 12 kHz. Earlier versions of this pipeline read the normal recordings as if they were 12 kHz, which put their shaft-speed line at a quarter of its true frequency and gave the healthy class a spurious spectral signature. `preprocess_data.py` now decimates them to 12 kHz (zero-phase order-8 Chebyshev I anti-aliasing filter, as for Paderborn), a regression test checks the shaft-speed line, and all CWRU results below were regenerated. Several earlier CWRU findings changed as a result.
+
+1. **The evaluation protocol decides the result.** On CWRU each faulty bearing is recorded at all four motor loads, so splitting by load still tests on bearings seen in training (see Hendriks et al., MSSP 2022; Abburi et al., arXiv 2023; Vieira et al., MSSP 2026). Under leave-one-load-out every model scores 100% macro-F1 on clean data. When whole defect sizes are held out (unseen faulty bearings), the networks drop to **46-50% clean macro-F1** and the Random Forest to 53-60%. Healthy windows are still recognised (the single healthy bearing leaks through the time split), but inner- and outer-race faults of an unseen size are mostly given the wrong fault type (recall 0-24% for the inner race and 19-37% for the outer race across models, mixed-noise training).
+2. **PAC-1DCNN's advantage appears only when test bearings were seen in training.** Under leave-one-load-out, PAC-1DCNN beats the standard CNN at -5 dB (39.7 vs 29.6 macro-F1, 17/20 runs, Holm-adjusted p = 0.004) and -10 dB (23.5 vs 15.5, adjusted p = 0.019) of low-pass noise, but not at 0 dB (adjusted p = 1.0). Removing the fixed filter from PAC-1DCNN has no significant effect, and the ablation that keeps only a single stream on the filtered signal is much better than the full model at 0 and -5 dB (99.0 and 67.9 macro-F1). Under the fault-size split, none of the 28 PAC-vs-CNN comparisons is significant after Holm correction.
+3. **The fixed residual filter helps only when the noise lies below its cut-off.** Under the fault-size split it improves the standard CNN with low-pass noise at 0 and -5 dB in every run (+11.9 to +18.6 macro-F1, significant after Holm correction in both training regimes) and lowers it with high-pass noise at 0 dB (-6.4, significant in the low-pass regime). Inside PAC-1DCNN, whose raw-signal stream bypasses the filter, it has no significant effect in any of 28 comparisons, and on Paderborn in none of 112.
+4. **Simpler baselines do as well or better.** Under the fault-size split a WDCNN-style CNN beats PAC-1DCNN by about 21 macro-F1 under high-pass noise at 0 dB (significant in both regimes) and has the highest mean of all networks at 0 and -5 dB for every noise spectrum. An envelope-spectrum Random Forest is significantly better than PAC-1DCNN in 10 of 14 test conditions in each training regime (by 6-32 points with low-pass training noise, 13-39 points with mixed), and PAC-1DCNN is ahead in none of the runs in those conditions.
+5. **On Paderborn, where every test bearing is a different physical specimen, all networks are close to chance.** Clean macro-F1 is 37-43% (real-damage cross-validation; random guessing 33.3%) and 30-35% (artificial->real damage; random guessing 30.4%). The same envelope-spectrum features separate the bearings almost perfectly (99.9% macro-F1) when windows of the same bearings appear in training and test, but reach 50% when bearings are held out. So the models learn bearing identity, not transferable fault features. The Random Forest has the highest clean scores. Our measurement-level accuracy (best 50.2%) is far below the 98.3% that Lessmeier et al. (2016, Table 11) report with different features and classifiers on the same bearing split.
+6. **Temperature scaling does not fix calibration under noise.** The calibration data is classified 100% correctly, so the fitted temperature (0.34-0.40) makes the models more confident, and the calibration error at -5 dB increases for all five leave-one-load-out models. This matches the known limitation of temperature scaling under dataset shift (Ovadia et al., NeurIPS 2019).
 
 **Limitations:** CWRU has a single healthy bearing, so the healthy class is split by time and still leaks; with one bearing per fault type and size, the fault-size split has only three test bearings per fault type. The noise is synthetic. The WDCNN-style layer sizes were not checked against the original paper's architecture table. The Paderborn study uses one operating setting, decimates the signals to 16 kHz and classifies 0.128-s windows; we did not reproduce the features of Lessmeier et al.
 
@@ -53,10 +55,11 @@ Classes: Normal, Inner Race, Ball, Outer Race. T is fitted post hoc by minimizin
 ### 1. Leave-one-load-out (`run_benchmark.py`)
 Train on three loads, test on the fourth; all fault sizes (0.007″, 0.014″, 0.021″); 4 folds × 5 seeds. **Leaks bearing identity across loads.**
 
-| Macro-F1 (%) | clean | 5 dB | 0 dB | −5 dB |
-| :--- | :--- | :--- | :--- | :--- |
-| Standard 1D-CNN | 100.0 | 99.9 | 93.4 ± 5.8 | 31.0 ± 15.5 |
-| PAC-1DCNN | 99.9 | 99.7 | 97.4 ± 3.4 | 47.4 ± 17.7 |
+| Macro-F1 (%) | clean | 5 dB | 0 dB | −5 dB | −10 dB |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| Standard 1D-CNN | 100.0 | 99.9 ± 0.4 | 87.7 ± 9.0 | 29.6 ± 8.3 | 15.5 ± 6.2 |
+| PAC-1DCNN | 100.0 | 100.0 ± 0.0 | 89.6 ± 8.8 | 39.7 ± 9.5 | 23.5 ± 5.6 |
+| PAC-1DCNN, single stream on the filtered signal | 100.0 | 99.9 ± 0.3 | 99.0 ± 1.9 | 67.9 ± 22.1 | 12.2 ± 1.6 |
 
 Full table, ablations and calibration: [`results/benchmark_report.md`](results/benchmark_report.md).
 
@@ -65,12 +68,12 @@ Each fold holds out one defect size (unseen bearings) across all loads; healthy 
 
 | Clean macro-F1 (%), mixed-noise training | |
 | :--- | :--- |
-| Standard 1D-CNN | 45.2 ± 6.9 |
-| Standard 1D-CNN + fixed filter | 45.8 ± 8.5 |
-| PAC-1DCNN w/o fixed filter | 47.2 ± 10.1 |
-| PAC-1DCNN | 48.3 ± 11.3 |
-| WDCNN-style wide-kernel CNN | 51.6 ± 9.9 |
-| Envelope spectrum + Random Forest | 60.4 ± 23.4 |
+| Standard 1D-CNN | 47.9 ± 12.0 |
+| Standard 1D-CNN + fixed filter | 47.2 ± 10.3 |
+| PAC-1DCNN w/o fixed filter | 48.3 ± 12.7 |
+| PAC-1DCNN | 46.5 ± 11.0 |
+| WDCNN-style wide-kernel CNN | 49.6 ± 11.2 |
+| Envelope spectrum + Random Forest | 59.6 ± 22.0 |
 
 Full tables and all contrasts: [`results/robustness_report.md`](results/robustness_report.md); plot: `results/robustness_noise_spectra.png`.
 
@@ -125,7 +128,7 @@ industrial_fault_ai/
 ├── common.py                 # impairments (incl. noise spectra), training, calibration, metrics
 ├── models.py                 # standard CNN, WDCNN-style CNN, PAC-1DCNN (with ablation flags)
 ├── download_data.py          # 40 CWRU recordings (normal + 0.007/0.014/0.021" faults, loads 0-3)
-├── preprocess_data.py        # windowing; fixed split + per-load arrays
+├── preprocess_data.py        # 48 -> 12 kHz for the normal recordings; windowing; per-load arrays
 ├── train_and_evaluate.py     # fixed split, multi-seed
 ├── run_ablation_study.py     # component ablation on the fixed split
 ├── run_benchmark.py          # leave-one-load-out benchmark + noise sweep

@@ -78,6 +78,20 @@ def test_each_file_uses_its_own_recording():
     assert not np.allclose(normal_1[:, :n], normal_2[:, :n])
 
 
+@pytest.mark.skipif(not HAS_RAW, reason="raw CWRU data not downloaded")
+@pytest.mark.parametrize("name,rpm", [("Normal_3.mat", 1725), ("IR007_3.mat", 1721)])
+def test_recordings_are_at_12khz_after_loading(name, rpm):
+    """Regression: the normal recordings are 48 kHz. After loading, the strongest line near the
+    shaft speed must sit at RPM/60 (12 kHz reading) for normal and fault recordings alike."""
+    from scipy.signal import welch
+    from preprocess_data import load_recording
+    x = load_recording(os.path.join(config.DATA_DIR, name))[0]
+    f, p = welch(x, fs=config.SAMPLING_RATE_HZ, nperseg=2 ** 16)
+    band = (f > 26) & (f < 32)
+    assert f[band][np.argmax(p[band])] == pytest.approx(rpm / 60, abs=0.4)
+    assert len(x) / config.SAMPLING_RATE_HZ == pytest.approx(10.1, abs=0.4)  # ~10-s recordings
+
+
 @pytest.mark.skipif(not HAS_DATA, reason="run preprocess_data.py first")
 def test_no_window_shared_between_splits():
     def hashes(split):

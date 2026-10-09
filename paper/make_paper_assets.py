@@ -71,6 +71,11 @@ def fmt_p(p):
     return "<0.001" if p < 0.001 else f"{p:.3f}"
 
 
+def rel_p(p):
+    """p-value with its relation, for use as $p\res{...}$ in math mode."""
+    return "<0.001" if p < 0.001 else f"={p:.3f}"
+
+
 # ---------------------------------------------------------------------------
 # Models: parameter counts (computed, not transcribed)
 # ---------------------------------------------------------------------------
@@ -148,6 +153,8 @@ def lolo():
         put(k + "-wins", f"{wins}/{n}")
         put(k + "-p", fmt_p(p))
         put(k + "-pholm", fmt_p(pa))
+        put(k + "-prel", rel_p(p))
+        put(k + "-pholmrel", rel_p(pa))
     put("lolo-ntests", len(tests), "{:d}")
     put("lolo-nruns", len(vals("physics", "clean")), "{:d}")
 
@@ -165,6 +172,25 @@ def lolo():
                 "no_dual": "PAC $-$ dual stream", "no_attention": "PAC $-$ attention"}[m]
         rows.append(f"{name} & " + " & ".join(cells) + " \\\\")
     write("tab_lolo.tex", "\n".join(rows) + "\n")
+    # summary values quoted in the prose (ranges over all P1 models)
+    for s in LOLO_SNRS:
+        means = [vals(m, s).mean() for m in LOLO_MODELS]
+        put(f"lolo-{s}-f1-min", min(means))
+        put(f"lolo-{s}-f1-max", max(means))
+    put("lolo-nsig", sum(sig.values()), "{:d}")
+    put("lolo-baseline-nsig", sum(v for (m, _), v in sig.items() if m == "baseline"), "{:d}")
+    # degenerate predictions under strong noise: share of windows given the most frequent label, and the
+    # macro-F1 of always predicting one class (best class, worst-case fold)
+    for m in LOLO_MODELS:
+        for s in ("-5dB", "-10dB"):
+            share = [np.array(r["test"][s]["calibrated"]["confusion"]).sum(0).max()
+                     / np.sum(r["test"][s]["calibrated"]["confusion"]) for r in runs if r["model"] == m]
+            put(f"lolo-{m}-{s}-topshare", 100.0 * float(np.mean(share)))
+    one_class = []
+    for r in runs:
+        n = np.array(r["test"]["clean"]["calibrated"]["confusion"]).sum(1)
+        one_class.append(max(2 * k / (n.sum() + k) for k in n) * 100.0 / len(n))
+    put("lolo-oneclass-f1-max", max(one_class))
 
     # calibration under LOLO
     cal_rows = []
@@ -184,6 +210,15 @@ def lolo():
                 "no_dual": "PAC $-$ dual", "no_attention": "PAC $-$ att."}[m]
         cal_rows.append(f"{name} & {T:.2f} & {acc:.1f} & " + " & ".join(cells) + " \\\\")
     write("tab_calibration.tex", "\n".join(cal_rows) + "\n")
+    # how often temperature scaling raised ECE, per SNR, over the P1 models
+    for s in ["0dB", "-5dB"]:
+        change = [vals(m, s, "ece").mean() - vals(m, s, "ece", "uncalibrated").mean() for m in LOLO_MODELS]
+        put(f"lolo-{s}-ece-nworse", sum(c > 0 for c in change), "{:d}")
+        put(f"lolo-{s}-ece-maxabschange", max(abs(c) for c in change))
+    put("lolo-nmodels", len(LOLO_MODELS), "{:d}")
+    put("lolo-T-min", min(np.mean([r["temperature"] for r in runs if r["model"] == m]) for m in LOLO_MODELS), "{:.2f}")
+    put("lolo-T-max", max(np.mean([r["temperature"] for r in runs if r["model"] == m]) for m in LOLO_MODELS), "{:.2f}")
+    put("lolo-calibacc-min", min(np.mean([r["calib_accuracy"] for r in runs if r["model"] == m]) for m in LOLO_MODELS))
 
     # false alarms at -5 dB (LOLO)
     for m in ("baseline", "physics"):
@@ -262,6 +297,11 @@ def fault_size():
     put("fs-pac-cnn-nsig", sum(r["p_holm"] < 0.05 for r in pac_cnn), "{:d}")
     put("fs-filter-ntests", len(filt), "{:d}")
     put("fs-filter-nsig", sum(r["p_holm"] < 0.05 for r in filt), "{:d}")
+    for a, b, name in (("baseline_hp", "baseline", "cnn"), ("physics", "no_residual", "pac")):
+        sub = [r for r in filt if (r["a"], r["b"]) == (a, b)]
+        put(f"fs-filter-{name}-ntests", len(sub), "{:d}")
+        put(f"fs-filter-{name}-nsig", sum(r["p_holm"] < 0.05 for r in sub), "{:d}")
+        put(f"fs-filter-{name}-absmax", max(abs(r["delta"]) for r in sub))
     put("fs-nruns", rb["summary"]["contrasts"][regimes[0]][0]["n"], "{:d}")
     put("fs-ntests-total", n_tests, "{:d}")
     rf_sig = [r for r in s["contrasts"]["mixed"] if r["a"] == "physics" and r["b"] == "rf" and r["p_holm"] < 0.05]
@@ -286,6 +326,32 @@ def fault_size():
                 put(f"fs-{regime}-{m}-{cond_key(c)}-far",
                     float(np.mean([r["test"][c]["false_alarm_rate"] for r in runs
                                    if r["regime"] == regime and r["model"] == m])))
+        # ranges quoted in the prose
+        means = s["means"][regime]
+        nets = [means[m]["clean"]["macro_f1"]["mean"] for m in FS_MODELS if m != "rf"]
+        put(f"fs-{regime}-nets-clean-min", min(nets))
+        put(f"fs-{regime}-nets-clean-max", max(nets))
+        rec = {m: np.mean([r["test"]["clean"]["recall_per_class"] for r in runs
+                           if r["regime"] == regime and r["model"] == m], axis=0) for m in FS_MODELS}
+        put(f"fs-{regime}-normal-recall-min", min(v[0] for v in rec.values()))
+        # where unseen inner- and outer-race windows go (clean data), from the confusion matrices
+        if all("confusion" in r["test"]["clean"] for r in runs):
+            for m in FS_MODELS:
+                conf = np.sum([r["test"]["clean"]["confusion"] for r in runs
+                               if r["regime"] == regime and r["model"] == m], axis=0)
+                for true, name in ((1, "inner"), (3, "outer")):
+                    for pred, pname in enumerate(["normal", "inner", "ball", "outer"]):
+                        put(f"fs-{regime}-{m}-{name}-as-{pname}", 100.0 * conf[true, pred] / conf[true].sum())
+                put(f"fs-{regime}-{m}-iror-as-ball", 100.0 * (conf[1, 2] + conf[3, 2]) / (conf[1].sum() + conf[3].sum()))
+                put(f"fs-{regime}-{m}-iror-swapped", 100.0 * (conf[1, 3] + conf[3, 1]) / (conf[1].sum() + conf[3].sum()))
+                put(f"fs-{regime}-{m}-faults-as-normal", 100.0 * conf[1:, 0].sum() / conf[1:].sum())
+            for key in ("iror-as-ball", "iror-swapped", "faults-as-normal"):
+                shares = [float(NUM[f"fs-{regime}-{m.replace('_', '')}-{key}"]) for m in FS_MODELS]
+                put(f"fs-{regime}-{key}-min", min(shares))
+                put(f"fs-{regime}-{key}-max", max(shares))
+        for i, name in ((1, "inner"), (2, "ball"), (3, "outer")):
+            put(f"fs-{regime}-recall-{name}-min", min(v[i] for v in rec.values()))
+            put(f"fs-{regime}-recall-{name}-max", max(v[i] for v in rec.values()))
     return rb
 
 
@@ -354,6 +420,8 @@ def spectra_figure():
     Hr = np.abs(1 - np.fft.rfft(ma, n) * np.exp(-1j * 2 * np.pi * f / fs * -5)) ** 2
     ax.plot(f / 1000, 10 * np.log10(Hr / Hr.max() + 1e-12), "k--", label="residual filter $|H_r|^2$")
     put("filter-halfamp-hz", float(f[np.argmax(np.sqrt(Hr) > 0.5)]), "{:.0f}")
+    put("filter-maxgain", float(np.sqrt(Hr.max())), "{:.2f}")  # side-lobe peak of |H_r| (>1: amplification)
+    put("filter-maxgain-hz", float(f[np.argmax(Hr)]), "{:.0f}")
     put("filter-halfamp-hz-pu", float(f[np.argmax(np.sqrt(Hr) > 0.5)]) * 16000 / fs, "{:.0f}")
     ax.set_xlim(0, fs / 2000)
     ax.set_ylim(-40, 3)

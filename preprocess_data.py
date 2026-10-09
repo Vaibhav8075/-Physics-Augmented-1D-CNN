@@ -3,12 +3,19 @@ import re
 import glob
 import numpy as np
 import scipy.io as sio
+import scipy.signal
 
 import config
 from common import add_real_world_impairments, impair_array  # noqa: F401  (re-exported for older imports)
 from download_data import recording_id
 
 LABEL_PREFIXES = {"Normal": 0, "IR": 1, "B": 2, "OR": 3}
+
+# The normal-baseline recordings (97-100) are sampled at 48 kHz, unlike the 12 kHz drive-end fault
+# recordings: read as 12 kHz, their shaft-speed line appears at a quarter of RPM/60 at every load,
+# and their ~485k samples are 10 s at 48 kHz. They are decimated to 12 kHz with the same zero-phase
+# order-8 Chebyshev type I anti-aliasing filter as the Paderborn data (scipy.signal.decimate).
+NATIVE_FS_HZ = {"097": 48000, "098": 48000, "099": 48000, "100": 48000}
 
 
 def parse_filename(filename):
@@ -40,7 +47,12 @@ def load_recording(filepath):
     de = mat[de_key].ravel()
     fe = mat[fe_key].ravel() if fe_key in mat else de
     n = min(len(de), len(fe))
-    return np.stack([de[:n], fe[:n]]).astype(np.float32)
+    signal = np.stack([de[:n], fe[:n]]).astype(np.float64)
+    native_fs = NATIVE_FS_HZ.get(rid, config.SAMPLING_RATE_HZ)
+    if native_fs != config.SAMPLING_RATE_HZ:
+        factor = native_fs // config.SAMPLING_RATE_HZ
+        signal = scipy.signal.decimate(signal, factor, ftype="iir", zero_phase=True, axis=-1)
+    return signal.astype(np.float32)
 
 
 def window_signal(signal):

@@ -27,13 +27,16 @@ On Overleaf, upload `main.tex`, `references.bib`, `generated/` and `figures/`.
 All sections are complete; `check_paper.py` reports no missing or TBD values. The
 Paderborn numbers need `results/paderborn_{real_cv,a2r}_metrics.json` (from
 `run_paderborn_study.py`) and `results/paderborn_sanity.json` (from
-`paderborn_sanity_check.py`). Values quoted from Lessmeier et al. (Tables 9 and 11) are
-typed into `main.tex` by hand and were checked against the published PDF (Table 11 gives
-98.3%, its running text 98.5%); so are a few rounded summaries in the prose (e.g. the
-CWRU "45--60%" range), which must be updated by hand if the results change.
+`paderborn_sanity_check.py`). All CWRU numbers, including the ranges quoted in the prose,
+are generated keys; they were regenerated after the 48 kHz normal-baseline recordings were
+decimated to 12 kHz (see the main README). Values quoted from Lessmeier et al. (Tables 9
+and 11) are typed into `main.tex` by hand and were checked against the published PDF
+(Table 11 gives 98.3%, its running text 98.5%).
 
-Open items for submission: author affiliation, and the target venue with its template and
-page limit (the manuscript is currently 9 pages).
+Open items for submission: the author's school/department (placeholder in the author
+block; `check_paper.py --submission` fails until it is filled in), and the target venue
+with its template, page limit and review mode (the manuscript is currently 10 pages plus
+two references on an 11th; an anonymous author block is needed for double-blind review).
 
 The earlier drafts in the repository root (`IEEE_Research_Paper_Physics_1DCNN.*`) contain
 claims these results do not support and are superseded by this manuscript.
