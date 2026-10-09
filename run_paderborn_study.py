@@ -6,7 +6,9 @@ test can be separated by bearing for all classes, including healthy. Two
 protocols from Lessmeier et al. (PHM Society European Conference 2016) are used:
 
   a2r      Table 8: train on artificially damaged bearings, test on bearings with
-           real (accelerated-lifetime) damage. One split; statistics over seeds.
+           real (accelerated-lifetime) damage. One split; statistics over 20 seeds
+           (with 10, the smallest Wilcoxon p-value, ~0.002, could not survive Holm
+           correction over 70 tests).
   real_cv  Table 10: real-damage bearings only; 3 bearings per class train, the
            other 2 test, for all C(5,3) = 10 combinations.
 
@@ -318,7 +320,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--protocols", nargs="+", default=["real_cv", "a2r"], choices=["real_cv", "a2r"])
     parser.add_argument("--seeds-cv", type=int, nargs="+", default=[0, 1])
-    parser.add_argument("--seeds-a2r", type=int, nargs="+", default=list(range(10)))
+    parser.add_argument("--seeds-a2r", type=int, nargs="+", default=list(range(20)))  # single split: n=20 pairs
     parser.add_argument("--epochs", type=int, default=config.EPOCHS)
     parser.add_argument("--regimes", nargs="+", default=list(REGIMES), choices=list(REGIMES))
     parser.add_argument("--models", nargs="+", default=list(MODEL_SPECS), choices=list(MODEL_SPECS))

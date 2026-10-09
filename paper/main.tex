@@ -1,0 +1,362 @@
+% Main manuscript. Build: see paper/README.md
+% All result-dependent numbers come from generated/numbers.tex via \res{key};
+% all result tables are \input from generated/; all result figures are produced by
+% make_paper_assets.py from results/*.json. Do not type results by hand.
+\documentclass[conference]{IEEEtran}
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc}
+
+\input{generated/numbers.tex}
+\makeatletter
+% \res{key}: a generated number; an unknown key is printed in red and reported as a warning
+\newcommand{\res}[1]{\ifcsname res@#1\endcsname\csname res@#1\endcsname\else
+  \textcolor{red}{[missing:\detokenize{#1}]}\PackageWarning{results}{Missing result key #1}\fi}
+\makeatother
+% \input inside a tabular breaks the following \bottomrule; the TeX primitive is expandable
+\makeatletter
+\newcommand{\tabinput}[1]{\@@input #1 }
+\makeatother
+% Clearly marked text that must be written once the Paderborn experiment has finished
+\newcommand{\pending}[1]{\par\smallskip\noindent\fcolorbox{orange}{orange!8}{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{\footnotesize\textbf{PENDING (Paderborn run in progress):} #1}}\par\smallskip}
+
+\begin{document}
+
+\title{Does a Fixed Physics-Motivated Front End Make\\ 1D-CNN Bearing Fault Classifiers Robust to Noise?\\ A Leakage-Controlled Evaluation}
+
+\author{\IEEEauthorblockN{Vaibhav Goel}
+\IEEEauthorblockA{\textit{[Affiliation to be provided]}\\
+vaibhav.goel0531@gmail.com}}
+
+\maketitle
+
+\begin{abstract}
+Convolutional networks for vibration-based bearing fault diagnosis are often reported to be robust to noise and to changes in operating condition, yet the Case Western Reserve University (CWRU) data on which most such claims rest records every faulty bearing at all motor loads, so load-wise splits test on bearings seen during training. We examine one popular design idea under controlled evaluation: a fixed, non-trainable residual (high-pass) front end that subtracts an 11-tap moving average before learned convolutions, embedded in a dual-stream 1D-CNN with attention and temperature scaling (PAC-1DCNN). We compare it with a standard 1D-CNN with and without the same front end, a WDCNN-style wide-kernel CNN and an envelope-spectrum random forest, under leave-one-load-out and fault-size hold-out splits of CWRU, with low-pass, white and high-pass synthetic noise at 10 to $-5$\,dB SNR, paired Wilcoxon tests and Holm correction. Under leave-one-load-out, all models reach about 100\% macro-F1 on clean data and PAC-1DCNN is ahead of the standard CNN at 0 and $-5$\,dB (\res{lolo-baseline-0dB-wins} and \res{lolo-baseline--5dB-wins} runs), but not significantly after correction. When whole defect sizes are held out, every model falls to roughly 45--60\% macro-F1 and assigns most unseen inner- and outer-race faults to the ball-fault class; none of \res{fs-pac-cnn-ntests} PAC-versus-CNN comparisons and none of \res{fs-filter-ntests} front-end comparisons is significant, while the WDCNN-style network is significantly better than PAC-1DCNN under high-pass noise. The front end tends, without reaching significance, to help when the test noise lies mostly below its cut-off, as the low-pass noise used in training does, and to hurt when it does not. Temperature scaling fitted on correctly classified calibration data increased the calibration error of every model at $-5$\,dB and changed it little at 0\,dB.
+\textbf{[PENDING: one sentence on the Paderborn results.]}
+\end{abstract}
+
+\begin{IEEEkeywords}
+Bearing fault diagnosis, convolutional neural networks, data leakage, noise robustness, evaluation methodology, calibration, CWRU, Paderborn.
+\end{IEEEkeywords}
+
+% =====================================================================================
+\section{Introduction}
+Rolling-element bearing diagnosis from vibration signals is a long-standing condition-monitoring problem \cite{randall2011tutorial,lei2020review}, and one-dimensional convolutional neural networks (1D-CNNs) trained on raw signal windows have become a common data-driven approach \cite{zhang2017wdcnn,zhang2018ticnn,zhao2020benchmark}. Industrial signals contain background noise, sensor drift and impulsive disturbances that laboratory recordings largely lack, so a recurring design goal is robustness to such impairments. Several architectures pursue it by building signal-processing knowledge into the first layers, for example wide first-layer kernels intended to suppress high-frequency noise \cite{zhang2017wdcnn}, wavelet-parameterised first layers \cite{li2022wkn}, or physics-informed spectral preprocessing combined with attention \cite{kim2023tfmd}.
+
+How such robustness is measured matters as much as how it is designed. The CWRU bearing data \cite{cwrudata} have become a standard reference for testing diagnostic algorithms \cite{smith2015cwru}; in them each seeded fault exists on one physical bearing that was recorded at four motor loads, and all healthy data come from a single bearing \cite{abburi2023closer,rosa2024multilabel}. Random window splits place overlapping segments of one recording in both training and test sets, and splits by motor load still test on bearings seen in training \cite{hendriks2022cwru,abburi2023closer,rosa2024multilabel}. Bearing-wise evaluation across several datasets has shown that common partitions inflate performance and that the number of distinct training bearings is decisive \cite{vieira2026realistic}. Data leakage of this kind is a recognised source of irreproducible results across machine-learning-based science \cite{kapoor2023leakage}.
+
+This paper asks a narrow question that both literatures leave open: \emph{does a fixed, physics-motivated high-pass front end improve the noise robustness of a 1D-CNN bearing classifier once train/test leakage is controlled, and does any gain depend on the spectrum of the noise used to evaluate it?} The front end studied here subtracts an 11-sample moving average from each channel, i.e.\ a fixed high-pass filter, and feeds the residual to one stream of a dual-stream network with attention and post-hoc temperature scaling. We refer to the complete model as PAC-1DCNN. An earlier version of this work reported gains for this model on a single CWRU load split; that evaluation leaked validation data into training and is superseded by the results below.
+
+The contributions are empirical:
+\begin{itemize}
+\item A controlled comparison of the fixed front end at two model capacities (a standard 1D-CNN with and without it; PAC-1DCNN with and without it) against a WDCNN-style network and an envelope-spectrum random forest, under protocols with progressively less train/test overlap: leave-one-load-out and fault-size hold-out on CWRU, and bearing-disjoint protocols on the Paderborn University data \cite{lessmeier2016kat}.
+\item A noise-spectrum sweep (low-pass, white and high-pass noise at 10 to $-5$\,dB SNR, plus drift and impulses) with two training regimes, which exposes a confound between the spectrum of the synthetic noise and the passband of the front end.
+\item Paired, multiplicity-corrected statistics over folds and seeds, reporting effect sizes and win counts rather than single-run accuracies, and a code base in which every number in this paper is generated from saved results.
+\end{itemize}
+We do not claim a new architecture. The results are largely negative for the front end and for PAC-1DCNN, and we report them as such.
+
+% =====================================================================================
+\section{Related Work}
+\subsection{Noise-robust CNNs for bearing diagnosis}
+WDCNN uses wide kernels in the first convolutional layer to extract features and suppress high-frequency noise, and adaptive batch normalisation for domain adaptation across loads \cite{zhang2017wdcnn}; the same group studied training methods for CNN diagnosis under noisy environments and different working loads \cite{zhang2018ticnn}. WaveletKernelNet replaces the first convolutional layer with a continuous-wavelet layer whose scale and translation are learned \cite{li2022wkn}. Kim and Kim combine time- and frequency-domain 1D-CNN branches, physics-informed spectral preprocessing and a channel-spatial attention module for noise robustness \cite{kim2023tfmd}. Channel and spatial attention of this kind follows squeeze-and-excitation \cite{hu2018se} and CBAM \cite{woo2018cbam}. Zhao et al.\ benchmarked MLP, auto-encoder, CNN and RNN models on seven datasets with different split strategies and released a common code base \cite{zhao2020benchmark}. Robustness in such studies is usually assessed by adding synthetic noise at controlled SNRs to the test signals. In the work we examined we did not find an analysis of how the outcome depends on the spectrum of that noise relative to the pass band of the network's front end; our search was not exhaustive.
+
+\subsection{Evaluation leakage in bearing datasets}
+Smith and Randall analysed the CWRU recordings with envelope analysis, spectral kurtosis and cepstral methods and categorised which records are clearly diagnosable \cite{smith2015cwru}. Hendriks et al.\ showed that common CWRU partitions lead to over-optimistic results \cite{hendriks2022cwru}, and Abburi et al.\ reported that assigning data from one bearing to both training and evaluation inflates performance \cite{abburi2023closer}. Rosa et al.\ noted that, because CWRU contains a single healthy bearing pair, any division of the healthy class leaks, and proposed holding out whole fault conditions \cite{rosa2024multilabel}. Vieira et al.\ proposed bearing-wise partitioning across CWRU, Paderborn, UORED-VAFCLS and HUST data \cite{vieira2026realistic}. The Paderborn data contain experiments with 32 bearings (6 healthy, 12 with artificial damage and 14 with damage from accelerated lifetime tests) and define two bearing-disjoint protocols \cite{lessmeier2016kat}. Our study applies these evaluation principles to the specific question of front-end design for noise robustness.
+
+\subsection{Calibration under shift}
+Temperature scaling divides the logits by a scalar fitted on held-out data and is effective for in-distribution calibration \cite{guo2017calibration}; under dataset shift its benefit was found to diminish or reverse \cite{ovadia2019shift}. Several bearing-diagnosis models include it as a component; we test whether it helps when the test noise differs from the calibration data.
+
+% =====================================================================================
+\section{Problem Setting and Evaluation Protocols}
+\subsection{Task}
+A window $\mathbf{x}\in\mathbb{R}^{C\times L}$ of $L$ samples from $C$ accelerometer channels, sampled at $f_s$, is to be assigned a class $y\in\{1,\dots,K\}$. On CWRU, $C=2$ (drive end and fan end), $f_s=12$\,kHz, $L=1024$ and $K=4$ (normal, inner race, ball, outer race). On Paderborn, $C=1$, $f_s=16$\,kHz after decimation, $L=2048$ and $K=3$ (healthy, inner ring, outer ring). Each channel of each window is standardised to zero mean and unit variance before any impairment is added.
+
+\subsection{Data}
+\emph{CWRU.} We use \res{cwru-recordings} recordings of the 12\,kHz drive-end data set \cite{cwrudata}: the four normal-baseline recordings and inner-race, ball and outer-race (centred, 6~o'clock) faults of 0.007, 0.014 and 0.021\,in at loads of 0--3\,hp. Windows are cut with a stride of 256 samples, giving \res{cwru-windows} windows. Smith and Randall reported that several of these records, including some 0.014\,in outer-race and many ball-fault records, are not clearly diagnosable with envelope analysis \cite{smith2015cwru}.
+
+\emph{Paderborn.} We use the housing vibration signal of the \res{pu-bearings} bearings without combined damage \cite{lessmeier2016kat,kat2016data}. Each 4-s measurement at 64\,kHz is decimated by four with an eighth-order Chebyshev type~I anti-aliasing filter applied forwards and backwards. As in the artificial-to-real experiment of \cite{lessmeier2016kat}, only operating setting N15\_M07\_F10 (1500\,rpm, 0.7\,N\,m, 1000\,N; 20 measurements per bearing) is used, here for both protocols. Training windows overlap by half; test windows do not overlap.
+
+\subsection{Protocols}
+Table~\ref{tab:protocols} lists the four protocols and what each allows training and test sets to share. P1 holds out one motor load at a time. P2 holds out one defect size (all loads) per fold, so the faulty test bearings are never seen in training, as in the fault-condition hold-out of \cite{rosa2024multilabel}; the single healthy bearing is split in time (first 80\% of each recording for training, last 20\% for testing, 1\% gap), a residual leak we cannot remove on CWRU. P3 and P4 are the artificial-to-real and real-damage cross-validation protocols of \cite{lessmeier2016kat}, in which every test bearing, including healthy ones, is a separate specimen. P4 uses all $\binom{5}{3}=10$ ways of training on three bearings per class and testing on the other two. P3 has a single split, so its statistics reflect only training randomness (initialisation, data order and augmentation) over 20 seeds.
+
+\begin{table}[t]
+\centering
+\caption{Evaluation protocols. ``Shared'' lists what training and test data have in common; ``Runs'' is folds $\times$ seeds.}
+\label{tab:protocols}
+\footnotesize
+\begin{tabular}{@{}p{1.15cm}p{2.6cm}p{2.25cm}l@{}}
+\toprule
+Protocol & Train / test & Shared & Runs \\
+\midrule
+P1 CWRU & 3 loads / 4th load & all physical bearings & $4\times5$ \\
+P2 CWRU & 2 defect sizes / 3rd size & healthy bearing (time split) & $3\times5$ \\
+P3 PU & artificial damage / real damage \cite{lessmeier2016kat} & none (damage type shifts) & $1\times20$ \\
+P4 PU & 3 / 2 real-damage bearings per class & none & $10\times2$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =====================================================================================
+\section{Models}
+\subsection{Fixed residual front end}
+For each channel, the front end computes
+\begin{equation}
+\mathbf{r}_c[n]=\mathbf{x}_c[n]-\frac{1}{11}\sum_{k=-5}^{5}\mathbf{x}_c[n+k],
+\label{eq:residual}
+\end{equation}
+with zero padding at the window edges. Its frequency response is
+\begin{equation}
+H_r(\omega)=1-\frac{\sin(11\omega/2)}{11\sin(\omega/2)},\qquad \omega=2\pi f/f_s ,
+\label{eq:hr}
+\end{equation}
+a high-pass filter whose amplitude response first reaches 0.5 at about \res{filter-halfamp-hz}\,Hz for $f_s=12$\,kHz (\res{filter-halfamp-hz-pu}\,Hz at 16\,kHz). It has no trainable parameters. It removes slow baseline drift by construction, but it equally removes any noise and signal content below its cut-off.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[font=\scriptsize, node distance=3.5mm and 3mm,
+  box/.style={draw, rounded corners=1pt, align=center, minimum height=5.5mm, inner sep=2pt},
+  fixed/.style={box, fill=gray!15}, train/.style={box, fill=blue!6}, ->, >={Stealth[length=1.6mm]}]
+\node[box] (x) {window $\mathbf{x}$\\$C\times L$};
+\node[fixed, right=5mm of x] (hp) {fixed residual\\filter \eqref{eq:residual}};
+\node[train, right=4mm of hp] (sr) {stream R\\conv $k{=}5$ $\times2$};
+\node[train, below=3mm of sr] (sx) {stream X\\conv $k{=}15$ $\times2$};
+\node[train, right=5mm of sr, yshift=-4.6mm] (fu) {concat +\\conv $k{=}3$};
+\node[train, below=9mm of fu] (at) {channel att.\\+ temporal att.};
+\node[train, left=5mm of at] (hd) {GAP,\\linear};
+\node[fixed, left=5mm of hd] (ts) {softmax\\$(\mathbf{z}/T)$};
+\draw (x) -- (hp); \draw (hp) -- node[above]{$\mathbf{r}$} (sr);
+\draw (x.south) |- (sx.west);
+\draw (sr.east) -- ++(2mm,0) |- (fu.west); \draw (sx.east) -- ++(2mm,0) |- (fu.west);
+\draw (fu) -- (at); \draw (at) -- (hd); \draw (hd) -- (ts);
+\end{tikzpicture}
+\caption{PAC-1DCNN as implemented (conceptual block diagram). Grey blocks have no trainable parameters; $T$ is fitted after training. Ablations remove the residual filter (stream R then receives $\mathbf{x}$), replace the two streams by one, or remove the attention block.}
+\label{fig:arch}
+\end{figure}
+
+\subsection{PAC-1DCNN}
+Fig.~\ref{fig:arch} shows the network. Stream~R applies two strided convolutions with kernel length 5 (32 and 64 channels) to $\mathbf{r}$; stream~X applies two with kernel length 15 to $\mathbf{x}$; each convolution is followed by batch normalisation and ReLU. The concatenated 128 feature maps are fused by a strided convolution of length 3, giving $\mathbf{Z}\in\mathbb{R}^{128\times L/8}$. The attention block computes feature-channel weights $\mathbf{a}=\sigma(\mathbf{W}_2\,\mathrm{ReLU}(\mathbf{W}_1\,\mathrm{GAP}(\mathbf{Z})))$ in the manner of squeeze-and-excitation \cite{hu2018se}, then temporal weights $\boldsymbol{\tau}=\sigma(\mathrm{conv}_7(\mathbf{a}\odot\mathbf{Z}))\in\mathbb{R}^{1\times L/8}$ as in CBAM \cite{woo2018cbam}, and outputs $\boldsymbol{\tau}\odot\mathbf{a}\odot\mathbf{Z}$. Global average pooling and a linear layer give logits $\mathbf{z}$, and $\hat{\mathbf{p}}=\mathrm{softmax}(\mathbf{z}/T)$. Note that $\mathbf{a}$ weights the 128 learned feature channels, not the physical sensors, so the attention weights cannot be read as sensor attributions; we did not evaluate them as explanations.
+
+\subsection{Baselines}
+\emph{Standard 1D-CNN (CNN):} three strided convolutions (kernel lengths 15, 7, 5; 32, 64, 128 channels) with batch normalisation and ReLU, global average pooling and a linear layer. \emph{CNN+HP:} the same network with the fixed front end \eqref{eq:residual} applied to its input. Together with PAC-1DCNN and PAC-1DCNN without the front end (PAC$-$HP), this gives a $2\times2$ design that separates the front end from model capacity. \emph{WDCNN-style CNN (WDCNN-s):} a first convolution of length 64 and stride 16 followed by four length-3 convolutions with max-pooling, after \cite{zhang2017wdcnn}; layer sizes are our adaptation to the window lengths used here and were not checked against the original architecture table. \emph{Envelope-spectrum random forest (Env-RF):} for each channel, log energies of the Hann-windowed magnitude spectrum in 64 equal bands up to the Nyquist frequency and the log magnitude of the Hilbert envelope spectrum up to about 610\,Hz \cite{randall2011tutorial}, classified by a random forest of 300 trees with balanced class weights \cite{breiman2001rf}. Table~\ref{tab:models} gives parameter counts.
+
+\begin{table}[t]
+\centering
+\caption{Models and trainable parameters (CWRU: 2 channels, 4 classes; Paderborn: 1 channel, 3 classes). Counts computed from the implementation.}
+\label{tab:models}
+\footnotesize
+\begin{tabular}{@{}p{3.6cm}lrr@{}}
+\toprule
+Model & Abbrev. & CWRU & PU \\
+\midrule
+\tabinput{generated/tab_models.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =====================================================================================
+\section{Impairment Model and Training}
+\subsection{Impairments}
+A clean standardised window $\mathbf{x}$ is impaired as $\tilde{\mathbf{x}}=\mathbf{x}+\mathbf{n}+\mathbf{d}+\mathbf{e}$. The noise is $\mathbf{n}=\alpha\,(g_s*\mathbf{w})$ with $\mathbf{w}$ white Gaussian, ``same''-length convolution with a shaping kernel $g_s$, and $\alpha$ chosen so that $10\log_{10}(P_x/P_n)$ equals the target SNR, where $P_x$ and $P_n$ are mean powers over all channels and samples of the window. Three spectra are used: \emph{low-pass}, $g[k]=e^{-3k/14}$ for $k=0,\dots,14$ (\res{noise-lowpass-below1k}\% of its power below 1\,kHz at 12\,kHz); \emph{white}, $g=\delta$; and \emph{high-pass}, $g=[-0.5,\,1,\,-0.5]$. With probability $p_d$ a drift $d[n]=a\sin(2\pi c\,n/(L-1))+b\,n/(L-1)$ with $a\sim\mathcal{U}(0.3,0.8)$, $c\sim\mathcal{U}(0.5,2)$, $b\sim\mathcal{U}(-0.5,0.5)$ is added to all channels; with probability $p_e$, two to five impulses of amplitude $\pm\mathcal{U}(2,4)$ and three samples' width are added. Fig.~\ref{fig:spectra} compares the noise spectra with $|H_r|^2$: the low-pass noise lies largely in the stop band of the front end, the high-pass noise in its pass band.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_noise_spectra.pdf}
+\caption{Normalised power spectra of the three synthetic noise models and power response of the fixed residual filter \eqref{eq:hr} at 12\,kHz.}
+\label{fig:spectra}
+\end{figure}
+
+\subsection{Training and test conditions}
+All networks are trained with AdamW \cite{loshchilov2019adamw} (learning rate $10^{-3}$, weight decay $10^{-3}$, batch 64, 15 epochs), class-weighted cross-entropy, and the weights of the final epoch (no model selection on test-like data). Impairments are drawn afresh for every training batch at 15\,dB SNR with $p_d=0.4$, $p_e=0.1$, either with low-pass noise only (\emph{low-pass regime}) or with the spectrum drawn per window from the three types (\emph{mixed regime}); the random forest is trained on two impaired copies of the training windows under the same regime. Test sets are impaired once with fixed seeds, identically for all models: P1 uses low-pass noise at each SNR together with drift and impulses ($p_d=0.85$, $p_e=0.35$); P2--P4 use each noise spectrum alone at 10, 5, 0 and $-5$\,dB, a drift-and-impulses condition without noise, and clean data. In P1 the temperature $T$ is fitted by minimising the negative log-likelihood on the last 20\% (in time) of each training recording, impaired at 10\,dB with $p_d=0.6$, $p_e=0.2$; in P2--P4 uncalibrated probabilities are reported. Algorithm~\ref{alg:protocol} summarises one fold.
+
+\begin{algorithm}[t]
+\caption{One fold of the evaluation}
+\label{alg:protocol}
+\footnotesize
+\begin{algorithmic}[1]
+\Require bearing-level split $(\mathcal{B}_{\text{tr}},\mathcal{B}_{\text{te}})$, seeds $S$, regimes $R$, test conditions $Q$
+\State $X_{\text{tr}},X_{\text{te}}\gets$ standardised windows of $\mathcal{B}_{\text{tr}}$, $\mathcal{B}_{\text{te}}$
+\For{$r\in R$, $s\in S$, model $m$}
+  \State initialise $m$ with seed $s$
+  \For{15 epochs, each mini-batch $B\subset X_{\text{tr}}$}
+    \State $\tilde B\gets$ impair$(B;\,r,\,15\,\text{dB})$ with fresh randomness; update $m$ on $\tilde B$
+  \EndFor
+\EndFor
+\For{$q\in Q$}
+  \State $\tilde X_{\text{te}}\gets$ impair$(X_{\text{te}};\,q)$ with a seed fixed per (fold, $q$)
+  \State evaluate every trained model on $\tilde X_{\text{te}}$
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Metrics and statistics}
+We report macro-F1 over windows as the primary metric because the class sizes differ, together with the false-alarm rate (healthy windows predicted as faulty), the missed-fault rate, the expected calibration error (ECE, ten equal-width confidence bins) \cite{guo2017calibration} and, on Paderborn, accuracy per 4-s measurement obtained by averaging window probabilities, which matches the unit used in \cite{lessmeier2016kat}. Models are compared by two-sided Wilcoxon signed-rank tests \cite{wilcoxon1945} over paired (fold, seed) runs, with Holm's procedure \cite{holm1979} applied over all contrasts and test conditions of a protocol and training regime. With 15 pairs the smallest attainable $p$-value is about $6\times10^{-5}$, so with 70 tests per family only effects that are nearly unanimous across runs can be declared significant; we therefore also report mean differences and win counts.
+
+\subsection{Implementation}
+Experiments used Python~3.14, PyTorch~2.9.0 (CUDA~12.9), scikit-learn~1.8.0, NumPy~2.3.5 and SciPy~1.17.1 on an NVIDIA GeForce RTX~5050 Laptop GPU. Code, configuration and the scripts that generate every table and figure of this paper are available at \url{https://github.com/Vaibhav8075/-Physics-Augmented-1D-CNN}.
+
+% =====================================================================================
+\section{Results}
+\subsection{P1: leave-one-load-out (CWRU)}
+Table~\ref{tab:lolo} shows that every model reaches about 100\% macro-F1 on clean data from the held-out load, and remains above 99\% down to 5\,dB. At 0\,dB, PAC-1DCNN averages \res{lolo-physics-0dB-f1}\% against \res{lolo-baseline-0dB-f1}\% for the standard CNN (ahead in \res{lolo-baseline-0dB-wins} runs, $p=\res{lolo-baseline-0dB-p}$, Holm-adjusted $p=\res{lolo-baseline-0dB-pholm}$); at $-5$\,dB, \res{lolo-physics--5dB-f1}\% against \res{lolo-baseline--5dB-f1}\% (\res{lolo-baseline--5dB-wins}, $p=\res{lolo-baseline--5dB-p}$, adjusted $p=\res{lolo-baseline--5dB-pholm}$). The direction is consistent, but neither difference is significant after correction for the \res{lolo-ntests} comparisons in the table. Removing the front end from PAC-1DCNN lowers macro-F1 at $-5$\,dB by \res{lolo-noresidual--5dB-absdelta} points on average (adjusted $p=\res{lolo-noresidual--5dB-pholm}$); removing the dual stream or the attention block has no detectable effect. Because P1 shares all physical bearings between training and test, the near-perfect clean scores say little about generalisation to new bearings.
+
+\begin{table*}[t]
+\centering
+\caption{P1, leave-one-load-out on CWRU: macro-F1 (\%) on the held-out load, mean\,$\pm$\,std over \res{lolo-nruns} runs (4 folds $\times$ 5 seeds). Test noise is low-pass with drift and impulses. $^\dagger$: differs from PAC-1DCNN after Holm correction (none does).}
+\label{tab:lolo}
+\footnotesize
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Model & clean & 10\,dB & 5\,dB & 0\,dB & $-5$\,dB & $-10$\,dB \\
+\midrule
+\tabinput{generated/tab_lolo.tex}
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{P2: fault-size hold-out (CWRU)}
+Holding out whole defect sizes changes the picture (Tables~\ref{tab:fs} and~\ref{tab:fscon}, Fig.~\ref{fig:protocols}). On clean data the networks reach \res{fs-mixed-baseline-clean-f1}--\res{fs-mixed-wdcnn-clean-f1}\% macro-F1 under the mixed regime and the random forest \res{fs-mixed-rf-clean-f1}\%, with large differences between folds: the random forest reaches \res{fs-mixed-rf-fold7-clean-f1}\% when the 0.007\,in faults are held out but \res{fs-mixed-rf-fold14-clean-f1}\% and \res{fs-mixed-rf-fold21-clean-f1}\% on the other folds, while PAC-1DCNN reaches \res{fs-mixed-physics-fold7-clean-f1}, \res{fs-mixed-physics-fold14-clean-f1} and \res{fs-mixed-physics-fold21-clean-f1}\%. Fig.~\ref{fig:recall} shows why: healthy windows are always recognised (the healthy class still leaks through the time split), but unseen inner- and outer-race faults are mostly assigned to the ball-fault class by every model. For PAC-1DCNN, mean recall on clean data is \res{fs-mixed-physics-recall-normal}\% (normal), \res{fs-mixed-physics-recall-inner}\% (inner race), \res{fs-mixed-physics-recall-ball}\% (ball) and \res{fs-mixed-physics-recall-outer}\% (outer race). The models detect that a fault is present but do not identify its type at an unseen defect size.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_cwru_protocols.pdf}
+\caption{Macro-F1 versus test SNR on CWRU under P1 (left; low-pass noise with drift and impulses) and P2 (right; low-pass noise only, low-pass training regime). The two panels use different test conditions and should not be compared point by point; they show the level shift between protocols.}
+\label{fig:protocols}
+\end{figure}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_cwru_recall.pdf}
+\caption{P2: per-class recall on clean test data for each held-out defect size (mixed training regime, mean over 5 seeds).}
+\label{fig:recall}
+\end{figure*}
+
+\begin{table*}[t]
+\centering
+\caption{P2, fault-size hold-out on CWRU: macro-F1 (\%), mean\,$\pm$\,std over \res{fs-nruns} runs (3 folds $\times$ 5 seeds). LP, W, HP: low-pass, white and high-pass noise only, at the stated SNR in dB; D+S: drift and impulses without noise.}
+\label{tab:fs}
+\footnotesize
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+Model & clean & LP\,0 & LP\,$-5$ & W\,0 & W\,$-5$ & HP\,0 & HP\,$-5$ & D+S \\
+\midrule
+\tabinput{generated/tab_faultsize.tex}
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\centering
+\caption{P2 contrasts: mean macro-F1 difference (runs in which the first model is better / total); conditions as in Table~\ref{tab:fs}. Bold: significant after Holm correction over all \res{fs-ntests-per-regime} tests of a training regime.}
+\label{tab:fscon}
+\footnotesize
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+Contrast & clean & LP\,0 & LP\,$-5$ & W\,0 & W\,$-5$ & HP\,0 & HP\,$-5$ & D+S \\
+\midrule
+\tabinput{generated/tab_faultsize_contrasts.tex}
+\bottomrule
+\end{tabular}
+\end{table*}
+
+None of the \res{fs-pac-cnn-ntests} PAC-versus-CNN contrasts and none of the \res{fs-filter-ntests} front-end contrasts (CNN+HP versus CNN and PAC versus PAC$-$HP, both regimes) is significant. The mean front-end differences nevertheless follow a pattern, although the win counts show that individual runs vary widely: with low-pass test noise at $-5$\,dB the front end adds \res{fs-mixed-baselinehp-baseline-lowpass-5dB-absdelta} points to the CNN under the mixed regime (\res{fs-mixed-baselinehp-baseline-lowpass-5dB-wins} runs better), whereas with white noise at 0\,dB it changes macro-F1 by \res{fs-mixed-baselinehp-baseline-white0dB-delta} points (\res{fs-mixed-baselinehp-baseline-white0dB-wins} runs better) and with high-pass noise at 0\,dB by \res{fs-mixed-baselinehp-baseline-highpass0dB-delta}. This is what \eqref{eq:hr} predicts: the filter attenuates noise below its cut-off and passes noise above it. The WDCNN-style network is significantly better than PAC-1DCNN under high-pass noise at 0\,dB, by \res{fs-lowpass-physics-wdcnn-highpass0dB-absdelta} and \res{fs-mixed-physics-wdcnn-highpass0dB-absdelta} points in the low-pass and mixed regimes (PAC-1DCNN better in \res{fs-lowpass-physics-wdcnn-highpass0dB-wins} and \res{fs-mixed-physics-wdcnn-highpass0dB-wins} runs). Under the mixed regime the random forest is significantly better than PAC-1DCNN in \res{fs-rf-nsig-mixed} conditions, by \res{fs-rf-sig-min}--\res{fs-rf-sig-max} points, a result driven mainly by the 0.007\,in fold. Broadband noise also produces false alarms: at 0\,dB white noise, \res{fs-mixed-physics-white0dB-far}\% of healthy windows are flagged as faulty by PAC-1DCNN, \res{fs-mixed-wdcnn-white0dB-far}\% by the WDCNN-style network and \res{fs-mixed-rf-white0dB-far}\% by the random forest.
+
+\subsection{P3 and P4: bearing-disjoint protocols (Paderborn)}
+\pending{Results of P3 (artificial$\rightarrow$real damage) and P4 (real-damage bearing cross-validation): Tables~\ref{tab:pu} and~\ref{tab:pucon} and Fig.~\ref{fig:pu} are regenerated automatically; the interpretation, including a comparison of measurement-level accuracy with the values reported in \cite{lessmeier2016kat}, will be written after the run finishes. Current status: P4 \res{pu-realcv-status}, P3 \res{pu-a2r-status}.}
+
+\begin{table*}[t]
+\centering
+\caption{Paderborn: macro-F1 (\%), mean\,$\pm$\,std; conditions as in Table~\ref{tab:fs}. Top: P4 real-damage bearing cross-validation (10 folds $\times$ 2 seeds). Bottom: P3 artificial$\rightarrow$real damage (one split, 20 seeds).}
+\label{tab:pu}
+\footnotesize
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+Model & clean & LP\,0 & LP\,$-5$ & W\,0 & W\,$-5$ & HP\,0 & HP\,$-5$ \\
+\midrule
+\multicolumn{8}{@{}l}{\textbf{P4: real-damage bearing cross-validation}} \\
+\tabinput{generated/tab_pu_real_cv.tex}
+\midrule
+\multicolumn{8}{@{}l}{\textbf{P3: artificial $\rightarrow$ real damage}} \\
+\tabinput{generated/tab_pu_a2r.tex}
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\centering
+\caption{Paderborn contrasts, as in Table~\ref{tab:fscon}. Bold: significant after Holm correction within protocol and regime.}
+\label{tab:pucon}
+\footnotesize
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+Contrast & clean & LP\,0 & LP\,$-5$ & W\,0 & W\,$-5$ & HP\,0 & HP\,$-5$ \\
+\midrule
+\multicolumn{8}{@{}l}{\textbf{P4: real-damage bearing cross-validation}} \\
+\tabinput{generated/tab_pu_real_cv_contrasts.tex}
+\midrule
+\multicolumn{8}{@{}l}{\textbf{P3: artificial $\rightarrow$ real damage}} \\
+\tabinput{generated/tab_pu_a2r_contrasts.tex}
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_paderborn.pdf}
+\caption{P4 on Paderborn: macro-F1 versus test SNR for each noise spectrum (mixed training regime).}
+\label{fig:pu}
+\end{figure*}
+
+\subsection{Calibration}
+In P1 the calibration windows, although impaired at 10\,dB, are classified correctly by every model (mean calibration-set accuracy \res{lolo-physics-calibacc}\% for PAC-1DCNN), so minimising their negative log-likelihood drives the temperature below one (mean $T=\res{lolo-physics-T}$ for PAC-1DCNN) and makes the models more confident. Table~\ref{tab:cal} shows that this increases ECE for every model at $-5$\,dB (for PAC-1DCNN from \res{lolo-physics--5dB-ece-uncal}\% to \res{lolo-physics--5dB-ece-cal}\%), while at 0\,dB, where errors are rare, the changes are small and of either sign. This agrees with the observation that temperature scaling fitted on in-distribution data does not transfer to shifted data \cite{ovadia2019shift}; it cannot anticipate errors that the calibration set does not contain.
+
+\begin{table}[t]
+\centering
+\caption{P1 calibration: mean fitted temperature, calibration-set accuracy (\%), and ECE (\%) before / after temperature scaling.}
+\label{tab:cal}
+\footnotesize
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+ & & & \multicolumn{2}{c}{0\,dB} & \multicolumn{2}{c}{$-5$\,dB} \\
+\cmidrule(lr){4-5}\cmidrule(l){6-7}
+Model & $T$ & acc. & before & after & before & after \\
+\midrule
+\tabinput{generated/tab_calibration.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Computational cost}
+PAC-1DCNN has \res{params-physics-cwru} parameters against \res{params-baseline-cwru} for the standard CNN. Measured on the host CPU (\res{edge-cpu}; ONNX Runtime, one thread, batch size one, 1000 timed runs), one CWRU window takes \res{edge-ortfp-ms}\,ms in FP32 and \res{edge-ortstatic-ms}\,ms after static INT8 quantisation (\res{edge-ortstatic-kb}\,KB), while dynamic INT8 quantisation is slower (\res{edge-ortdyn-ms}\,ms). These figures come from a model trained on an earlier CWRU split; latency depends on the architecture, not the weights. No measurements were made on embedded hardware.
+
+% =====================================================================================
+\section{Discussion}
+\emph{What the results establish.} On CWRU, a protocol that shares physical bearings between training and test makes all models look nearly perfect and makes a 4--16 point difference between architectures look meaningful. Once bearings are held out, all models, including a classical envelope-spectrum classifier, lose most of their ability to identify the fault type, and architecture-level differences are smaller than fold-to-fold variation. The fixed front end does not produce a significant gain in any condition; its tendency to help under low-pass noise and to hurt under white or high-pass noise follows directly from its frequency response and from the fact that the training augmentation and the original test noise were both low-pass.
+
+\emph{What they do not establish.} The absence of significant effects is not evidence of no effect: the strict family-wise correction gives low power, and P2 has only three test bearings per fault type. Synthetic noise models of the kind used here, and in much of the literature, are not measurements of plant noise. The collapse of fault-type recall on CWRU may partly reflect the dataset itself, since several of its records are not clearly diagnosable \cite{smith2015cwru}.
+
+\emph{Implications for evaluation.} Robustness claims for fixed or learned front ends should be tested with noise whose spectrum overlaps the front end's pass band, not only with the noise used for training, and with splits that hold out physical bearings \cite{vieira2026realistic}. Reporting win counts and corrected paired tests over folds and seeds makes it visible when an apparent improvement is within run-to-run variation.
+
+\pending{Discussion of whether the CWRU findings replicate on Paderborn (P3/P4).}
+
+% =====================================================================================
+\section{Threats to Validity}
+\emph{Internal.} All networks share one training recipe (15 epochs, no early stopping, no per-model tuning); a model that needs a different recipe may be disadvantaged. The WDCNN-style network is an adaptation, not a reproduction, of \cite{zhang2017wdcnn}. The random forest uses a fixed, untuned feature set. \emph{Construct.} Macro-F1 over windows weights each class equally but treats overlapping windows of one recording as separate samples. Synthetic noise is added after per-window standardisation, so SNR is defined per window. \emph{External.} CWRU contains one bearing per fault condition and one healthy bearing; the Paderborn protocols use 18 (P3) and 15 (P4) bearings of a single type at one operating setting. Neither data set contains field data from industrial machines. \emph{Conclusion validity.} Holm correction over 24 (P1) to 70 (P2--P4) tests per family limits power; uncorrected $p$-values and win counts are reported to show the size and consistency of the observed effects.
+
+% =====================================================================================
+\section{Conclusion}
+A fixed residual high-pass front end, alone or within the PAC-1DCNN architecture, did not yield a statistically significant robustness gain for 1D-CNN bearing fault classifiers once physical bearings were held out of training on CWRU. Its observed effects depended on whether the test noise lay above or below its cut-off, and a WDCNN-style network and an envelope-spectrum random forest performed as well or better. All models failed to identify fault types at unseen defect sizes. Temperature scaling fitted on correctly classified data made calibration worse under strong noise.
+\textbf{[PENDING: Paderborn conclusion.]}
+Future work should evaluate front ends with field noise recordings and on data sets with many bearings per class.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
