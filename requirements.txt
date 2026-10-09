@@ -1,4 +1,7 @@
-# Training / evaluation (versions this project was last run with)
+# Minimum versions. The exact versions behind the published results are pinned in
+# requirements-lock.txt.
+
+# Training / evaluation
 numpy>=2.0
 scipy>=1.13
 scikit-learn>=1.5
@@ -13,5 +16,6 @@ onnxruntime>=1.19
 # Dashboard
 streamlit>=1.38
 
-# Tests
+# Tests and manuscript checks (paper/check_paper.py)
 pytest>=8.0
+pypdf>=5.0

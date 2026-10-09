@@ -1,4 +1,4 @@
-﻿import os
+import os
 import json
 import time
 import numpy as np
@@ -104,7 +104,10 @@ X_test, y_test = load_test_data()
 
 # Header
 st.markdown('<div class="main-title">⚙️ Cyber-Physical Diagnostic Console: Physics-Augmented 1D-CNN</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">Live Bearing Vibration Diagnostics under Factory Noise, Baseline Drift & Cross-Load Domain Shifts | Vaibhav Goel</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-title">Demonstration on CWRU windows with synthetic noise, drift and spikes. '
+            'The models come from the fixed demo split (train_and_evaluate.py), which shares bearings between '
+            'training and test; see the paper for the leakage-controlled evaluation. | Vaibhav Goel</div>',
+            unsafe_allow_html=True)
 
 if X_test is None or y_test is None:
     st.error("Processed test data not found. Please run `preprocess_data.py` first.")
@@ -170,7 +173,7 @@ with col1:
     st.markdown(f"**Ground Truth:**\n### {CLASS_NAMES[true_label]}")
 
 with col2:
-    st.markdown(f"**Patent Model Prediction:**\n### <span class='{badge_style}'>{CLASS_NAMES[p_pred]}</span>", unsafe_allow_html=True)
+    st.markdown(f"**PAC-1DCNN Prediction:**\n### <span class='{badge_style}'>{CLASS_NAMES[p_pred]}</span>", unsafe_allow_html=True)
 
 with col3:
     st.metric("Calibrated Confidence", f"{p_probs[p_pred]*100:.1f}%", f"{'✔ Match' if is_correct else '✖ Mismatch'}")
@@ -181,10 +184,10 @@ with col4:
 st.markdown("---")
 
 # Visual Tabs
-tab1, tab2, tab3 = st.tabs(["📊 Live Explainability & Kinematics", "🔬 Baseline vs Patent Comparison", "📑 Benchmark & Confusion Matrix"])
+tab1, tab2, tab3 = st.tabs(["📊 Residual & Attention", "🔬 Standard CNN vs PAC-1DCNN", "📑 Demo-Split Metrics & Confusion Matrix"])
 
 with tab1:
-    st.subheader("Physics Kinematic Residual & Temporal Attention Attribution")
+    st.subheader("Residual Front-End Output & Temporal Attention (illustration, not a validated explanation)")
     
     fig, axes = plt.subplots(3, 1, figsize=(13, 6.5), sharex=True)
     plt.subplots_adjust(hspace=0.25)
@@ -196,10 +199,10 @@ with tab1:
     axes[0].legend(loc="upper right", fontsize=9)
     axes[0].grid(True, linestyle="--", alpha=0.5)
 
-    # 2. Kinematic residual
+    # 2. Residual front-end output
     if p_res is not None:
         res_sig = p_res[0, 0].numpy()
-        axes[1].plot(res_sig, color="#e11d48", linewidth=1.1, label="Kinematic Residual r(t) = x(t) - Smooth(x(t)) [Drift Eliminated]")
+        axes[1].plot(res_sig, color="#e11d48", linewidth=1.1, label="Residual r(t) = x(t) - MA11(x)(t) (high-pass; removes slow drift)")
     else:
         axes[1].plot(impaired_sample[0], color="#e11d48", label="Signal")
     axes[1].set_ylabel("Residual", fontsize=10)
@@ -220,7 +223,7 @@ with tab1:
     plt.close(fig)
 
 with tab2:
-    st.subheader("Model Diagnostic Comparison (Standard 1D-CNN vs Proposed Architecture)")
+    st.subheader("Model Comparison on This Window (Standard 1D-CNN vs PAC-1DCNN)")
     c1, c2 = st.columns(2)
     
     with c1:
@@ -234,7 +237,7 @@ with tab2:
         plt.close(fig_b)
 
     with c2:
-        st.markdown("#### Proposed Physics-Augmented Calibrated CNN")
+        st.markdown("#### PAC-1DCNN")
         st.markdown(f"**Predicted:** `{CLASS_NAMES[p_pred]}` (Confidence: `{p_probs[p_pred]*100:.1f}%`)")
         fig_p, ax_p = plt.subplots(figsize=(6, 3.5))
         ax_p.barh(CLASS_NAMES, p_probs * 100, color="#0284c7")
@@ -249,12 +252,14 @@ with tab3:
         st.info("Run `python train_and_evaluate.py` to generate results/metrics.json.")
     else:
         proto = metrics["protocol"]
-        st.subheader(f"Measured Benchmark: Unseen {proto['test_loads']} HP Load + "
-                     f"{proto['impairments']['test']['snr_db']:.0f} dB Plant Noise "
+        st.subheader(f"Fixed demo split: test load {proto['test_loads']} HP, "
+                     f"{proto['impairments']['test']['snr_db']:.0f} dB synthetic noise "
                      f"(mean ± std over {len(proto['seeds'])} seeds)")
+        st.caption("Same physical bearings as in training (CWRU records every bearing at all loads), "
+                   "so these figures do not measure generalisation to new bearings.")
         rows = {"Metric": ["Accuracy (%)", "Macro-F1 (%)", "False Alarm Rate (%)", "Missed Fault Rate (%)",
                            "ECE (%)", "CPU Latency, batch 1 (ms)"]}
-        for name, label in [("baseline", "Standard 1D-CNN"), ("physics", "PAC-1DCNN (Proposed)")]:
+        for name, label in [("baseline", "Standard 1D-CNN"), ("physics", "PAC-1DCNN")]:
             m = metrics["models"][name]
             cell = lambda k: f"{m['test'][k]['mean']:.2f} ± {m['test'][k]['std']:.2f}"
             rows[label] = [cell("accuracy"), cell("macro_f1"), cell("false_alarm_rate"),
@@ -263,10 +268,12 @@ with tab3:
 
     col_cm, col_saliency = st.columns(2)
     with col_cm:
-        cm_file = os.path.join(RESULTS_DIR, "patent_figure_confusion_matrix.png")
+        cm_file = os.path.join(RESULTS_DIR, "fixedsplit_confusion_matrix.png")
         if os.path.exists(cm_file):
-            st.image(cm_file, caption="Confusion Matrix under 3 HP Load + Plant Noise", use_container_width=True)
+            st.image(cm_file, caption="Confusion matrices, fixed demo split (3 HP load, synthetic noise)",
+                     use_container_width=True)
     with col_saliency:
-        sal_file = os.path.join(RESULTS_DIR, "patent_figure_explainability.png")
+        sal_file = os.path.join(RESULTS_DIR, "fixedsplit_attention_example.png")
         if os.path.exists(sal_file):
-            st.image(sal_file, caption="Patent Saliency & Attribution Proof", use_container_width=True)
+            st.image(sal_file, caption="Residual and temporal attention for one window (illustration; "
+                                       "not evaluated as an explanation)", use_container_width=True)

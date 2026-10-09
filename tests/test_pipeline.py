@@ -241,3 +241,36 @@ def test_measurement_accuracy_averages_window_probabilities():
     y = np.array([0, 0, 1, 2])
     meas = np.array(["a", "a", "b", "c"])
     assert measurement_accuracy(probs, y, meas) == pytest.approx(100.0)  # a: mean [0.55, 0.45] -> 0
+
+
+def test_learnable_front_end_starts_as_the_fixed_filter():
+    from models import PhysicalHarmonicResidualFilter
+    x = torch.randn(3, 2, 1024)
+    fixed, learn = PhysicalHarmonicResidualFilter(2), PhysicalHarmonicResidualFilter(2, learnable=True)
+    torch.testing.assert_close(fixed(x)[0], learn(x)[0])
+    assert learn.smooth_kernel.requires_grad and not any(p.requires_grad for p in fixed.parameters())
+
+
+def test_ball_bearing_orders_reproduce_published_cwru_values():
+    from kinematic_features import ball_bearing_orders, CWRU_DE_ORDERS
+    # CWRU drive-end bearing 6205-2RS: ball 0.3126 in, pitch 1.537 in, 9 balls (CWRU bearing page)
+    computed = ball_bearing_orders(1.537, 0.3126, 9)
+    for k, v in CWRU_DE_ORDERS.items():
+        assert computed[k] == pytest.approx(v, abs=2e-4)
+
+
+@pytest.mark.parametrize("fault", ["inner", "outer", "ball"])
+def test_kinematic_features_peak_at_the_simulated_fault(fault):
+    """Decaying 3 kHz bursts repeated at one fault frequency: that order's features must be largest."""
+    from kinematic_features import kinematic_features, CWRU_DE_ORDERS, HARMONICS
+    fs, L, shaft = 12000, 1024, 29.0
+    rng = np.random.default_rng(0)
+    t = np.arange(L) / fs
+    burst = np.exp(-t[:60] * 2000) * np.sin(2 * np.pi * 3000 * t[:60])
+    x = 0.05 * rng.standard_normal((8, 1, L))
+    period = fs / (CWRU_DE_ORDERS[fault] * shaft)
+    for n in np.arange(0, L - 60, period):
+        x[:, 0, int(n):int(n) + 60] += burst
+    f = kinematic_features(x, shaft, CWRU_DE_ORDERS, fs).reshape(8, len(CWRU_DE_ORDERS), HARMONICS)
+    first_harmonic = f[:, :, 0].mean(0)
+    assert list(CWRU_DE_ORDERS)[int(np.argmax(first_harmonic))] == fault
