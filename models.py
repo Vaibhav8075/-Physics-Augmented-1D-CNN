@@ -6,8 +6,13 @@ import torch.nn.functional as F
 # 1. BASELINE MODEL: Standard Data-Driven 1D-CNN
 # -------------------------------------------------------------
 class Baseline1DCNN(nn.Module):
-    def __init__(self, in_channels=2, num_classes=4):
+    """
+    highpass_input=True puts the same fixed residual filter as the PAC model in front
+    of the network, so the filter's effect can be measured without the other components.
+    """
+    def __init__(self, in_channels=2, num_classes=4, highpass_input=False):
         super(Baseline1DCNN, self).__init__()
+        self.highpass = PhysicalHarmonicResidualFilter(in_channels, filter_size=11) if highpass_input else None
         self.conv1 = nn.Conv1d(in_channels, 32, kernel_size=15, stride=2, padding=7)
         self.bn1 = nn.BatchNorm1d(32)
         
@@ -24,11 +29,42 @@ class Baseline1DCNN(nn.Module):
         self.register_buffer("temperature", torch.ones(1))
 
     def forward(self, x, return_calibrated=True):
+        if self.highpass is not None:
+            x, _ = self.highpass(x)
         x = F.relu(self.bn1(self.conv1(x)))
         x = F.relu(self.bn2(self.conv2(x)))
         x = F.relu(self.bn3(self.conv3(x)))
         x = self.pool(x).squeeze(-1)
         logits = self.fc(x)
+        if return_calibrated:
+            logits = logits / self.temperature.clamp(min=1e-3)
+        return logits, None, None
+
+
+class WideKernelCNN(nn.Module):
+    """
+    WDCNN-style baseline (Zhang et al., Sensors 2017): a wide, strided first-layer kernel
+    followed by small 3-tap convolutions with max-pooling. Layer sizes follow our reading of
+    that design adapted to 1024-sample windows; they have not been checked against the
+    paper's architecture table.
+    """
+    def __init__(self, in_channels=2, num_classes=4):
+        super(WideKernelCNN, self).__init__()
+        def block(c_in, c_out, k, s, p):
+            return [nn.Conv1d(c_in, c_out, kernel_size=k, stride=s, padding=p),
+                    nn.BatchNorm1d(c_out), nn.ReLU(), nn.MaxPool1d(2)]
+        self.features = nn.Sequential(
+            *block(in_channels, 16, 64, 16, 24),  # 1024 -> 64 -> 32
+            *block(16, 32, 3, 1, 1),              # -> 16
+            *block(32, 64, 3, 1, 1),              # -> 8
+            *block(64, 64, 3, 1, 1),              # -> 4
+            *block(64, 64, 3, 1, 0),              # -> 2 -> 1
+        )
+        self.fc = nn.Sequential(nn.Flatten(), nn.Linear(64, 100), nn.ReLU(), nn.Linear(100, num_classes))
+        self.register_buffer("temperature", torch.ones(1))
+
+    def forward(self, x, return_calibrated=True):
+        logits = self.fc(self.features(x))
         if return_calibrated:
             logits = logits / self.temperature.clamp(min=1e-3)
         return logits, None, None

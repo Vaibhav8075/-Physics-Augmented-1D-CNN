@@ -30,6 +30,19 @@ FILES = {
     "OR007_6_3.mat": "https://engineering.case.edu/sites/default/files/133.mat",
 }
 
+# Larger defect sizes (0.014" and 0.021"), same fault types and loads
+_BASE = "https://engineering.case.edu/sites/default/files/{}.mat"
+for _prefix, _ids in {
+    "IR014": [169, 170, 171, 172],
+    "B014": [185, 186, 187, 188],
+    "OR014_6": [197, 198, 199, 200],
+    "IR021": [209, 210, 211, 212],
+    "B021": [222, 223, 224, 225],
+    "OR021_6": [234, 235, 236, 237],
+}.items():
+    for _load, _rid in enumerate(_ids):
+        FILES[f"{_prefix}_{_load}.mat"] = _BASE.format(_rid)
+
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
 
 

@@ -1,152 +1,156 @@
-﻿# Physics-Augmented & Calibrated 1D-CNN for Industrial Bearing Diagnostics
+# Physics-Augmented 1D-CNN for Bearing Fault Diagnosis: an Honest Evaluation
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red.svg)](https://pytorch.org/)
 [![ONNX Runtime](https://img.shields.io/badge/ONNX_Runtime-INT8_Quantized-green.svg)](https://onnxruntime.ai/)
-[![Raspberry Pi 5](https://img.shields.io/badge/Hardware-Raspberry_Pi_5-C51A4A.svg)](https://www.raspberrypi.com/)
-[![License](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
 
-An end-to-end **Physics-Informed Deep Learning & Edge AI** framework for robust rolling element bearing fault diagnostics, operator explainability, and remaining useful life (RUL) prognostics under harsh industrial plant noise and cross-load domain shifts.
+A 1D-CNN with a fixed "physics" residual filter, dual-stream convolutions, sensor-temporal attention and post-hoc temperature scaling (**PAC-1DCNN**), evaluated on the [CWRU bearing data](https://engineering.case.edu/bearingdatacenter) against a standard CNN, a WDCNN-style wide-kernel CNN and an envelope-spectrum Random Forest, under three evaluation protocols of increasing strictness.
 
 ---
 
-## Table of Contents
-- [Executive Overview](#-executive-overview)
-- [The Lab-to-Factory Failure Gap](#-the-lab-to-factory-failure-gap)
-- [Architecture & Patent Innovations](#-architecture--patent-innovations)
-- [Key Results & Benchmarks](#-key-results--benchmarks)
-- [Edge Microcontroller Deployment (Raspberry Pi 5)](#-edge-microcontroller-deployment-raspberry-pi-5)
-- [Interactive Live Diagnostic Dashboard](#-interactive-live-diagnostic-dashboard)
-- [Repository Structure](#-repository-structure)
-- [Quick Start Guide](#-quick-start-guide)
+## Status and key findings
+
+Earlier versions of this README reported 87.58% cross-load accuracy, 0% false alarms and gains from every component. Those numbers came from a split that leaked validation data into training and could not be reproduced. All results below are regenerated from the scripts in this repository (5 seeds each; reports in `results/`).
+
+1. **The evaluation protocol decides the result.** On CWRU each faulty bearing is recorded at all four motor loads, so splitting by load still tests on bearings seen in training (see Hendriks et al., MSSP 2022; Abburi et al., arXiv 2023; Vieira et al., MSSP 2026). Under leave-one-load-out every model scores ~100% macro-F1 on clean data. When whole defect sizes are held out (unseen bearings), every model drops to **~45–60% macro-F1** and labels most unseen inner- and outer-race faults as ball faults.
+2. **PAC-1DCNN's noise robustness does not survive unseen bearings.** Under leave-one-load-out, PAC-1DCNN beat the standard CNN at 0 dB (+4.0 macro-F1) and −5 dB (+16.4) of low-pass noise (p = 0.003). Under the fault-size split, none of 28 PAC-vs-CNN comparisons is significant after Holm correction.
+3. **The fixed residual filter shows no significant effect.** Its direction depends on the noise spectrum: it tends to help with low-pass noise (the kind the training augmentation uses, and which the filter removes) and to hurt with white or high-pass noise. Not significant after correction.
+4. **Simpler baselines do as well or better.** A WDCNN-style CNN beats PAC-1DCNN by ~18–26 macro-F1 under high-pass noise at 0 dB (15/15 runs). An envelope-spectrum Random Forest beats it on clean and moderate-noise data when trained on mixed noise, driven mainly by one fold.
+5. **Temperature scaling does not fix calibration under noise.** The calibration data is classified 100% correctly, so the fitted temperature cannot anticipate errors on noisy or unseen data. This matches the known limitation of temperature scaling under dataset shift (Ovadia et al., NeurIPS 2019).
+
+**Limitations:** CWRU has a single healthy bearing, so the healthy class is split by time and still leaks; with one bearing per fault type and size, the fault-size split has only three test bearings per fault type. The noise is synthetic. The WDCNN-style layer sizes were not checked against the original paper's architecture table. Results on a dataset with many bearings (e.g. Paderborn) are still needed.
 
 ---
 
-## Executive Overview
-Standard deep learning architectures report >99% classification accuracy on curated laboratory vibration datasets, but fail catastrophically when deployed in real factories due to **1/f pink background noise**, **sensor thermal baseline drift**, **transient electromagnetic shock spikes**, and **motor speed/load shifts (0 to 3 HP)**.
-
-This project implements a **Physics-Augmented Calibrated 1D-CNN (PAC-1DCNN)** that enforces kinematic physical inductive biases directly into the convolutional pipeline, achieving **87.58% cross-domain accuracy** and **0% false alarms** on unseen 3 HP industrial loads with 8.0 dB SNR plant noise, with an ultra-lightweight **120.4 KB INT8 ONNX edge footprint**.
-
----
-
-## Architecture & Patent Innovations
+## Model
 
 ```
-                                  INPUT VIBRATION STREAM (2 Channels: DE + FE, 1024 Points)
-                                                           │
-                                            ┌──────────────┴──────────────┐
-                                            ▼                             ▼
-                          Stage 1: Kinematic Residual              Raw Signal x(t)
-                          Filter: r(t) = x(t) - Smooth(x)                │
-                                            │                            │
-                                     Stream 1 (Impact)            Stream 2 (Envelope)
-                                     Conv1D (k=5, 64 ch)          Conv1D (k=15, 64 ch)
-                                            └──────────────┬─────────────┘
-                                                           ▼
-                                            Stage 2: Feature Fusion (128 ch)
-                                                           │
-                                            Stage 3: Sensor-Temporal Attention
-                                            (Channel DE/FE + Temporal Saliency)
-                                                           │
-                                            Stage 4: Temperature Calibration (z / T)
-                                                           │
-                                            Calibrated 4 Class Logits + Saliency Heatmap
+                 INPUT: 2 channels (drive end + fan end), 1024 samples @ 12 kHz
+                                          │
+                        ┌─────────────────┴─────────────────┐
+                        ▼                                   ▼
+          Fixed residual filter                       Raw signal x(t)
+          r(t) = x(t) − MovingAvg11(x)                      │
+          (high-pass, cut-off ≈ 660 Hz)                     │
+                        │                                   │
+              Stream 1: Conv1D k=5                Stream 2: Conv1D k=15
+                        └─────────────────┬─────────────────┘
+                                          ▼
+                              Fusion Conv1D (128 ch)
+                                          ▼
+                     Sensor (DE/FE) + temporal attention
+                                          ▼
+                    Pooling → 4-class logits → logits / T
 ```
 
-1. **Kinematic Residual Filter**: A non-trainable kinematic moving-average kernel ($11\times1$) isolates transient defect bursts and eliminates 100% of thermal sensor baseline drift:
-   $$r(t) = x(t) - \text{Smooth}(x(t))$$
-2. **Dual-Stream Multi-Scale Conv**: Concurrent streams extract microsecond shock impacts on $r(t)$ and macro-rotational envelope dynamics on $x(t)$.
-3. **Sensor-Temporal Attention**: Computes channel reliability between Drive-End (DE) and Fan-End (FE) sensors and outputs millisecond temporal attribution heatmaps for human operators.
-4. **Temperature-Scaled Calibration**: Minimizes Expected Calibration Error (ECE) via validation NLL optimization, eliminating overconfident false positive alarms on transient electrical switching noise.
+Classes: Normal, Inner Race, Ball, Outer Race. T is fitted post hoc by minimizing NLL on held-out data. The `use_residual_filter`, `use_dual_stream` and `use_attention` flags in `models.py` switch components off for ablations.
 
 ---
 
-## Key Results & Benchmarks
+## Evaluation protocols and results
 
-### 1. Cross-Load Domain Shift Benchmark (Unseen 3 HP Load + 8 dB Plant Noise)
-| Model Architecture | Test Accuracy | False Alarm Rate (FAR) | Calibration Error (ECE) | Latency (CPU) |
+### 1. Leave-one-load-out (`run_benchmark.py`)
+Train on three loads, test on the fourth; all fault sizes (0.007″, 0.014″, 0.021″); 4 folds × 5 seeds. **Leaks bearing identity across loads.**
+
+| Macro-F1 (%) | clean | 5 dB | 0 dB | −5 dB |
 | :--- | :--- | :--- | :--- | :--- |
-| Standard Vanilla 1D-CNN | 86.16% | 0.00% | 8.92% | 0.012 ms |
-| **Proposed PAC-1DCNN** | **87.58%** | **0.00%** | **7.95%** | **0.050 ms** |
+| Standard 1D-CNN | 100.0 | 99.9 | 93.4 ± 5.8 | 31.0 ± 15.5 |
+| PAC-1DCNN | 99.9 | 99.7 | 97.4 ± 3.4 | 47.4 ± 17.7 |
 
-### 2. Systematic Ablation Study
-| Configuration | Accuracy (%) | Delta Acc | ECE (%) | FAR (%) |
-| :--- | :--- | :--- | :--- | :--- |
-| **M0: Full Proposed Model** | **87.58%** | **---** | **7.95%** | **0.00%** |
-| M1: w/o Kinematic Residual Filter | 88.85% | +1.27% | 6.15% | 0.00% |
-| M2: w/o Dual-Stream Conv | 85.80% | -1.78% | 13.59% | 0.00% |
-| M3: w/o Attention Module | 92.10% | +4.52% | 2.71% | 0.00% |
-| M4: w/o Temperature Calibration | 96.35% | +8.77% | 1.41% | 0.00% |
+Full table, ablations and calibration: [`results/benchmark_report.md`](results/benchmark_report.md).
 
----
+### 2. Fault-size hold-out (`run_robustness_study.py`)
+Each fold holds out one defect size (unseen bearings) across all loads; healthy data split by time. Test noise is low-pass, white or high-pass at 10/5/0/−5 dB; models are trained on low-pass or mixed-spectrum noise; 3 folds × 5 seeds; paired Wilcoxon with Holm correction.
 
-## Edge Microcontroller Deployment (Raspberry Pi 5)
+| Clean macro-F1 (%), mixed-noise training | |
+| :--- | :--- |
+| Standard 1D-CNN | 45.2 ± 6.9 |
+| Standard 1D-CNN + fixed filter | 45.8 ± 8.5 |
+| PAC-1DCNN w/o fixed filter | 47.2 ± 10.1 |
+| PAC-1DCNN | 48.3 ± 11.3 |
+| WDCNN-style wide-kernel CNN | 51.6 ± 9.9 |
+| Envelope spectrum + Random Forest | 60.4 ± 23.4 |
 
-| Runtime Engine | Precision | Model Size | Mean Latency | Throughput | Test Accuracy |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| PyTorch Baseline | FP32 | 401.1 KB | 11.87 ms | 84 windows/s | 86.16% |
-| TorchScript C++ | FP32 | 441.0 KB | 13.81 ms | 72 windows/s | 86.16% |
-| **ONNX Runtime** | FP32 | 386.8 KB | **1.68 ms** | **596 windows/s** | 86.16% |
-| **ONNX Quantized** | **INT8** | **120.4 KB** | **17.20 ms** | **58 windows/s** | **86.07%** |
+Full tables and all contrasts: [`results/robustness_report.md`](results/robustness_report.md); plot: `results/robustness_noise_spectra.png`.
 
-* **Hardware Compatibility**: Raspberry Pi 5 (8GB / 4GB), STM32, ESP32, and industrial edge IPCs.
-* **Processing Budget**: Consumes **< 2%** of physical 85.3 ms sampling window budget.
+### 3. Original fixed split (`train_and_evaluate.py`, `run_ablation_study.py`)
+Train 0–1 HP, validate 2 HP, test 3 HP, 0.007″ faults only. Both models reach 85.8% accuracy; every 3 HP ball-fault window is classified as inner race. These results were produced before the per-batch GPU noise augmentation was introduced and have not been regenerated.
 
 ---
 
-## Interactive Live Diagnostic Dashboard
-Run the real-time Streamlit diagnostic visualizer locally or host it directly on your Raspberry Pi:
+## Edge inference
+
+Measured on an Intel desktop CPU (ONNX Runtime, 1 thread, batch 1, 1,000 timed runs) on the fixed-split model; see [`results/edge_deployment_report.md`](results/edge_deployment_report.md).
+
+| Runtime | Size (KB) | Mean latency (ms) |
+| :--- | :--- | :--- |
+| PyTorch FP32 | 401.1 | 1.69 |
+| ONNX Runtime FP32 | 386.8 | 0.42 |
+| ONNX Runtime INT8 (static QDQ) | 132.5 | 0.29 |
+| ONNX Runtime INT8 (dynamic) | 120.4 | 5.21 |
+
+INT8 did not change test accuracy. No Raspberry Pi measurements have been made yet; run `rpi_edge_diagnostic.py` on the board to obtain them.
+
+---
+
+## Dashboard and prognostics demo
 
 ```bash
 streamlit run app.py
 ```
-
-* **Live Waveform Streaming**: Real-time Drive-End and Fan-End sensor feeds.
-* **Live Kinematic Filter Verification**: Shows DC drift removal in real time.
-* **Microsecond Temporal Saliency**: Explains exact defect impact timestamps.
+Shows the drive-end/fan-end waveforms, the residual filter output and the attention maps for impaired test windows. `prognostics_engine.py` is a **simulation** of a health-index/RUL trajectory and has not been validated on run-to-failure data.
 
 ---
 
-## Repository Structure
+## Repository structure
 ```
 industrial_fault_ai/
-├── models.py                     # Baseline & Physics-Augmented 1D-CNN Architectures
-├── preprocess_data.py            # Real-world 1/f Pink Noise & Thermal Drift Engine
-├── train_and_evaluate.py         # Cross-load training & evaluation pipeline
-├── export_edge.py                # ONNX & Dynamic INT8 Quantization Benchmark Suite
-├── run_ablation_study.py         # 5-Variant Systematic Architecture Ablation Study
-├── prognostics_engine.py         # Machine Health Index HI(t) & RUL Trajectory Simulator
-├── app.py                        # Streamlit Real-Time Interactive Diagnostic Web Console
-├── rpi_edge_diagnostic.py        # Standalone Raspberry Pi 5 Edge AI Execution Script
-├── setup_rpi.sh                  # 1-Click Installation Script for Raspberry Pi OS
-├── IEEE_Research_Paper_Physics_1DCNN.tex # Full IEEE Transactions LaTeX Paper
-├── IEEE_Research_Paper_Physics_1DCNN.md  # Full Research Paper in Markdown
-└── results/                      # Saved ONNX models, benchmarks, and high-res plots
+├── config.py                 # paths, splits, impairment settings, seeds
+├── common.py                 # impairments (incl. noise spectra), training, calibration, metrics
+├── models.py                 # standard CNN, WDCNN-style CNN, PAC-1DCNN (with ablation flags)
+├── download_data.py          # 40 CWRU recordings (normal + 0.007/0.014/0.021" faults, loads 0-3)
+├── preprocess_data.py        # windowing; fixed split + per-load arrays
+├── train_and_evaluate.py     # fixed split, multi-seed
+├── run_ablation_study.py     # component ablation on the fixed split
+├── run_benchmark.py          # leave-one-load-out benchmark + noise sweep
+├── run_robustness_study.py   # fault-size hold-out, noise spectra, stronger baselines
+├── export_edge.py            # ONNX FP32 / INT8 export and latency benchmark
+├── rpi_edge_diagnostic.py    # standalone ONNX inference script for a Raspberry Pi
+├── app.py                    # Streamlit dashboard
+├── prognostics_engine.py     # RUL simulation (demo only)
+├── tests/                    # data-split, impairment and model tests
+└── results/                  # metrics JSON, reports, figures, models
 ```
+The IEEE paper drafts (`IEEE_Research_Paper_Physics_1DCNN.*`) predate these results and still contain the old, unsupported claims.
 
 ---
 
-## Quick Start Guide
+## Quick start
 
-### 1. Clone & Install Dependencies
+### 1. Clone and install
 ```bash
-git clone https://github.com/Vaibhav8075/industrial-bearing-fault-ai.git
-cd industrial-bearing-fault-ai
-pip install torch numpy matplotlib scipy onnx onnxruntime streamlit
+git clone https://github.com/Vaibhav8075/-Physics-Augmented-1D-CNN.git
+cd -- -Physics-Augmented-1D-CNN
+pip install -r requirements.txt
 ```
 
-### 2. Download Data & Preprocess
+### 2. Download and preprocess the data
 ```bash
-python download_data.py
-python preprocess_data.py
+python download_data.py      # 40 CWRU recordings: normal + 0.007"/0.014"/0.021" faults, loads 0-3 HP
+python preprocess_data.py    # fixed split (0.007" only) + per-load arrays for the benchmarks
+pytest tests                 # data-split, impairment and model checks
 ```
 
-### 3. Train & Evaluate
+### 3. Run the evaluations
 ```bash
-python train_and_evaluate.py
+python run_robustness_study.py # fault-size (bearing-wise) split, 3 noise spectra, all baselines (~1.5 h on GPU)
+python run_benchmark.py        # leave-one-load-out benchmark, all fault sizes, noise sweep (~1.5 h on GPU)
+python train_and_evaluate.py   # fixed split: train 0-1 HP, validate 2 HP, test 3 HP (5 seeds)
+python run_ablation_study.py   # component ablation on the fixed split (5 seeds)
 ```
+`run_robustness_study.py --folds 14 21 --resume` continues an interrupted run. Results go to `results/*_metrics.json` with Markdown reports alongside.
 
-### 4. Run Edge Quantization Benchmark & Launch UI
+### 4. Edge export and dashboard
 ```bash
 python export_edge.py
 streamlit run app.py
@@ -154,7 +158,13 @@ streamlit run app.py
 
 ---
 
-## Author & Citation
-**Vaibhav Goel**  
-*Department of Cyber-Physical Systems & Machine Learning Research*  
-Email: [vaibhav.goel0531@gmail.com](mailto:vaibhav.goel0531@gmail.com) | GitHub: [@Vaibhav8075](https://github.com/Vaibhav8075)
+## Data and references
+- Vibration data: Case Western Reserve University Bearing Data Center.
+- Hendriks, Dumond & Knox, "Towards better benchmarking using the CWRU bearing fault dataset", *Mechanical Systems and Signal Processing* 169 (2022) 108732.
+- Abburi et al., "A Closer Look at Bearing Fault Classification Approaches", [arXiv:2309.17001](https://arxiv.org/abs/2309.17001) (2023).
+- Vieira, Bauler, Rosa & Silva, "Towards a more realistic evaluation of machine learning models for bearing fault diagnosis", *Mechanical Systems and Signal Processing* 258 (2026) 114640 ([arXiv:2509.22267](https://arxiv.org/abs/2509.22267)).
+- Zhang et al., "A New Deep Learning Model for Fault Diagnosis with Good Anti-Noise and Domain Adaptation Ability on Raw Vibration Signals", *Sensors* 17(2) (2017) 425.
+- Ovadia et al., "Can You Trust Your Model's Uncertainty? Evaluating Predictive Uncertainty Under Dataset Shift", NeurIPS 2019.
+
+## Author
+**Vaibhav Goel** — [vaibhav.goel0531@gmail.com](mailto:vaibhav.goel0531@gmail.com) | GitHub: [@Vaibhav8075](https://github.com/Vaibhav8075)

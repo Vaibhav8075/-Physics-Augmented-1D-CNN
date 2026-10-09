@@ -41,7 +41,7 @@ def run_ablation_study(seeds, epochs):
             set_seed(seed)
             train_loader, val_loader = make_loaders(X_train, y_train, X_val, y_val, seed)
             model = train_model(PhysicsAugmentedCalibratedCNN(**cfg["kw"]), train_loader, val_loader,
-                                y_train, epochs=epochs, verbose=False)
+                                y_train, epochs=epochs, verbose=False, seed=seed)
             model = calibrate_temperature(model, X_val, y_val, verbose=False)
             res = evaluate_model(model, X_test, y_test)
             per_seed[cfg["key"]].append({k: float(res[k]) for k in METRICS})
