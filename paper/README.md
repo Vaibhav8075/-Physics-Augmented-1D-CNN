@@ -33,11 +33,23 @@ decimated to 12 kHz and all CWRU recordings were given a common 4 kHz band limit
 README). Fold-level statistics and the convergence check come from `fold_level_stats.py` and
 `training_curves.py`. Values quoted from Lessmeier et al. (Tables 9
 and 11) are typed into `main.tex` by hand and were checked against the published PDF
-(Table 11 gives 98.3%, its running text 98.5%).
+(Table 11 gives 98.3%, its running text 98.5%). Statements from Smith and Randall (2015) and
+Hendriks et al. (2022), including the record numbers typed into `main.tex`, were checked against
+the published PDFs; `references.bib` records which section or table supports each one.
 
-Open item for submission: the target venue with its template, page limit and review mode
-(the manuscript is currently 11 pages plus the references on a 12th; an anonymous author
-block, and removal of the repository URL, are needed for double-blind review).
+**Review Draft — Venue and Authorship Pending.** `main.tex` prints this banner on every page
+while `\reviewdrafttrue` is set; `check_paper.py --submission` reports it as a problem. The
+`\documentclass[conference]{IEEEtran}` layout is provisional. Open before submission:
 
-The earlier drafts in the repository root (`IEEE_Research_Paper_Physics_1DCNN.*`) contain
-claims these results do not support and are superseded by this manuscript.
+- target venue, its template and page limit (the draft is 11 pages plus references on a 12th;
+  the abstract is at 250 words);
+- review mode: for double-blind review, replace the author block and anonymise the repository URL;
+- authorship and acknowledgements (the supervisor's role is not yet decided);
+- the 4.2 kHz interference line that survives the CWRU band limit (main README, "Known remaining
+  cue"): either repeat the CWRU experiments with a band limit below 4 kHz or keep it as the
+  stated limitation;
+- the repository URL opens `main`: merge each shared version into `main` first, and for
+  submission consider citing a tagged release so the link matches the paper.
+
+The earlier drafts in `archive/` (`IEEE_Research_Paper_Physics_1DCNN.*`) contain claims these
+results do not support and are superseded by this manuscript.

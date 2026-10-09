@@ -3,6 +3,10 @@
     5200,
     6000
   ],
+  "line_band_hz": [
+    4000,
+    4400
+  ],
   "band_limit_hz": 4000,
   "without_band_limit": {
     "load0": {
@@ -10,32 +14,56 @@
       "edge_clean_healthy_db": -39.58987865079037,
       "edge_clean_faulty_db": -30.619838932138084,
       "distinct_values": 1.0,
+      "line_clean": 1.0,
+      "line_clean_healthy_db": -1.9207559122787108,
+      "line_clean_faulty_db": -21.065252173445238,
+      "line_abs_healthy_vs_faulty_db": 8.128398595850168,
       "edge_lowpass_15dB": 0.9257858742601184,
-      "edge_white_15dB": 0.7323318269076948
+      "line_lowpass_15dB": 1.0,
+      "edge_white_15dB": 0.7323318269076948,
+      "line_white_15dB": 1.0
     },
     "load1": {
       "edge_clean": 0.8138976094848904,
       "edge_clean_healthy_db": -35.47087059179516,
       "edge_clean_faulty_db": -30.46834310561715,
       "distinct_values": 1.0,
+      "line_clean": 1.0,
+      "line_clean_healthy_db": -4.393890969653383,
+      "line_clean_faulty_db": -22.343740658290013,
+      "line_abs_healthy_vs_faulty_db": 7.249302393191359,
       "edge_lowpass_15dB": 0.8082416522390565,
-      "edge_white_15dB": 0.7348475016223232
+      "line_lowpass_15dB": 1.0,
+      "edge_white_15dB": 0.7348475016223232,
+      "line_white_15dB": 1.0
     },
     "load2": {
       "edge_clean": 0.5955395690651404,
       "edge_clean_healthy_db": -32.59306252358743,
       "edge_clean_faulty_db": -31.666643044741996,
       "distinct_values": 1.0,
+      "line_clean": 1.0,
+      "line_clean_healthy_db": -4.993773186123603,
+      "line_clean_faulty_db": -23.03544945037972,
+      "line_abs_healthy_vs_faulty_db": 7.167208396840136,
       "edge_lowpass_15dB": 0.640598626251307,
-      "edge_white_15dB": 0.6745871499967482
+      "line_lowpass_15dB": 1.0,
+      "edge_white_15dB": 0.6745871499967482,
+      "line_white_15dB": 1.0
     },
     "load3": {
       "edge_clean": 0.8108246380147076,
       "edge_clean_healthy_db": -36.35765249504168,
       "edge_clean_faulty_db": -32.73138532340302,
       "distinct_values": 1.0,
+      "line_clean": 1.0,
+      "line_clean_healthy_db": -5.650948357183534,
+      "line_clean_faulty_db": -23.30753542064084,
+      "line_abs_healthy_vs_faulty_db": 6.656072192583745,
       "edge_lowpass_15dB": 0.7896295809210113,
-      "edge_white_15dB": 0.6953320759867729
+      "line_lowpass_15dB": 1.0,
+      "edge_white_15dB": 0.6953320759867729,
+      "line_white_15dB": 1.0
     }
   },
   "with_band_limit": {
@@ -44,32 +72,56 @@
       "edge_clean_healthy_db": -119.9362485173624,
       "edge_clean_faulty_db": -122.64629435759471,
       "distinct_values": 0.5030545112781954,
+      "line_clean": 1.0,
+      "line_clean_healthy_db": -9.331749660216643,
+      "line_clean_faulty_db": -30.38829658637081,
+      "line_abs_healthy_vs_faulty_db": 4.9139263038565115,
       "edge_lowpass_15dB": 0.5099144136938091,
-      "edge_white_15dB": 0.5091075427931531
+      "line_lowpass_15dB": 1.0,
+      "edge_white_15dB": 0.5091075427931531,
+      "line_white_15dB": 1.0
     },
     "load1": {
       "edge_clean": 0.5214545035440558,
       "edge_clean_healthy_db": -121.96495998954568,
       "edge_clean_faulty_db": -122.27134062353733,
       "distinct_values": 0.5027027027027027,
+      "line_clean": 0.9999964922742339,
+      "line_clean_healthy_db": -14.185020433397026,
+      "line_clean_faulty_db": -31.788464316067664,
+      "line_abs_healthy_vs_faulty_db": 2.204069334881212,
       "edge_lowpass_15dB": 0.5290076393256147,
-      "edge_white_15dB": 0.5386794414698373
+      "line_lowpass_15dB": 0.9999969933779148,
+      "edge_white_15dB": 0.5386794414698373,
+      "line_white_15dB": 0.9999714370901911
     },
     "load2": {
       "edge_clean": 0.5016328899250091,
       "edge_clean_healthy_db": -121.41875533573858,
       "edge_clean_faulty_db": -121.83026714048876,
       "distinct_values": 0.5034036049647057,
+      "line_clean": 0.9999964980914599,
+      "line_clean_healthy_db": -14.519936171622714,
+      "line_clean_faulty_db": -32.081575589003165,
+      "line_abs_healthy_vs_faulty_db": 3.1990574437877854,
       "edge_lowpass_15dB": 0.526047695994317,
-      "edge_white_15dB": 0.5281368345748434
+      "line_lowpass_15dB": 0.9999959978188112,
+      "edge_white_15dB": 0.5281368345748434,
+      "line_white_15dB": 0.9999734855496245
     },
     "load3": {
       "edge_clean": 0.5345371779045751,
       "edge_clean_healthy_db": -122.57201239793781,
       "edge_clean_faulty_db": -121.95936617154635,
       "distinct_values": 0.5001345022073307,
+      "line_clean": 0.9996164196309458,
+      "line_clean_healthy_db": -13.623995871354515,
+      "line_clean_faulty_db": -31.974358343204443,
+      "line_abs_healthy_vs_faulty_db": 3.1451942189935527,
       "edge_lowpass_15dB": 0.5273428042813546,
-      "edge_white_15dB": 0.5270972132138954
+      "line_lowpass_15dB": 0.9995770652813936,
+      "edge_white_15dB": 0.5270972132138954,
+      "line_white_15dB": 0.9992662157355627
     }
   }
 }
