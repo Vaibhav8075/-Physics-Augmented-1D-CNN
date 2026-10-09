@@ -53,7 +53,7 @@ REAL_CV = {0: ["K001", "K002", "K003", "K004", "K005"],
            2: ["KA04", "KA15", "KA16", "KA22", "KA30"]}
 # Reference results reported by Lessmeier et al. (vibration features, setting N15_M07_F10,
 # accuracy per 4-s measurement): Table 9 (a2r) and Table 11 (real_cv)
-REFERENCE = {"a2r": "ensemble 75.0%, RF 64.1% (Table 9)", "real_cv": "CART / RF / ensemble 98.5% (Table 11)"}
+REFERENCE = {"a2r": "ensemble 75.0%, RF 64.1% (Table 9)", "real_cv": "CART / RF / ensemble 98.3% (Table 11; the running text states 98.5%)"}
 
 MODEL_SPECS = {
     "baseline": ("Standard 1D-CNN", lambda: Baseline1DCNN(1, 3)),

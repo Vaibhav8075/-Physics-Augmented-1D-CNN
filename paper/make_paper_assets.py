@@ -391,7 +391,8 @@ def paderborn():
             for (a, b) in CONTRAST_LABELS:
                 put(f"{prefix}-{a}-{b}-nsig", TBD)
                 put(f"{prefix}-{a}-{b}-ntests", TBD)
-            put(f"{prefix}-nruns", TBD)
+            for k in ("nruns", "filter-ntests", "filter-nsig", "ntests-per-regime"):
+                put(f"{prefix}-{k}", TBD)
             continue
         regimes = list(res["header"]["regimes"])
         means, contrasts = res["summary"]["means"], res["summary"]["contrasts"]
@@ -406,18 +407,83 @@ def paderborn():
                 for name, v in zip(["healthy", "inner", "outer"], rec):
                     put(f"{prefix}-{regime}-{m}-recall-{name}", v)
                 for c in ("white@0dB", "highpass@0dB", "lowpass@-5dB"):
-                    put(f"{prefix}-{regime}-{m}-{cond_key(c)}-far",
-                        float(np.mean([r["test"][c]["false_alarm_rate"] for r in res["runs"]
-                                       if r["regime"] == regime and r["model"] == m])))
+                    for metric, short in (("false_alarm_rate", "far"), ("missed_fault_rate", "miss")):
+                        put(f"{prefix}-{regime}-{m}-{cond_key(c)}-{short}",
+                            float(np.mean([r["test"][c][metric] for r in res["runs"]
+                                           if r["regime"] == regime and r["model"] == m])))
+        nets = [means[reg][m]["clean"]["macro_f1"]["mean"] for reg in regimes for m in models if m != "rf"]
+        put(f"{prefix}-nets-clean-min", min(nets))
+        put(f"{prefix}-nets-clean-max", max(nets))
         all_rows = [r for reg in regimes for r in contrasts[reg]]
         for (a, b) in CONTRAST_LABELS:
             rows = [r for r in all_rows if r["a"] == a and r["b"] == b]
-            put(f"{prefix}-{a}-{b}-nsig", sum(r["p_holm"] < 0.05 for r in rows), "{:d}")
+            sig = [abs(r["delta"]) for r in rows if r["p_holm"] < 0.05]
+            put(f"{prefix}-{a}-{b}-nsig", len(sig), "{:d}")
             put(f"{prefix}-{a}-{b}-ntests", len(rows), "{:d}")
+            if sig:
+                put(f"{prefix}-{a}-{b}-sig-absmin", min(sig))
+                put(f"{prefix}-{a}-{b}-sig-absmax", max(sig))
+        filt = [r for r in all_rows if (r["a"], r["b"]) in (("baseline_hp", "baseline"), ("physics", "no_residual"))]
+        put(f"{prefix}-filter-ntests", len(filt), "{:d}")
+        put(f"{prefix}-filter-nsig", sum(r["p_holm"] < 0.05 for r in filt), "{:d}")
+        put(f"{prefix}-ntests-per-regime", len(contrasts[regimes[0]]), "{:d}")
         put(f"{prefix}-nruns", contrasts[regimes[0]][0]["n"], "{:d}")
         put(f"{prefix}-status", "complete")
         out[protocol] = (res, regimes, models)
     return out
+
+
+def measacc_table(pu, sanity):
+    """Measurement-level accuracy on clean test data (both regimes, both protocols) plus reference levels."""
+    cols = [(p, reg) for p in ("real_cv", "a2r") for reg in ("lowpass", "mixed")]
+    if any(p not in pu for p, _ in cols):
+        write("tab_pu_measacc.tex", f"\\multicolumn{{5}}{{c}}{{{TBD}: experiment running}} \\\\\n")
+        return
+    rows = []
+    for m in FS_MODELS:
+        cells = []
+        for p, reg in cols:
+            e = pu[p][0]["summary"]["means"][reg][m]["clean"]["measurement_accuracy"]
+            cells.append(pm(e["mean"], e["std"]))
+        rows.append(f"{SHORT[m]} & " + " & ".join(cells) + " \\\\")
+    rows.append("\\midrule")
+    if sanity:
+        maj = [f"{sanity['chance'][p]['majority_measurement_accuracy']:.1f}" for p, _ in cols]
+        rows.append("Majority class & " + " & ".join(maj) + " \\\\")
+    write("tab_pu_measacc.tex", "\n".join(rows) + "\n")
+
+
+def paderborn_sanity():
+    s = load(os.path.join("results", "paderborn_sanity.json"))
+    for p in ("real_cv", "a2r"):
+        c = (s or {}).get("chance", {}).get(p)
+        put(f"pu-chance-{p.replace('_', '')}-f1", c["random_macro_f1"] if c else TBD)
+        put(f"pu-chance-{p.replace('_', '')}-majority", c["majority_measurement_accuracy"] if c else TBD)
+    for key in ("leaky", "disjoint"):
+        for stat in ("macro_f1_mean", "macro_f1_min", "macro_f1_max", "measurement_accuracy_mean",
+                     "measurement_accuracy_min", "measurement_accuracy_max"):
+            name = f"pu-sanity-{key}-{stat.replace('_', '')}"
+            put(name, s[f"{key}_summary"][stat] if s else TBD)
+    if s:
+        cases = dominant = dominant_wrong = 0
+        for fold in s["disjoint"]:
+            for b, rec in fold["per_bearing"].items():
+                counts = rec["predicted_counts"]
+                share = 100.0 * max(counts) / sum(counts)
+                put(f"pu-sanity-{fold['fold'].replace(' ', '')}-{b}-pred",
+                    ["healthy", "inner ring", "outer ring"][int(np.argmax(counts))])
+                put(f"pu-sanity-{fold['fold'].replace(' ', '')}-{b}-share", share)
+                cases += 1
+                if share >= 90:
+                    dominant += 1
+                    dominant_wrong += int(np.argmax(counts)) != rec["true"]
+        # test-bearing cases in which >= 90% of the windows receive one label, and how many of those are wrong
+        put("pu-sanity-cases", cases, "{:d}")
+        put("pu-sanity-dominant", dominant, "{:d}")
+        put("pu-sanity-dominant-wrong", dominant_wrong, "{:d}")
+    else:
+        for k in ("cases", "dominant", "dominant-wrong"):
+            put(f"pu-sanity-{k}", TBD)
 
 
 def paderborn_figure(pu):
@@ -433,20 +499,25 @@ def paderborn_figure(pu):
     res, regimes, models = pu["real_cv"]
     regime = "mixed" if "mixed" in regimes else regimes[0]
     means = res["summary"]["means"][regime]
+    sanity = load(os.path.join("results", "paderborn_sanity.json"))
+    chance = sanity["chance"]["real_cv"]["random_macro_f1"] if sanity and "chance" in sanity else None
     fig, axes = plt.subplots(1, 3, figsize=(7.1, 1.9), sharey=True)
     for ax, spec in zip(axes, ("lowpass", "white", "highpass")):
         cs = ["clean"] + [f"{spec}@{s}dB" for s in ("10", "5", "0", "-5")]
         for m in models:
             ax.plot(range(5), [means[m][c]["macro_f1"]["mean"] for c in cs], marker="o", ms=3, color=COLORS[m],
                     label=SHORT[m], linewidth=1.8 if m == "physics" else 1.0)
+        if chance is not None:
+            ax.axhline(chance, color="k", linestyle=":", linewidth=1.0, label="random guessing")
         ax.set_xticks(range(5), ["clean", "10", "5", "0", "$-$5"])
         ax.set_title(f"Test noise: {spec}")
         ax.set_xlabel("Test SNR (dB)")
-        ax.set_ylim(0, 102)
+        ax.set_ylim(0, 60)
         ax.grid(linestyle=":", alpha=0.6)
     axes[0].set_ylabel("Macro-F1 (%)")
-    axes[2].legend(loc="lower left", frameon=False, ncol=2)
-    plt.tight_layout(pad=0.3)
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="upper center", ncol=len(labels), frameon=False, bbox_to_anchor=(0.5, 1.0))
+    plt.tight_layout(pad=0.3, rect=(0, 0, 1, 0.88))
     plt.savefig(path)
     plt.close()
 
@@ -486,5 +557,12 @@ if __name__ == "__main__":
     spectra_figure()
     pu = paderborn()
     paderborn_figure(pu)
+    paderborn_sanity()
+    measacc_table(pu, load(os.path.join("results", "paderborn_sanity.json")))
+    # front-end contrasts pooled over the protocols that hold out physical bearings (P2-P4)
+    for stat in ("ntests", "nsig"):
+        parts = [NUM.get(f"{p}-filter-{stat}", TBD) for p in ("fs", "pu-realcv", "pu-a2r")]
+        put(f"heldout-filter-{stat}", sum(map(int, parts)) if all(s.isdigit() for s in parts) else TBD, "{}")
+        put(f"pu-filter-{stat}", sum(map(int, parts[1:])) if all(s.isdigit() for s in parts[1:]) else TBD, "{}")
     dataset_numbers()
     write_numbers()

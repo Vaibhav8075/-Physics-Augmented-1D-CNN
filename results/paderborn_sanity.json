@@ -1,0 +1,608 @@
+{
+ "settings": [
+  "N15_M07_F10"
+ ],
+ "model": "envelope-spectrum random forest, 300 trees, clean training",
+ "chance": {
+  "real_cv": {
+   "random_macro_f1": 33.326766734961765,
+   "majority_measurement_accuracy": 33.33333333333333,
+   "random_measurement_accuracy": 33.333333333333336
+  },
+  "a2r": {
+   "random_macro_f1": 30.364480265384394,
+   "majority_measurement_accuracy": 45.45454545454545,
+   "random_measurement_accuracy": 33.333333333333336
+  }
+ },
+ "leaky": [
+  {
+   "macro_f1": 99.95669240796819,
+   "measurement_accuracy": 100.0
+  },
+  {
+   "macro_f1": 99.93531944028611,
+   "measurement_accuracy": 100.0
+  },
+  {
+   "macro_f1": 99.82769199458198,
+   "measurement_accuracy": 100.0
+  },
+  {
+   "macro_f1": 99.8051574606949,
+   "measurement_accuracy": 100.0
+  },
+  {
+   "macro_f1": 99.91413132176133,
+   "measurement_accuracy": 100.0
+  }
+ ],
+ "disjoint": [
+  {
+   "fold": "train 123",
+   "macro_f1": 44.78597984204354,
+   "measurement_accuracy": 50.0,
+   "per_bearing": {
+    "K004": {
+     "true": 0,
+     "predicted_counts": [
+      559,
+      19,
+      42
+     ]
+    },
+    "K005": {
+     "true": 0,
+     "predicted_counts": [
+      563,
+      31,
+      26
+     ]
+    },
+    "KI18": {
+     "true": 1,
+     "predicted_counts": [
+      1,
+      619,
+      0
+     ]
+    },
+    "KI21": {
+     "true": 1,
+     "predicted_counts": [
+      5,
+      118,
+      497
+     ]
+    },
+    "KA22": {
+     "true": 2,
+     "predicted_counts": [
+      607,
+      3,
+      10
+     ]
+    },
+    "KA30": {
+     "true": 2,
+     "predicted_counts": [
+      0,
+      603,
+      17
+     ]
+    }
+   }
+  },
+  {
+   "fold": "train 124",
+   "macro_f1": 68.01850484512465,
+   "measurement_accuracy": 68.33333333333333,
+   "per_bearing": {
+    "K003": {
+     "true": 0,
+     "predicted_counts": [
+      620,
+      0,
+      0
+     ]
+    },
+    "K005": {
+     "true": 0,
+     "predicted_counts": [
+      574,
+      0,
+      46
+     ]
+    },
+    "KI16": {
+     "true": 1,
+     "predicted_counts": [
+      0,
+      277,
+      343
+     ]
+    },
+    "KI21": {
+     "true": 1,
+     "predicted_counts": [
+      1,
+      93,
+      526
+     ]
+    },
+    "KA16": {
+     "true": 2,
+     "predicted_counts": [
+      0,
+      0,
+      620
+     ]
+    },
+    "KA30": {
+     "true": 2,
+     "predicted_counts": [
+      0,
+      200,
+      420
+     ]
+    }
+   }
+  },
+  {
+   "fold": "train 125",
+   "macro_f1": 58.78202122602526,
+   "measurement_accuracy": 66.66666666666666,
+   "per_bearing": {
+    "K003": {
+     "true": 0,
+     "predicted_counts": [
+      620,
+      0,
+      0
+     ]
+    },
+    "K004": {
+     "true": 0,
+     "predicted_counts": [
+      620,
+      0,
+      0
+     ]
+    },
+    "KI16": {
+     "true": 1,
+     "predicted_counts": [
+      0,
+      71,
+      549
+     ]
+    },
+    "KI18": {
+     "true": 1,
+     "predicted_counts": [
+      178,
+      347,
+      95
+     ]
+    },
+    "KA16": {
+     "true": 2,
+     "predicted_counts": [
+      0,
+      0,
+      620
+     ]
+    },
+    "KA22": {
+     "true": 2,
+     "predicted_counts": [
+      611,
+      0,
+      9
+     ]
+    }
+   }
+  },
+  {
+   "fold": "train 134",
+   "macro_f1": 40.19716489229913,
+   "measurement_accuracy": 40.0,
+   "per_bearing": {
+    "K002": {
+     "true": 0,
+     "predicted_counts": [
+      260,
+      0,
+      360
+     ]
+    },
+    "K005": {
+     "true": 0,
+     "predicted_counts": [
+      566,
+      0,
+      54
+     ]
+    },
+    "KI14": {
+     "true": 1,
+     "predicted_counts": [
+      192,
+      386,
+      42
+     ]
+    },
+    "KI21": {
+     "true": 1,
+     "predicted_counts": [
+      0,
+      282,
+      338
+     ]
+    },
+    "KA15": {
+     "true": 2,
+     "predicted_counts": [
+      40,
+      534,
+      46
+     ]
+    },
+    "KA30": {
+     "true": 2,
+     "predicted_counts": [
+      0,
+      614,
+      6
+     ]
+    }
+   }
+  },
+  {
+   "fold": "train 135",
+   "macro_f1": 29.993495407082982,
+   "measurement_accuracy": 33.33333333333333,
+   "per_bearing": {
+    "K002": {
+     "true": 0,
+     "predicted_counts": [
+      605,
+      6,
+      9
+     ]
+    },
+    "K004": {
+     "true": 0,
+     "predicted_counts": [
+      620,
+      0,
+      0
+     ]
+    },
+    "KI14": {
+     "true": 1,
+     "predicted_counts": [
+      353,
+      10,
+      257
+     ]
+    },
+    "KI18": {
+     "true": 1,
+     "predicted_counts": [
+      415,
+      143,
+      62
+     ]
+    },
+    "KA15": {
+     "true": 2,
+     "predicted_counts": [
+      52,
+      545,
+      23
+     ]
+    },
+    "KA22": {
+     "true": 2,
+     "predicted_counts": [
+      521,
+      38,
+      61
+     ]
+    }
+   }
+  },
+  {
+   "fold": "train 145",
+   "macro_f1": 59.44179168260219,
+   "measurement_accuracy": 64.16666666666667,
+   "per_bearing": {
+    "K002": {
+     "true": 0,
+     "predicted_counts": [
+      87,
+      2,
+      531
+     ]
+    },
+    "K003": {
+     "true": 0,
+     "predicted_counts": [
+      620,
+      0,
+      0
+     ]
+    },
+    "KI14": {
+     "true": 1,
+     "predicted_counts": [
+      514,
+      38,
+      68
+     ]
+    },
+    "KI16": {
+     "true": 1,
+     "predicted_counts": [
+      0,
+      361,
+      259
+     ]
+    },
+    "KA15": {
+     "true": 2,
+     "predicted_counts": [
+      27,
+      6,
+      587
+     ]
+    },
+    "KA16": {
+     "true": 2,
+     "predicted_counts": [
+      0,
+      0,
+      620
+     ]
+    }
+   }
+  },
+  {
+   "fold": "train 234",
+   "macro_f1": 50.74665266185936,
+   "measurement_accuracy": 60.0,
+   "per_bearing": {
+    "K001": {
+     "true": 0,
+     "predicted_counts": [
+      620,
+      0,
+      0
+     ]
+    },
+    "K005": {
+     "true": 0,
+     "predicted_counts": [
+      539,
+      0,
+      81
+     ]
+    },
+    "KI04": {
+     "true": 1,
+     "predicted_counts": [
+      113,
+      39,
+      468
+     ]
+    },
+    "KI21": {
+     "true": 1,
+     "predicted_counts": [
+      2,
+      0,
+      618
+     ]
+    },
+    "KA04": {
+     "true": 2,
+     "predicted_counts": [
+      0,
+      280,
+      340
+     ]
+    },
+    "KA30": {
+     "true": 2,
+     "predicted_counts": [
+      24,
+      2,
+      594
+     ]
+    }
+   }
+  },
+  {
+   "fold": "train 235",
+   "macro_f1": 65.26269975697659,
+   "measurement_accuracy": 66.66666666666666,
+   "per_bearing": {
+    "K001": {
+     "true": 0,
+     "predicted_counts": [
+      620,
+      0,
+      0
+     ]
+    },
+    "K004": {
+     "true": 0,
+     "predicted_counts": [
+      614,
+      0,
+      6
+     ]
+    },
+    "KI04": {
+     "true": 1,
+     "predicted_counts": [
+      5,
+      10,
+      605
+     ]
+    },
+    "KI18": {
+     "true": 1,
+     "predicted_counts": [
+      9,
+      606,
+      5
+     ]
+    },
+    "KA04": {
+     "true": 2,
+     "predicted_counts": [
+      0,
+      8,
+      612
+     ]
+    },
+    "KA22": {
+     "true": 2,
+     "predicted_counts": [
+      612,
+      0,
+      8
+     ]
+    }
+   }
+  },
+  {
+   "fold": "train 245",
+   "macro_f1": 39.962939480636045,
+   "measurement_accuracy": 33.33333333333333,
+   "per_bearing": {
+    "K001": {
+     "true": 0,
+     "predicted_counts": [
+      620,
+      0,
+      0
+     ]
+    },
+    "K003": {
+     "true": 0,
+     "predicted_counts": [
+      620,
+      0,
+      0
+     ]
+    },
+    "KI04": {
+     "true": 1,
+     "predicted_counts": [
+      5,
+      0,
+      615
+     ]
+    },
+    "KI16": {
+     "true": 1,
+     "predicted_counts": [
+      0,
+      268,
+      352
+     ]
+    },
+    "KA04": {
+     "true": 2,
+     "predicted_counts": [
+      0,
+      620,
+      0
+     ]
+    },
+    "KA16": {
+     "true": 2,
+     "predicted_counts": [
+      0,
+      614,
+      6
+     ]
+    }
+   }
+  },
+  {
+   "fold": "train 345",
+   "macro_f1": 44.6004046357212,
+   "measurement_accuracy": 50.0,
+   "per_bearing": {
+    "K001": {
+     "true": 0,
+     "predicted_counts": [
+      620,
+      0,
+      0
+     ]
+    },
+    "K002": {
+     "true": 0,
+     "predicted_counts": [
+      191,
+      0,
+      429
+     ]
+    },
+    "KI04": {
+     "true": 1,
+     "predicted_counts": [
+      3,
+      37,
+      580
+     ]
+    },
+    "KI14": {
+     "true": 1,
+     "predicted_counts": [
+      536,
+      25,
+      59
+     ]
+    },
+    "KA04": {
+     "true": 2,
+     "predicted_counts": [
+      0,
+      63,
+      557
+     ]
+    },
+    "KA15": {
+     "true": 2,
+     "predicted_counts": [
+      28,
+      81,
+      511
+     ]
+    }
+   }
+  }
+ ],
+ "leaky_summary": {
+  "macro_f1_mean": 99.8877985250585,
+  "macro_f1_min": 99.8051574606949,
+  "macro_f1_max": 99.95669240796819,
+  "measurement_accuracy_mean": 100.0,
+  "measurement_accuracy_min": 100.0,
+  "measurement_accuracy_max": 100.0
+ },
+ "disjoint_summary": {
+  "macro_f1_mean": 50.17916544303709,
+  "macro_f1_min": 29.993495407082982,
+  "macro_f1_max": 68.01850484512465,
+  "measurement_accuracy_mean": 53.25,
+  "measurement_accuracy_min": 33.33333333333333,
+  "measurement_accuracy_max": 68.33333333333333
+ }
+}
