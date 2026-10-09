@@ -25,10 +25,31 @@ def set_seed(seed):
 # -------------------------------------------------------------
 # Industrial impairment simulation
 # -------------------------------------------------------------
-def add_real_world_impairments(signal, snr_db=8.0, drift_prob=0.8, impulse_prob=0.3, rng=None):
+NOISE_SPECTRA = ("lowpass", "white", "highpass")
+
+
+def noise_kernel(spectrum):
+    """
+    FIR shaping kernel applied to white noise (odd length, symmetric except lowpass):
+      lowpass  - 15-tap decaying exponential (the original impairment; energy mostly below ~1 kHz at 12 kHz)
+      white    - identity (flat spectrum)
+      highpass - second difference [-0.5, 1, -0.5] (energy rises towards Nyquist, i.e. into the band
+                 a moving-average residual filter passes)
+    """
+    if spectrum == "lowpass":
+        return np.exp(-np.linspace(0, 3, 15)).astype(np.float32)
+    if spectrum == "white":
+        return np.ones(1, dtype=np.float32)
+    if spectrum == "highpass":
+        return np.array([-0.5, 1.0, -0.5], dtype=np.float32)
+    raise ValueError(f"unknown noise spectrum {spectrum!r}; expected one of {NOISE_SPECTRA}")
+
+
+def add_real_world_impairments(signal, snr_db=8.0, drift_prob=0.8, impulse_prob=0.3, rng=None,
+                               spectrum="lowpass"):
     """
     Simulates a factory environment on a (C, L) window:
-    1. Colored (low-pass filtered) background noise at the given SNR
+    1. Coloured background noise at the given SNR (spectrum: see noise_kernel; snr_db=None skips it)
     2. Non-linear sensor baseline drift
     3. Transient electromagnetic shock spikes
     """
@@ -37,7 +58,10 @@ def add_real_world_impairments(signal, snr_db=8.0, drift_prob=0.8, impulse_prob=
     L = signal.shape[-1]
 
     white = rng.standard_normal(signal.shape).astype(np.float32)
-    kernel = np.exp(-np.linspace(0, 3, 15)).astype(np.float32)
+    if snr_db is None:
+        white[:] = 0.0  # keep RNG consumption identical so drift/spikes match the noisy conditions
+        snr_db = 0.0
+    kernel = noise_kernel(spectrum)
     colored_noise = np.stack([np.convolve(white[c], kernel, mode="same") for c in range(signal.shape[0])])
 
     signal_power = np.mean(signal ** 2) + 1e-8
@@ -65,20 +89,31 @@ def impair_array(X_clean, split, seed):
     return np.stack([add_real_world_impairments(x, rng=rng, **params) for x in X_clean]).astype(np.float32)
 
 
-def impair_batch(x, snr_db, drift_prob, impulse_prob, generator=None):
+def _shape_noise(white, spectrum):
+    """np.convolve(..., mode="same") with an odd kernel == conv1d with the flipped kernel, padding k//2."""
+    k = torch.from_numpy(noise_kernel(spectrum)[::-1].copy()).to(white.device).view(1, 1, -1)
+    return F.conv1d(white, k, padding=k.shape[-1] // 2)
+
+
+def impair_batch(x, snr_db, drift_prob, impulse_prob, generator=None, spectrum="lowpass"):
     """
     Batched torch version of add_real_world_impairments (same distribution),
     applied on the GPU to every training batch so impairments are fresh each epoch.
-    x: (B, C, L) tensor.
+    x: (B, C, L) tensor. spectrum may also be "mixed": each window draws one of NOISE_SPECTRA.
     """
     B, C, L = x.shape
     dev, g = x.device, generator
     rand = lambda *shape: torch.rand(*shape, device=dev, generator=g)
 
-    # 1. Colored noise: np.convolve(..., mode="same") == conv1d with flipped kernel, padding 7
-    kernel = torch.exp(-torch.linspace(0, 3, 15, device=dev)).flip(0).view(1, 1, -1)
+    # 1. Colored noise (power is normalised per window below, so kernel gain does not matter)
     white = torch.randn(B * C, 1, L, device=dev, generator=g)
-    colored = F.conv1d(white, kernel, padding=7).view(B, C, L)
+    if spectrum == "mixed":
+        choice = torch.randint(0, len(NOISE_SPECTRA), (B, 1, 1), device=dev, generator=g)
+        colored = torch.zeros(B, C, L, device=dev)
+        for i, s in enumerate(NOISE_SPECTRA):
+            colored = colored + _shape_noise(white, s).view(B, C, L) * (choice == i)
+    else:
+        colored = _shape_noise(white, spectrum).view(B, C, L)
     signal_power = x.pow(2).mean(dim=(1, 2), keepdim=True) + 1e-8
     noise_power = colored.pow(2).mean(dim=(1, 2), keepdim=True) + 1e-8
     target_power = signal_power / (10 ** (snr_db / 10.0))

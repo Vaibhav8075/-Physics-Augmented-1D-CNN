@@ -126,3 +126,44 @@ def test_benchmark_calibration_split_does_not_overlap_training():
         idx = np.round(pos * len(pos)).astype(int)
         train_idx, calib_idx = idx[pos < cut - 0.01], idx[pos >= cut]
         assert calib_idx.min() - train_idx.max() >= gap_windows, rec
+
+
+@pytest.mark.parametrize("spectrum", ["lowpass", "white", "highpass", "mixed"])
+def test_batched_impairment_snr_for_every_spectrum(spectrum):
+    from common import impair_batch
+    x = torch.randn(64, 2, config.WINDOW_SIZE)
+    noisy = impair_batch(x, snr_db=0.0, drift_prob=0.0, impulse_prob=0.0, spectrum=spectrum)
+    snr = 10 * torch.log10(x.pow(2).mean((1, 2)) / (noisy - x).pow(2).mean((1, 2)))
+    assert torch.allclose(snr, torch.zeros_like(snr), atol=0.05)
+
+
+def test_noise_spectra_differ_in_high_frequency_share():
+    """Share of noise power above 1.5 kHz: lowpass < white < highpass (numpy and torch agree)."""
+    from common import impair_batch
+    freqs = np.fft.rfftfreq(config.WINDOW_SIZE, d=1.0 / config.SAMPLING_RATE_HZ)
+    def hf_share(d):
+        p = np.abs(np.fft.rfft(d, axis=-1)) ** 2
+        return p[..., freqs > 1500].sum() / p.sum()
+    x = np.zeros((200, 2, config.WINDOW_SIZE), dtype=np.float32) + 1.0  # constant signal: noise isolated below
+    shares = {}
+    for s in ["lowpass", "white", "highpass"]:
+        rng = np.random.default_rng(0)
+        ref = np.stack([add_real_world_impairments(w, snr_db=0.0, drift_prob=0.0, impulse_prob=0.0,
+                                                   rng=rng, spectrum=s) for w in x]) - x
+        out = impair_batch(torch.from_numpy(x), 0.0, 0.0, 0.0, spectrum=s).numpy() - x
+        shares[s] = hf_share(ref)
+        assert hf_share(out) == pytest.approx(shares[s], abs=0.03), s
+    assert shares["lowpass"] < shares["white"] < shares["highpass"]
+
+
+@pytest.mark.skipif(not os.path.exists(os.path.join(config.PROCESSED_DIR, "load0.npz")),
+                    reason="run preprocess_data.py first")
+def test_fault_size_folds_hold_out_whole_bearings():
+    from run_robustness_study import load_all, fold_masks, FAULT_SIZES
+    data = load_all()
+    for held_out in FAULT_SIZES:
+        train, test = fold_masks(data, held_out)
+        assert not (train & test).any()
+        assert set(np.unique(data["size"][test])) == {0, held_out}
+        assert held_out not in set(np.unique(data["size"][train]))
+        assert set(np.unique(data["y"][test])) == {0, 1, 2, 3}

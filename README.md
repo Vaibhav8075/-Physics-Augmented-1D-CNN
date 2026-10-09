@@ -147,8 +147,11 @@ pytest tests                 # data-split and model sanity checks
 python train_and_evaluate.py   # fixed split: train 0-1 HP, validate 2 HP, test 3 HP (5 seeds)
 python run_ablation_study.py   # component ablation on the fixed split (5 seeds)
 python run_benchmark.py        # leave-one-load-out benchmark, all fault sizes, noise sweep (~1.5 h on GPU)
+python run_robustness_study.py # fault-size (bearing-wise) split, 3 noise spectra, WDCNN-style + RF baselines (~1.5 h)
 ```
-Results are written to `results/metrics.json`, `results/ablation_metrics.json` and `results/benchmark_metrics.json`, with Markdown reports alongside.
+Results are written to `results/metrics.json`, `results/ablation_metrics.json`, `results/benchmark_metrics.json` and `results/robustness_metrics.json`, with Markdown reports alongside.
+
+> **Note on evaluation:** CWRU records each faulty bearing at all four loads, so the leave-one-load-out benchmark still tests on bearings seen in training. `run_robustness_study.py` holds out whole defect sizes instead; see `results/robustness_report.md`.
 
 ### 4. Run Edge Quantization Benchmark & Launch UI
 ```bash
