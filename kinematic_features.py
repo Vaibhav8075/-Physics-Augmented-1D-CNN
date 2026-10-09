@@ -42,8 +42,22 @@ def kinematic_features(X, shaft_hz, orders, fs, band=None, pad=8):
     (mean removed, Hann window, zero-padded by `pad` for peak interpolation), and for every fault
     order and harmonic h the peak magnitude within +-TOLERANCE of h * order * shaft_hz is divided
     by the median envelope-spectrum magnitude below 1.2 x the highest target frequency.
-    Returns (N, C * len(orders) * HARMONICS) log ratios.
+    Returns (N, C * len(orders) * HARMONICS) log ratios. Windows are processed in chunks of
+    CHUNK so that memory stays bounded (a zero-padded spectrum of every window at once would
+    need several GB for a CWRU training set).
     """
+    N = len(X)
+    shaft = np.broadcast_to(np.asarray(shaft_hz, dtype=np.float64), (N,))
+    out = np.empty((N, X.shape[1] * len(orders) * HARMONICS), dtype=np.float32)
+    for s in range(0, N, CHUNK):
+        out[s:s + CHUNK] = _chunk_features(X[s:s + CHUNK], shaft[s:s + CHUNK], orders, fs, band, pad)
+    return out
+
+
+CHUNK = 256
+
+
+def _chunk_features(X, shaft, orders, fs, band, pad):
     N, C, L = X.shape
     lo, hi = band or (fs / 12.0, fs / 3.0)
     sos = scipy.signal.butter(4, [lo, hi], btype="bandpass", fs=fs, output="sos")
@@ -52,7 +66,6 @@ def kinematic_features(X, shaft_hz, orders, fs, band=None, pad=8):
     env -= env.mean(-1, keepdims=True)
     spec = np.abs(np.fft.rfft(env * np.hanning(L), n=pad * L, axis=-1))
     freqs = np.fft.rfftfreq(pad * L, 1.0 / fs)
-    shaft = np.broadcast_to(np.asarray(shaft_hz, dtype=np.float64), (N,))
     half_bin = fs / L  # one native bin on either side at least
 
     names = list(orders)

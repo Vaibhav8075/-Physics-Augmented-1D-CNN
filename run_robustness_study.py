@@ -205,7 +205,7 @@ def run(seeds, epochs, regimes, model_keys, folds=FAULT_SIZES, resume=False):
               f"{np.bincount(y_tr, minlength=4).tolist()} | test {len(y_te)} {np.bincount(y_te, minlength=4).tolist()} ===",
               flush=True)
 
-        trained = {}  # (regime, seed, model) -> model on device, or RF
+        trained = {}  # (regime, seed, network) -> model on device
         for regime in regimes:
             for seed in seeds:
                 for key in nn_keys:
@@ -218,32 +218,41 @@ def run(seeds, epochs, regimes, model_keys, folds=FAULT_SIZES, resume=False):
                     eta = (time.time() - t0) / done * (total - done) / 60
                     print(f"[{done}/{total}] {held_out:02d} {regime:<7} seed {seed} {key:<12} trained | "
                           f"ETA {eta:.0f} min", flush=True)
-                for key in (k for k in CLASSICAL if k in model_keys):
-                    trained[(regime, seed, key)] = train_rf(X_tr, y_tr, REGIMES[regime], seed,
-                                                            featurize=cwru_featurizer(key, shaft_tr))
-                    done += 1
 
-        records = {k: {"held_out_size": held_out, "regime": k[0], "seed": k[1], "model": k[2], "test": {}}
-                   for k in trained}
+        classical = [k for k in CLASSICAL if k in model_keys]
+        records = {(r, s, k): {"held_out_size": held_out, "regime": r, "seed": s, "model": k, "test": {}}
+                   for r in regimes for s in seeds for k in model_keys}
+        test_feats = {key: {} for key in classical}  # features of every test condition, for the forests
         for ci, (name, params) in enumerate(conds):
             X_c = X_te if params is None else impair_fixed(X_te, config.BENCHMARK_NOISE_SEED + 100 * held_out + ci,
                                                            **params)
-            feats = {key: cwru_featurizer(key, shaft_te)(X_c) for key in CLASSICAL if key in model_keys}
+            for key in classical:
+                test_feats[key][name] = cwru_featurizer(key, shaft_te)(X_c)
             for k, model in trained.items():
-                if k[2] in CLASSICAL:
-                    probs = model.predict_proba(feats[k[2]])
-                else:
-                    probs = F.softmax(predict_logits(model, X_c, calibrated=False), dim=1).numpy()
+                probs = F.softmax(predict_logits(model, X_c, calibrated=False), dim=1).numpy()
                 records[k]["test"][name] = score(probs, y_te)
             print(f"  evaluated {name:<16} | macro-F1 " + " ".join(
                 f"{m}={np.mean([records[(r, s, m)]['test'][name]['macro_f1'] for r in regimes for s in seeds]):.1f}"
-                for m in model_keys), flush=True)
-            del X_c, feats
+                for m in nn_keys), flush=True)
+            del X_c
+        del trained
+        torch.cuda.empty_cache()
+
+        # Random forests one at a time (each holds 300 fully grown trees), scored on the same test inputs
+        for key in classical:
+            for regime in regimes:
+                for seed in seeds:
+                    rf = train_rf(X_tr, y_tr, REGIMES[regime], seed, featurize=cwru_featurizer(key, shaft_tr))
+                    for name, feats in test_feats[key].items():
+                        records[(regime, seed, key)]["test"][name] = score(rf.predict_proba(feats), y_te)
+                    del rf
+                    done += 1
+            print(f"  {key:<4} clean macro-F1 {np.mean([records[(r, s, key)]['test']['clean']['macro_f1'] for r in regimes for s in seeds]):.1f}",
+                  flush=True)
+        del test_feats
         results["runs"].extend(records.values())
         with open(OUT_JSON, "w", encoding="utf-8") as f:
             json.dump(results, f)
-        del trained
-        torch.cuda.empty_cache()
 
     summarize(results)
 
