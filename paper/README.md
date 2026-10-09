@@ -29,12 +29,14 @@ Paderborn numbers need `results/paderborn_{real_cv,a2r}_metrics.json` (from
 `run_paderborn_study.py`) and `results/paderborn_sanity.json` (from
 `paderborn_sanity_check.py`). All CWRU numbers, including the ranges quoted in the prose,
 are generated keys; they were regenerated after the 48 kHz normal-baseline recordings were
-decimated to 12 kHz (see the main README). Values quoted from Lessmeier et al. (Tables 9
+decimated to 12 kHz and all CWRU recordings were given a common 4 kHz band limit (see the main
+README). Fold-level statistics and the convergence check come from `fold_level_stats.py` and
+`training_curves.py`. Values quoted from Lessmeier et al. (Tables 9
 and 11) are typed into `main.tex` by hand and were checked against the published PDF
 (Table 11 gives 98.3%, its running text 98.5%).
 
 Open item for submission: the target venue with its template, page limit and review mode
-(the manuscript is currently 10 pages plus two references on an 11th; an anonymous author
+(the manuscript is currently 11 pages plus the references on a 12th; an anonymous author
 block, and removal of the repository URL, are needed for double-blind review).
 
 The earlier drafts in the repository root (`IEEE_Research_Paper_Physics_1DCNN.*`) contain

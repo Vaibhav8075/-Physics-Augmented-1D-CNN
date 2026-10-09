@@ -1,0 +1,9088 @@
+{
+ "p1_lolo": [
+  {
+   "a": "physics",
+   "b": "baseline",
+   "condition": "clean",
+   "delta": 0.040248129004822886,
+   "fold_deltas": [
+    0.038,
+    0.0,
+    0.056,
+    0.067
+   ],
+   "folds_agree": 3,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "baseline",
+   "condition": "10dB",
+   "delta": 0.4131637039211178,
+   "fold_deltas": [
+    0.782,
+    0.0,
+    0.726,
+    0.144
+   ],
+   "folds_agree": 3,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "baseline",
+   "condition": "5dB",
+   "delta": 2.4322828594685717,
+   "fold_deltas": [
+    3.604,
+    -0.028,
+    6.042,
+    0.112
+   ],
+   "folds_agree": 3,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "baseline",
+   "condition": "0dB",
+   "delta": 11.476974502899454,
+   "fold_deltas": [
+    12.615,
+    9.286,
+    13.073,
+    10.933
+   ],
+   "folds_agree": 4,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "baseline",
+   "condition": "-5dB",
+   "delta": 3.472389226852581,
+   "fold_deltas": [
+    -0.646,
+    6.592,
+    -0.031,
+    7.974
+   ],
+   "folds_agree": 2,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "baseline",
+   "condition": "-10dB",
+   "delta": 0.07335869332434886,
+   "fold_deltas": [
+    -0.375,
+    3.0,
+    -1.137,
+    -1.194
+   ],
+   "folds_agree": 1,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_residual",
+   "condition": "clean",
+   "delta": -0.005651591748812024,
+   "fold_deltas": [
+    -0.037,
+    0.004,
+    0.0,
+    0.011
+   ],
+   "folds_agree": 1,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_residual",
+   "condition": "10dB",
+   "delta": -0.030152419340726766,
+   "fold_deltas": [
+    -0.085,
+    0.0,
+    0.007,
+    -0.042
+   ],
+   "folds_agree": 2,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_residual",
+   "condition": "5dB",
+   "delta": 0.0023017125717643694,
+   "fold_deltas": [
+    -0.073,
+    -0.032,
+    0.657,
+    -0.543
+   ],
+   "folds_agree": 1,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_residual",
+   "condition": "0dB",
+   "delta": 0.012072340311412688,
+   "fold_deltas": [
+    0.624,
+    -3.913,
+    7.525,
+    -4.189
+   ],
+   "folds_agree": 2,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_residual",
+   "condition": "-5dB",
+   "delta": -4.851895633463352,
+   "fold_deltas": [
+    -5.166,
+    -10.74,
+    1.35,
+    -4.852
+   ],
+   "folds_agree": 3,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_residual",
+   "condition": "-10dB",
+   "delta": -3.830946321336826,
+   "fold_deltas": [
+    -4.348,
+    -4.822,
+    -0.363,
+    -5.791
+   ],
+   "folds_agree": 4,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_dual",
+   "condition": "clean",
+   "delta": 0.566967382219083,
+   "fold_deltas": [
+    -0.112,
+    0.007,
+    0.0,
+    2.373
+   ],
+   "folds_agree": 2,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_dual",
+   "condition": "10dB",
+   "delta": 0.7244069354938745,
+   "fold_deltas": [
+    0.24,
+    0.004,
+    0.0,
+    2.654
+   ],
+   "folds_agree": 3,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_dual",
+   "condition": "5dB",
+   "delta": 1.141660236843581,
+   "fold_deltas": [
+    0.73,
+    -0.028,
+    0.215,
+    3.649
+   ],
+   "folds_agree": 3,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_dual",
+   "condition": "0dB",
+   "delta": -13.989870243513352,
+   "fold_deltas": [
+    -13.57,
+    -17.277,
+    -14.132,
+    -10.981
+   ],
+   "folds_agree": 4,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_dual",
+   "condition": "-5dB",
+   "delta": -28.31366025137043,
+   "fold_deltas": [
+    -17.767,
+    -24.913,
+    -35.482,
+    -35.093
+   ],
+   "folds_agree": 4,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_dual",
+   "condition": "-10dB",
+   "delta": -8.492047677363267,
+   "fold_deltas": [
+    -8.183,
+    -8.091,
+    -10.851,
+    -6.843
+   ],
+   "folds_agree": 4,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_attention",
+   "condition": "clean",
+   "delta": 0.03303192495318541,
+   "fold_deltas": [
+    0.129,
+    0.0,
+    0.0,
+    0.004
+   ],
+   "folds_agree": 2,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_attention",
+   "condition": "10dB",
+   "delta": 0.08339673902719014,
+   "fold_deltas": [
+    0.39,
+    0.0,
+    0.0,
+    -0.056
+   ],
+   "folds_agree": 1,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_attention",
+   "condition": "5dB",
+   "delta": 0.08439875167842814,
+   "fold_deltas": [
+    0.91,
+    -0.035,
+    0.133,
+    -0.67
+   ],
+   "folds_agree": 2,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_attention",
+   "condition": "0dB",
+   "delta": 1.7829313467686827,
+   "fold_deltas": [
+    3.051,
+    1.048,
+    11.928,
+    -8.895
+   ],
+   "folds_agree": 3,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_attention",
+   "condition": "-5dB",
+   "delta": -2.815203110216122,
+   "fold_deltas": [
+    -2.657,
+    -4.443,
+    1.707,
+    -5.868
+   ],
+   "folds_agree": 3,
+   "n_folds": 4
+  },
+  {
+   "a": "physics",
+   "b": "no_attention",
+   "condition": "-10dB",
+   "delta": -1.724509958132322,
+   "fold_deltas": [
+    -0.264,
+    -1.129,
+    -0.743,
+    -4.763
+   ],
+   "folds_agree": 4,
+   "n_folds": 4
+  }
+ ],
+ "p2_fault_size": {
+  "lowpass": [
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -2.5674638578657727,
+    "fold_deltas": [
+     -10.148,
+     0.229,
+     2.217
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -0.8976897007553776,
+    "fold_deltas": [
+     -7.101,
+     0.991,
+     3.417
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -0.9225438816427763,
+    "fold_deltas": [
+     -5.519,
+     1.939,
+     0.812
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": 7.757728070343436,
+    "fold_deltas": [
+     12.381,
+     9.819,
+     1.073
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": 13.461727067391019,
+    "fold_deltas": [
+     37.509,
+     0.005,
+     2.871
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -1.4733069931539393,
+    "fold_deltas": [
+     -3.863,
+     -7.373,
+     6.817
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -9.7125413970029,
+    "fold_deltas": [
+     -3.903,
+     -14.113,
+     -11.121
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": -12.758760733503479,
+    "fold_deltas": [
+     -12.274,
+     -16.359,
+     -9.643
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": 0.10766999829555364,
+    "fold_deltas": [
+     -11.39,
+     5.956,
+     5.757
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": -1.2693164028637594,
+    "fold_deltas": [
+     -2.043,
+     -10.147,
+     8.382
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -7.171158045885697,
+    "fold_deltas": [
+     -4.75,
+     -9.245,
+     -7.519
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -14.017552471149193,
+    "fold_deltas": [
+     -26.646,
+     -11.685,
+     -3.722
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": 0.5495399777086899,
+    "fold_deltas": [
+     -3.215,
+     4.773,
+     0.09
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -2.5332583910121733,
+    "fold_deltas": [
+     -10.27,
+     0.462,
+     2.208
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -0.7014129521115299,
+    "fold_deltas": [
+     -1.981,
+     0.132,
+     -0.255
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -0.57577436513386,
+    "fold_deltas": [
+     -2.488,
+     0.564,
+     0.197
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -0.8573177345898925,
+    "fold_deltas": [
+     -4.717,
+     1.311,
+     0.834
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": -1.7960013891241087,
+    "fold_deltas": [
+     -6.378,
+     1.377,
+     -0.387
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": -3.664228688704332,
+    "fold_deltas": [
+     -8.899,
+     0.005,
+     -2.099
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -1.1227874333888177,
+    "fold_deltas": [
+     -3.299,
+     0.246,
+     -0.315
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -2.264959945082088,
+    "fold_deltas": [
+     -4.717,
+     -0.753,
+     -1.325
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": -3.4288846591722972,
+    "fold_deltas": [
+     -7.755,
+     0.89,
+     -3.421
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": -1.506417416237671,
+    "fold_deltas": [
+     -5.452,
+     0.529,
+     0.404
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": -1.601264672996372,
+    "fold_deltas": [
+     -3.739,
+     0.123,
+     -1.188
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -1.9617950431020337,
+    "fold_deltas": [
+     -4.269,
+     -0.791,
+     -0.826
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -2.6099724795788313,
+    "fold_deltas": [
+     -6.734,
+     -0.68,
+     -0.416
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": 2.870887536314369,
+    "fold_deltas": [
+     4.046,
+     3.368,
+     1.199
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -1.2230486800100284,
+    "fold_deltas": [
+     -3.205,
+     -0.113,
+     -0.351
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -1.7281197883005508,
+    "fold_deltas": [
+     -4.19,
+     -0.562,
+     -0.432
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -2.082620721532591,
+    "fold_deltas": [
+     -7.04,
+     0.356,
+     0.436
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -4.216448861360355,
+    "fold_deltas": [
+     -11.832,
+     1.227,
+     -2.045
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": 1.2415354703603498,
+    "fold_deltas": [
+     -1.337,
+     4.362,
+     0.7
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": 4.635890029330524,
+    "fold_deltas": [
+     11.069,
+     0.005,
+     2.833
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -3.6881788718056754,
+    "fold_deltas": [
+     -8.565,
+     -1.864,
+     -0.636
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -3.7890339034330744,
+    "fold_deltas": [
+     -10.802,
+     0.744,
+     -1.308
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": 3.2461894424555298,
+    "fold_deltas": [
+     -7.367,
+     6.578,
+     10.528
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": 8.29104372785856,
+    "fold_deltas": [
+     2.853,
+     10.327,
+     11.693
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": -3.25566091300441,
+    "fold_deltas": [
+     -8.084,
+     -0.554,
+     -1.129
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -0.4051897174702728,
+    "fold_deltas": [
+     -8.196,
+     4.253,
+     2.727
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": 2.7057385905661206,
+    "fold_deltas": [
+     -10.174,
+     7.503,
+     10.788
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": 8.163994043147898,
+    "fold_deltas": [
+     7.724,
+     13.651,
+     3.117
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -2.3175700261101517,
+    "fold_deltas": [
+     -6.03,
+     -0.34,
+     -0.583
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -2.3820788484452655,
+    "fold_deltas": [
+     -1.565,
+     -2.953,
+     -2.628
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -2.9403209862919866,
+    "fold_deltas": [
+     -2.721,
+     -4.446,
+     -1.654
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -8.425356127306175,
+    "fold_deltas": [
+     -6.034,
+     -10.806,
+     -8.436
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": -15.405766497095513,
+    "fold_deltas": [
+     -10.294,
+     -12.222,
+     -23.701
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": -18.63694945133327,
+    "fold_deltas": [
+     -9.748,
+     -16.135,
+     -30.027
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -3.3042253540704443,
+    "fold_deltas": [
+     -4.78,
+     -2.756,
+     -2.377
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -3.421048918678217,
+    "fold_deltas": [
+     -6.137,
+     -3.874,
+     -0.252
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": -10.073846575541753,
+    "fold_deltas": [
+     -7.266,
+     -13.205,
+     -9.751
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": -13.586733270863467,
+    "fold_deltas": [
+     -13.132,
+     -20.775,
+     -6.853
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": -1.6702409567526288,
+    "fold_deltas": [
+     -3.941,
+     -3.223,
+     2.152
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -0.02060822033379613,
+    "fold_deltas": [
+     -4.14,
+     -6.766,
+     10.844
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -16.48812624809845,
+    "fold_deltas": [
+     -20.558,
+     -19.409,
+     -9.497
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": -14.277382761143691,
+    "fold_deltas": [
+     -13.52,
+     -20.122,
+     -9.19
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -3.3688487100368483,
+    "fold_deltas": [
+     -2.958,
+     -4.285,
+     -2.864
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -18.91017176437463,
+    "fold_deltas": [
+     -37.508,
+     -12.526,
+     -6.697
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -18.329682824520766,
+    "fold_deltas": [
+     -35.962,
+     -12.401,
+     -6.626
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -20.686390867022123,
+    "fold_deltas": [
+     -32.673,
+     -14.106,
+     -15.28
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": -22.707251905297138,
+    "fold_deltas": [
+     -23.306,
+     -10.578,
+     -34.238
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": -26.780105392772075,
+    "fold_deltas": [
+     -29.949,
+     -10.793,
+     -39.599
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -17.647266296817538,
+    "fold_deltas": [
+     -37.992,
+     -2.51,
+     -12.44
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -8.229676044856761,
+    "fold_deltas": [
+     -28.532,
+     16.294,
+     -12.451
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": 9.908243356437529,
+    "fold_deltas": [
+     13.221,
+     16.778,
+     -0.274
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": 7.691249770502357,
+    "fold_deltas": [
+     13.982,
+     1.661,
+     7.431
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": -14.44464137483871,
+    "fold_deltas": [
+     -37.116,
+     4.468,
+     -10.686
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -0.6132112227617199,
+    "fold_deltas": [
+     -20.441,
+     16.903,
+     1.698
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": 6.923374333681296,
+    "fold_deltas": [
+     0.558,
+     7.449,
+     12.763
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": -1.856514753649454,
+    "fold_deltas": [
+     4.344,
+     -12.541,
+     2.627
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -19.169999866996875,
+    "fold_deltas": [
+     -37.45,
+     -13.789,
+     -6.272
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "clean",
+    "delta": 0.16816205129322034,
+    "fold_deltas": [
+     -0.559,
+     0.773,
+     0.29
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@10dB",
+    "delta": -0.035167331107177326,
+    "fold_deltas": [
+     -2.046,
+     1.077,
+     0.864
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@5dB",
+    "delta": -0.1501122097373558,
+    "fold_deltas": [
+     -2.559,
+     0.929,
+     1.18
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@0dB",
+    "delta": -0.14572993318196245,
+    "fold_deltas": [
+     -0.723,
+     0.01,
+     0.276
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@-5dB",
+    "delta": -1.129434798126449,
+    "fold_deltas": [
+     -3.506,
+     -0.005,
+     0.123
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@10dB",
+    "delta": 1.367756096899419,
+    "fold_deltas": [
+     -1.692,
+     4.401,
+     1.394
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@5dB",
+    "delta": 0.9116401186010196,
+    "fold_deltas": [
+     -1.659,
+     2.777,
+     1.616
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@0dB",
+    "delta": -1.1454521754954439,
+    "fold_deltas": [
+     -6.619,
+     3.078,
+     0.105
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@-5dB",
+    "delta": 0.8057572453366232,
+    "fold_deltas": [
+     0.105,
+     0.712,
+     1.6
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@10dB",
+    "delta": 0.5327985093658137,
+    "fold_deltas": [
+     -2.627,
+     2.811,
+     1.415
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@5dB",
+    "delta": -0.37203286232149324,
+    "fold_deltas": [
+     -1.375,
+     0.592,
+     -0.333
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@0dB",
+    "delta": -0.623699684520318,
+    "fold_deltas": [
+     -0.856,
+     0.107,
+     -1.123
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@-5dB",
+    "delta": -0.5589519283013556,
+    "fold_deltas": [
+     0.0,
+     -1.457,
+     -0.22
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "drift+spikes",
+    "delta": 0.20856734839935598,
+    "fold_deltas": [
+     -0.597,
+     0.803,
+     0.42
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "clean",
+    "delta": 0.5949443543879577,
+    "fold_deltas": [
+     -2.033,
+     1.925,
+     1.893
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@10dB",
+    "delta": 2.7296910151335774,
+    "fold_deltas": [
+     3.898,
+     2.491,
+     1.8
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@5dB",
+    "delta": 4.640579803289384,
+    "fold_deltas": [
+     6.885,
+     1.73,
+     5.307
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@0dB",
+    "delta": 7.61654844445776,
+    "fold_deltas": [
+     13.437,
+     7.555,
+     1.858
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@-5dB",
+    "delta": 14.411206679593041,
+    "fold_deltas": [
+     36.676,
+     0.171,
+     6.387
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@10dB",
+    "delta": 2.907608155057048,
+    "fold_deltas": [
+     6.368,
+     -3.538,
+     5.892
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@5dB",
+    "delta": -3.955945631588365,
+    "fold_deltas": [
+     6.929,
+     -14.175,
+     -4.622
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@0dB",
+    "delta": -9.836980989583,
+    "fold_deltas": [
+     -2.715,
+     -16.601,
+     -10.195
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@-5dB",
+    "delta": -0.9563465018421482,
+    "fold_deltas": [
+     -14.243,
+     8.063,
+     3.311
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@10dB",
+    "delta": 2.6852856289893694,
+    "fold_deltas": [
+     6.5,
+     -8.811,
+     10.367
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@5dB",
+    "delta": -5.090004342236725,
+    "fold_deltas": [
+     4.711,
+     -13.72,
+     -6.261
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@0dB",
+    "delta": -18.073948557128336,
+    "fold_deltas": [
+     -24.506,
+     -15.434,
+     -14.282
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@-5dB",
+    "delta": -4.359072778203278,
+    "fold_deltas": [
+     -10.939,
+     -0.58,
+     -1.558
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "drift+spikes",
+    "delta": 1.3115362173132112,
+    "fold_deltas": [
+     -0.122,
+     2.149,
+     1.908
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "clean",
+    "delta": -15.630324898358019,
+    "fold_deltas": [
+     -29.757,
+     -26.895,
+     9.762
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@10dB",
+    "delta": -15.696990093818377,
+    "fold_deltas": [
+     -28.177,
+     -24.929,
+     6.015
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@5dB",
+    "delta": -14.404939081556158,
+    "fold_deltas": [
+     -24.857,
+     -17.327,
+     -1.03
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@0dB",
+    "delta": -9.06713977969005,
+    "fold_deltas": [
+     -9.983,
+     -5.945,
+     -11.274
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@-5dB",
+    "delta": -3.3024954615145554,
+    "fold_deltas": [
+     0.869,
+     0.858,
+     -11.634
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@10dB",
+    "delta": -16.813392261863516,
+    "fold_deltas": [
+     -28.098,
+     -20.06,
+     -2.282
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@5dB",
+    "delta": -13.496198808312636,
+    "fold_deltas": [
+     -22.216,
+     -4.953,
+     -13.319
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@0dB",
+    "delta": 2.4960408292452527,
+    "fold_deltas": [
+     15.652,
+     -2.117,
+     -6.047
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@-5dB",
+    "delta": 5.035511145726781,
+    "fold_deltas": [
+     12.619,
+     -4.99,
+     7.477
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@10dB",
+    "delta": -13.92033287011204,
+    "fold_deltas": [
+     -27.144,
+     -12.023,
+     -2.594
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@5dB",
+    "delta": -7.281778523225472,
+    "fold_deltas": [
+     -13.685,
+     -1.646,
+     -6.514
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@0dB",
+    "delta": 9.29096864993811,
+    "fold_deltas": [
+     23.502,
+     -6.002,
+     10.373
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@-5dB",
+    "delta": 4.164395310059228,
+    "fold_deltas": [
+     22.226,
+     -20.722,
+     10.989
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "drift+spikes",
+    "delta": -16.430502031185014,
+    "fold_deltas": [
+     -28.572,
+     -28.515,
+     7.795
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   }
+  ],
+  "mixed": [
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -0.04796820904303208,
+    "fold_deltas": [
+     -3.772,
+     1.846,
+     1.782
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": 1.419498428413494,
+    "fold_deltas": [
+     -1.382,
+     3.453,
+     2.188
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": 2.7823573189175215,
+    "fold_deltas": [
+     0.783,
+     3.699,
+     3.865
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": 8.180786844122396,
+    "fold_deltas": [
+     14.731,
+     10.177,
+     -0.365
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": 14.312139492122656,
+    "fold_deltas": [
+     41.042,
+     0.005,
+     1.889
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": 0.26108751099769734,
+    "fold_deltas": [
+     0.348,
+     -1.562,
+     1.997
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -4.76424558610309,
+    "fold_deltas": [
+     1.558,
+     -9.262,
+     -6.588
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": -10.944887025883176,
+    "fold_deltas": [
+     -8.89,
+     -10.833,
+     -13.111
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": -1.3021542395274348,
+    "fold_deltas": [
+     -19.015,
+     14.978,
+     0.13
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": 1.2107327734684823,
+    "fold_deltas": [
+     2.162,
+     -1.177,
+     2.647
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -2.3137099910932193,
+    "fold_deltas": [
+     1.036,
+     -4.031,
+     -3.946
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -10.885559299739631,
+    "fold_deltas": [
+     -23.083,
+     0.055,
+     -9.629
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": 0.5777417339100085,
+    "fold_deltas": [
+     -12.461,
+     9.181,
+     5.013
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -0.09204694953167565,
+    "fold_deltas": [
+     -4.36,
+     2.159,
+     1.925
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -0.6552164961010973,
+    "fold_deltas": [
+     -2.701,
+     0.38,
+     0.356
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -0.05254269849245811,
+    "fold_deltas": [
+     -1.787,
+     1.326,
+     0.303
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": 0.33880065325094105,
+    "fold_deltas": [
+     -1.013,
+     0.615,
+     1.415
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": -1.0911912869623326,
+    "fold_deltas": [
+     -5.646,
+     2.205,
+     0.168
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": -1.4267200004394958,
+    "fold_deltas": [
+     -3.847,
+     0.0,
+     -0.433
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -0.37529393138614137,
+    "fold_deltas": [
+     -2.628,
+     1.24,
+     0.262
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": 0.1395287782544751,
+    "fold_deltas": [
+     -1.261,
+     2.297,
+     -0.618
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": -0.9631695796739758,
+    "fold_deltas": [
+     -1.077,
+     3.428,
+     -5.241
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": -0.44328948031931975,
+    "fold_deltas": [
+     -3.642,
+     3.595,
+     -1.283
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": -0.40829739926928116,
+    "fold_deltas": [
+     -2.062,
+     0.86,
+     -0.023
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -0.04787222507913924,
+    "fold_deltas": [
+     -0.755,
+     1.926,
+     -1.314
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -1.3685759837964089,
+    "fold_deltas": [
+     -1.829,
+     3.052,
+     -5.328
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": 0.15260497496581435,
+    "fold_deltas": [
+     -2.406,
+     7.702,
+     -4.838
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -0.472415730229135,
+    "fold_deltas": [
+     -2.125,
+     0.295,
+     0.413
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -0.5422551112313082,
+    "fold_deltas": [
+     -0.815,
+     -1.065,
+     0.252
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -0.19098646387979676,
+    "fold_deltas": [
+     -1.12,
+     0.119,
+     0.428
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": 0.19340368620561676,
+    "fold_deltas": [
+     -1.055,
+     0.261,
+     1.374
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": 0.8829233924880487,
+    "fold_deltas": [
+     -1.118,
+     4.243,
+     -0.476
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": 3.89939586713489,
+    "fold_deltas": [
+     9.878,
+     0.0,
+     1.82
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -0.9732987852124116,
+    "fold_deltas": [
+     -1.083,
+     -1.985,
+     0.148
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -0.11213180739498559,
+    "fold_deltas": [
+     -0.764,
+     1.654,
+     -1.226
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": 1.499789963428506,
+    "fold_deltas": [
+     0.377,
+     6.38,
+     -2.258
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": -1.6647991981241084,
+    "fold_deltas": [
+     -10.978,
+     9.94,
+     -3.956
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": -0.8560777692992426,
+    "fold_deltas": [
+     0.121,
+     -0.837,
+     -1.852
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": 1.633502107974601,
+    "fold_deltas": [
+     0.172,
+     2.907,
+     1.821
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": 1.292158595217489,
+    "fold_deltas": [
+     -1.489,
+     5.762,
+     -0.397
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": 2.511617617972938,
+    "fold_deltas": [
+     -4.2,
+     11.342,
+     0.392
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -0.45520319336129705,
+    "fold_deltas": [
+     -1.053,
+     -0.585,
+     0.273
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -0.7241596611785136,
+    "fold_deltas": [
+     4.026,
+     -3.933,
+     -2.266
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -1.3980176422610053,
+    "fold_deltas": [
+     3.501,
+     -6.269,
+     -1.427
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -6.6551700739560795,
+    "fold_deltas": [
+     1.812,
+     -14.485,
+     -7.293
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": -19.335596090911107,
+    "fold_deltas": [
+     -13.983,
+     -21.119,
+     -22.905
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": -24.267199236182176,
+    "fold_deltas": [
+     -22.743,
+     -24.383,
+     -25.675
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -1.7481379671391626,
+    "fold_deltas": [
+     2.932,
+     -5.387,
+     -2.789
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -1.4662854327304042,
+    "fold_deltas": [
+     4.034,
+     -5.127,
+     -3.306
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": -7.360048796180197,
+    "fold_deltas": [
+     2.684,
+     -11.262,
+     -13.503
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": -15.000510614573896,
+    "fold_deltas": [
+     -27.094,
+     -7.714,
+     -10.194
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": -1.175547152407449,
+    "fold_deltas": [
+     4.284,
+     -6.303,
+     -1.507
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": 0.9366396287040099,
+    "fold_deltas": [
+     5.722,
+     -10.424,
+     7.512
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -9.367643836193567,
+    "fold_deltas": [
+     -2.371,
+     -19.574,
+     -6.157
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": -11.498399673734724,
+    "fold_deltas": [
+     -23.642,
+     -4.525,
+     -6.328
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -0.8987734816978966,
+    "fold_deltas": [
+     4.027,
+     -4.204,
+     -2.52
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -18.117213897600898,
+    "fold_deltas": [
+     -33.924,
+     -13.685,
+     -6.743
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -18.8123949569209,
+    "fold_deltas": [
+     -32.886,
+     -17.432,
+     -6.119
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -21.86190616744821,
+    "fold_deltas": [
+     -28.9,
+     -23.789,
+     -12.896
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": -26.680373529986895,
+    "fold_deltas": [
+     -26.702,
+     -20.428,
+     -32.911
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": -39.361914635127796,
+    "fold_deltas": [
+     -43.242,
+     -27.094,
+     -47.75
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -18.530808011100785,
+    "fold_deltas": [
+     -34.795,
+     -12.821,
+     -7.977
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -12.598774955264917,
+    "fold_deltas": [
+     -28.171,
+     4.323,
+     -13.949
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": 1.1933281582216988,
+    "fold_deltas": [
+     14.401,
+     5.517,
+     -16.339
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": -4.556963633394003,
+    "fold_deltas": [
+     7.341,
+     -11.904,
+     -9.108
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": -16.528629374868668,
+    "fold_deltas": [
+     -32.78,
+     -9.262,
+     -7.543
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -9.423784188003893,
+    "fold_deltas": [
+     -26.272,
+     3.024,
+     -5.023
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -1.9674043350493708,
+    "fold_deltas": [
+     0.709,
+     -4.845,
+     -1.766
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": -9.873250447532003,
+    "fold_deltas": [
+     -7.265,
+     -14.461,
+     -7.894
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -17.888116964480677,
+    "fold_deltas": [
+     -32.623,
+     -15.074,
+     -5.967
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "clean",
+    "delta": 0.33634079265471445,
+    "fold_deltas": [
+     -0.168,
+     0.41,
+     0.767
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@10dB",
+    "delta": 0.27392823719118553,
+    "fold_deltas": [
+     -0.991,
+     0.57,
+     1.243
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@5dB",
+    "delta": -0.6042002513930704,
+    "fold_deltas": [
+     -2.869,
+     0.437,
+     0.619
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@0dB",
+    "delta": -0.623116254081193,
+    "fold_deltas": [
+     -1.204,
+     -1.02,
+     0.354
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@-5dB",
+    "delta": -4.771209620097612,
+    "fold_deltas": [
+     -14.496,
+     -0.005,
+     0.188
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@10dB",
+    "delta": 0.8259805397042754,
+    "fold_deltas": [
+     -1.225,
+     2.816,
+     0.887
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@5dB",
+    "delta": 2.2444258387839198,
+    "fold_deltas": [
+     -2.528,
+     5.571,
+     3.69
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@0dB",
+    "delta": -0.7922780232863964,
+    "fold_deltas": [
+     -9.41,
+     4.573,
+     2.46
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@-5dB",
+    "delta": 0.46654332922076297,
+    "fold_deltas": [
+     0.652,
+     -0.059,
+     0.806
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@10dB",
+    "delta": 0.47346574310679895,
+    "fold_deltas": [
+     -2.864,
+     2.128,
+     2.157
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@5dB",
+    "delta": 1.781846062552629,
+    "fold_deltas": [
+     -0.266,
+     1.183,
+     4.428
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@0dB",
+    "delta": -0.6127366290379044,
+    "fold_deltas": [
+     -1.762,
+     -0.917,
+     0.84
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@-5dB",
+    "delta": 0.5876459231303907,
+    "fold_deltas": [
+     2.593,
+     -0.657,
+     -0.173
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "drift+spikes",
+    "delta": 0.32784614580167454,
+    "fold_deltas": [
+     -0.106,
+     0.214,
+     0.875
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "clean",
+    "delta": 0.5187563105570424,
+    "fold_deltas": [
+     -3.16,
+     3.255,
+     1.461
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@10dB",
+    "delta": 2.366809961955577,
+    "fold_deltas": [
+     1.299,
+     4.345,
+     1.456
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@5dB",
+    "delta": 3.8625499733699216,
+    "fold_deltas": [
+     2.533,
+     3.496,
+     5.559
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@0dB",
+    "delta": 8.567994239765367,
+    "fold_deltas": [
+     15.53,
+     8.623,
+     1.55
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@-5dB",
+    "delta": 15.063698282867685,
+    "fold_deltas": [
+     38.353,
+     0.166,
+     6.672
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@10dB",
+    "delta": 2.1869841757251365,
+    "fold_deltas": [
+     2.922,
+     1.759,
+     1.881
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@5dB",
+    "delta": -2.940212503398795,
+    "fold_deltas": [
+     2.675,
+     -9.854,
+     -1.642
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@0dB",
+    "delta": -2.633363093498616,
+    "fold_deltas": [
+     -1.643,
+     -7.031,
+     0.773
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@-5dB",
+    "delta": 4.3243005328640995,
+    "fold_deltas": [
+     -7.137,
+     10.481,
+     9.628
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@10dB",
+    "delta": 2.5153620986311793,
+    "fold_deltas": [
+     2.493,
+     0.527,
+     4.526
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@5dB",
+    "delta": -2.5673652793823365,
+    "fold_deltas": [
+     0.898,
+     -7.679,
+     -0.921
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@0dB",
+    "delta": -6.759876378248688,
+    "fold_deltas": [
+     -20.942,
+     1.932,
+     -1.269
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@-5dB",
+    "delta": -0.05434756100015884,
+    "fold_deltas": [
+     -8.261,
+     -3.356,
+     11.455
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "drift+spikes",
+    "delta": 0.5228360247106801,
+    "fold_deltas": [
+     -3.104,
+     3.162,
+     1.511
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "clean",
+    "delta": -15.056307951683385,
+    "fold_deltas": [
+     -28.004,
+     -27.091,
+     9.926
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@10dB",
+    "delta": -16.69802119032339,
+    "fold_deltas": [
+     -28.238,
+     -28.368,
+     6.512
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@5dB",
+    "delta": -17.39308809367031,
+    "fold_deltas": [
+     -26.378,
+     -25.891,
+     0.089
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@0dB",
+    "delta": -11.758149556159857,
+    "fold_deltas": [
+     -10.715,
+     -14.601,
+     -9.959
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@-5dB",
+    "delta": -14.127033398594074,
+    "fold_deltas": [
+     -7.082,
+     -15.316,
+     -19.983
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@10dB",
+    "delta": -17.60945573063776,
+    "fold_deltas": [
+     -28.257,
+     -27.558,
+     2.987
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@5dB",
+    "delta": -18.202208874417085,
+    "fold_deltas": [
+     -26.771,
+     -16.01,
+     -11.826
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@0dB",
+    "delta": -7.2681098063837055,
+    "fold_deltas": [
+     6.895,
+     -13.064,
+     -15.635
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@-5dB",
+    "delta": -2.231503996896834,
+    "fold_deltas": [
+     12.328,
+     -17.656,
+     -1.367
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@10dB",
+    "delta": -15.00737481584153,
+    "fold_deltas": [
+     -26.827,
+     -22.7,
+     4.505
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@5dB",
+    "delta": -15.244374614729864,
+    "fold_deltas": [
+     -24.201,
+     -11.92,
+     -9.612
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@0dB",
+    "delta": -4.629496463195992,
+    "fold_deltas": [
+     7.212,
+     -15.99,
+     -5.11
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@-5dB",
+    "delta": -2.7021416685665365,
+    "fold_deltas": [
+     13.832,
+     -22.408,
+     0.47
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "drift+spikes",
+    "delta": -16.07907703241739,
+    "fold_deltas": [
+     -27.533,
+     -28.934,
+     8.229
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   }
+  ]
+ },
+ "p4_real_cv": {
+  "lowpass": [
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -0.036084764547850055,
+    "fold_deltas": [
+     10.464,
+     -2.408,
+     -1.545,
+     0.019,
+     0.104,
+     -16.009,
+     -2.715,
+     4.239,
+     1.184,
+     6.306
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.9954282469506525,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -0.6833777503203631,
+    "fold_deltas": [
+     9.259,
+     -3.368,
+     -8.885,
+     2.109,
+     0.148,
+     -15.346,
+     0.58,
+     1.313,
+     6.175,
+     1.182
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.9148072320445056,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -1.072512066507949,
+    "fold_deltas": [
+     -2.65,
+     0.98,
+     -20.559,
+     5.494,
+     -0.212,
+     -10.494,
+     -1.285,
+     0.982,
+     17.677,
+     -0.658
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.903867134366561,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": -1.523673596422869,
+    "fold_deltas": [
+     -8.244,
+     5.754,
+     -19.965,
+     -1.989,
+     -0.636,
+     -6.529,
+     16.273,
+     1.346,
+     -1.363,
+     0.117
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.8569421206541811,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": -3.4102154831816778,
+    "fold_deltas": [
+     -8.67,
+     0.664,
+     -0.719,
+     -3.066,
+     0.372,
+     -9.963,
+     -0.744,
+     0.0,
+     -14.272,
+     2.295
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.5012741477571646,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": 0.3053439771047152,
+    "fold_deltas": [
+     3.057,
+     -1.313,
+     0.085,
+     5.419,
+     -0.185,
+     -18.003,
+     1.792,
+     3.787,
+     3.315,
+     5.099
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.9603160543405356,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -1.9039390226508552,
+    "fold_deltas": [
+     -12.383,
+     1.159,
+     -7.731,
+     1.287,
+     -0.039,
+     -5.78,
+     3.94,
+     0.027,
+     -1.314,
+     1.793
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.6796319236218514,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": 1.616958651953863,
+    "fold_deltas": [
+     -9.81,
+     0.0,
+     0.234,
+     0.0,
+     0.0,
+     5.482,
+     -0.013,
+     -2.982,
+     17.563,
+     5.697
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.7998409069463762,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": -0.5317867620494123,
+    "fold_deltas": [
+     -0.599,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.169,
+     0.0,
+     -2.378,
+     -5.038,
+     1.528
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.755709734980068,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": -0.6012064414314449,
+    "fold_deltas": [
+     3.797,
+     -4.068,
+     -2.76,
+     4.05,
+     -0.324,
+     -18.704,
+     3.601,
+     3.573,
+     -0.576,
+     5.398
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.9253111158152992,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -2.805152373036486,
+    "fold_deltas": [
+     -13.14,
+     -2.472,
+     -2.492,
+     0.022,
+     -0.092,
+     -8.951,
+     -2.588,
+     5.218,
+     -4.796,
+     1.24
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.5543009068572602,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -2.8404310648534046,
+    "fold_deltas": [
+     -11.124,
+     -0.029,
+     -9.987,
+     0.0,
+     0.0,
+     9.163,
+     -0.039,
+     0.547,
+     -24.558,
+     7.623
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.7514880971895614,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": -3.9970349300272234,
+    "fold_deltas": [
+     -8.297,
+     0.0,
+     -27.811,
+     0.0,
+     0.0,
+     0.454,
+     0.0,
+     0.0,
+     -7.412,
+     3.096
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.6284090384040774,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": 0.10060816504979968,
+    "fold_deltas": [
+     9.993,
+     -2.099,
+     -2.155,
+     -0.049,
+     0.06,
+     -15.147,
+     -2.123,
+     4.194,
+     1.602,
+     6.729
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.9867598969528812,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -1.0220814053372347,
+    "fold_deltas": [
+     -5.19,
+     0.522,
+     1.889,
+     9.435,
+     -0.752,
+     -1.6,
+     0.376,
+     -12.492,
+     1.911,
+     -4.321
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.841909225417793,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -1.863826954263216,
+    "fold_deltas": [
+     -10.313,
+     0.754,
+     1.266,
+     6.129,
+     -0.352,
+     -1.578,
+     0.007,
+     -12.085,
+     1.158,
+     -3.625
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.7088637564848371,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -0.8647810335389922,
+    "fold_deltas": [
+     -6.137,
+     -1.187,
+     -0.572,
+     1.58,
+     -0.059,
+     -1.895,
+     1.12,
+     2.818,
+     -0.541,
+     -3.776
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.7148613783402377,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": -0.17759952166526355,
+    "fold_deltas": [
+     -0.25,
+     0.579,
+     2.02,
+     1.821,
+     0.071,
+     -3.944,
+     -0.08,
+     4.879,
+     -0.849,
+     -6.022
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.9484656720758021,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": -0.06451620446787025,
+    "fold_deltas": [
+     0.0,
+     0.044,
+     0.0,
+     4.689,
+     0.002,
+     -5.627,
+     -1.819,
+     0.196,
+     7.435,
+     -5.565
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.9856657806837987,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -1.7825234386655768,
+    "fold_deltas": [
+     -8.043,
+     0.67,
+     0.105,
+     1.862,
+     0.002,
+     1.75,
+     -0.533,
+     -11.876,
+     0.89,
+     -2.651
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.6674029404576102,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": 0.6273087986168668,
+    "fold_deltas": [
+     1.085,
+     1.518,
+     0.88,
+     0.708,
+     0.012,
+     6.011,
+     -0.387,
+     7.232,
+     -1.472,
+     -9.314
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.8756875675814495,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": 1.646515040378889,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     0.029,
+     0.0,
+     0.0,
+     0.223,
+     0.0,
+     6.926,
+     9.181,
+     0.106
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.5957095618147836,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": 1.4269887698855908,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     3.497,
+     0.0,
+     2.063,
+     11.55,
+     -2.84
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.6865664063132604,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": -1.7119579833227718,
+    "fold_deltas": [
+     -10.208,
+     1.919,
+     2.17,
+     2.198,
+     -0.041,
+     2.819,
+     -0.756,
+     -12.289,
+     0.384,
+     -3.315
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.7238194996916755,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -2.7615713288606196,
+    "fold_deltas": [
+     -4.009,
+     -1.453,
+     -2.25,
+     -0.209,
+     -0.008,
+     8.591,
+     -1.017,
+     -14.45,
+     -2.246,
+     -10.565
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.623865404026127,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -2.3129059374763825,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     -1.277,
+     0.0,
+     0.0,
+     0.057,
+     0.0,
+     -11.067,
+     -8.09,
+     -2.753
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.5250309436130961,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": -1.3671810183507784,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     2.567,
+     0.0,
+     0.0,
+     0.983,
+     0.0,
+     -0.022,
+     -12.183,
+     -5.017
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.7217225731994552,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -1.4831715873561393,
+    "fold_deltas": [
+     -6.615,
+     0.64,
+     0.221,
+     8.875,
+     -0.595,
+     -2.546,
+     0.797,
+     -10.995,
+     0.855,
+     -5.47
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.7598259911756793,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "clean",
+    "delta": 0.2777668034392821,
+    "fold_deltas": [
+     9.996,
+     2.983,
+     -6.687,
+     0.648,
+     -0.725,
+     3.473,
+     7.0,
+     -11.328,
+     -3.524,
+     0.942
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.9608957896033864,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -1.5113751623696685,
+    "fold_deltas": [
+     3.932,
+     0.322,
+     -9.992,
+     -3.28,
+     -0.335,
+     3.135,
+     3.159,
+     -9.05,
+     -2.383,
+     -0.622
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.7298067649342443,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -1.446253154778039,
+    "fold_deltas": [
+     2.724,
+     0.818,
+     -18.434,
+     -1.5,
+     -0.123,
+     0.781,
+     -4.791,
+     9.442,
+     -1.527,
+     -1.852
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.8200857388612095,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": 0.4578603196822467,
+    "fold_deltas": [
+     -7.446,
+     0.209,
+     -6.143,
+     0.34,
+     -0.517,
+     -7.984,
+     16.698,
+     12.569,
+     -1.144,
+     -2.004
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.9502264658386662,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": -1.6486734204784923,
+    "fold_deltas": [
+     -8.67,
+     -0.048,
+     -0.719,
+     -1.629,
+     0.374,
+     -8.15,
+     0.721,
+     0.86,
+     -6.329,
+     7.102
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.7053967723577087,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -1.0986842870337514,
+    "fold_deltas": [
+     2.421,
+     2.792,
+     -10.674,
+     -5.552,
+     0.003,
+     0.594,
+     2.243,
+     -6.894,
+     -0.831,
+     4.91
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.8070878073462842,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": 0.48622125336281813,
+    "fold_deltas": [
+     -7.146,
+     4.19,
+     -8.143,
+     0.248,
+     -0.007,
+     -8.613,
+     17.033,
+     11.503,
+     0.203,
+     -4.406
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.9492804798516744,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": 0.08526805528618872,
+    "fold_deltas": [
+     -9.81,
+     0.0,
+     -2.618,
+     0.0,
+     0.0,
+     -1.757,
+     -0.013,
+     9.454,
+     5.741,
+     -0.144
+    ],
+    "folds_agree": 2,
+    "n_folds": 10,
+    "p_nb": 0.9850002626401221,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": -0.5675371559982206,
+    "fold_deltas": [
+     -0.599,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     -3.167,
+     0.0,
+     -2.142,
+     6.104,
+     -5.871
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.83620579564512,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": 0.9571427616252958,
+    "fold_deltas": [
+     1.849,
+     1.019,
+     1.718,
+     -1.184,
+     -0.187,
+     -0.83,
+     9.25,
+     -2.773,
+     -2.645,
+     3.355
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.763577925609076,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -1.256824550141865,
+    "fold_deltas": [
+     -8.105,
+     -4.934,
+     11.806,
+     -0.136,
+     -0.121,
+     -15.365,
+     14.828,
+     -3.862,
+     0.982,
+     -7.66
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.8780579763784128,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -2.3351344051136325,
+    "fold_deltas": [
+     -11.124,
+     -0.029,
+     -4.956,
+     0.0,
+     0.0,
+     -5.273,
+     -0.039,
+     -1.326,
+     2.557,
+     -3.162
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.5157576946552429,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": -4.833455765445043,
+    "fold_deltas": [
+     -8.297,
+     0.0,
+     -24.383,
+     0.0,
+     0.0,
+     -4.142,
+     0.0,
+     0.0,
+     -7.355,
+     -4.157
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.4854619960843906,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": 0.21565099389007153,
+    "fold_deltas": [
+     8.398,
+     2.802,
+     -7.138,
+     -0.18,
+     -0.585,
+     2.746,
+     7.44,
+     -8.932,
+     -3.824,
+     1.429
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.9662570578293783,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -3.6092996271414988,
+    "fold_deltas": [
+     -12.138,
+     -4.811,
+     -8.815,
+     14.36,
+     -13.999,
+     12.157,
+     -1.285,
+     -12.695,
+     1.553,
+     -10.419
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.6963658434779563,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -4.167493206543907,
+    "fold_deltas": [
+     -16.52,
+     -6.217,
+     -10.113,
+     9.41,
+     -17.103,
+     10.896,
+     -0.92,
+     -8.957,
+     4.799,
+     -6.952
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.6440528001029695,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -3.805841506398469,
+    "fold_deltas": [
+     -15.908,
+     0.83,
+     -14.545,
+     -0.397,
+     -22.041,
+     8.072,
+     4.506,
+     -6.573,
+     12.42,
+     -4.422
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.7044774943964905,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": 2.569024132360421,
+    "fold_deltas": [
+     -7.76,
+     1.28,
+     0.701,
+     -0.646,
+     -23.165,
+     9.859,
+     13.928,
+     5.172,
+     29.235,
+     -2.913
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.8363927417815569,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": 1.5496729141042003,
+    "fold_deltas": [
+     -0.18,
+     -10.224,
+     0.0,
+     4.733,
+     -8.111,
+     16.277,
+     -10.655,
+     -1.238,
+     24.9,
+     -0.006
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.880003409981621,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -4.059865796280588,
+    "fold_deltas": [
+     -19.039,
+     -0.264,
+     -14.108,
+     7.046,
+     -17.209,
+     9.365,
+     3.365,
+     -8.077,
+     6.16,
+     -7.836
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.6713479108869309,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -6.428241852714498,
+    "fold_deltas": [
+     -28.554,
+     -10.728,
+     -11.995,
+     7.629,
+     -23.836,
+     -7.351,
+     14.635,
+     -1.875,
+     13.986,
+     -16.193
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.63557902721054,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": -7.344220588423994,
+    "fold_deltas": [
+     -20.111,
+     -23.387,
+     -13.944,
+     1.16,
+     -23.89,
+     -7.464,
+     -5.906,
+     6.55,
+     29.021,
+     -15.472
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.6194138836031475,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": -1.8968555041589632,
+    "fold_deltas": [
+     -9.391,
+     -9.108,
+     0.0,
+     0.0,
+     -7.718,
+     -0.231,
+     -2.268,
+     -0.458,
+     18.103,
+     -7.897
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.7951016302199193,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": -3.3565243893283423,
+    "fold_deltas": [
+     -16.657,
+     4.34,
+     -2.972,
+     7.84,
+     -17.127,
+     8.903,
+     4.546,
+     -16.311,
+     3.359,
+     -9.486
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.7263852025979463,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -8.808055329838254,
+    "fold_deltas": [
+     -28.9,
+     -14.781,
+     3.68,
+     7.987,
+     -21.731,
+     -10.041,
+     0.415,
+     -26.121,
+     18.181,
+     -16.77
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.5380359983110087,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -10.439129912217265,
+    "fold_deltas": [
+     -27.817,
+     -26.301,
+     -0.296,
+     0.763,
+     -27.145,
+     -12.383,
+     -10.71,
+     -23.136,
+     36.675,
+     -14.042
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.5581122006704391,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": -3.0728073584153286,
+    "fold_deltas": [
+     -12.071,
+     -9.842,
+     6.362,
+     0.0,
+     -7.603,
+     0.417,
+     -3.061,
+     -8.992,
+     12.452,
+     -8.39
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.667528419854215,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -3.929358184633692,
+    "fold_deltas": [
+     -12.152,
+     -5.301,
+     -10.494,
+     13.583,
+     -14.427,
+     10.658,
+     -0.857,
+     -10.72,
+     1.019,
+     -10.603
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.6583098864687499,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -9.327166751060412,
+    "fold_deltas": [
+     -8.75,
+     -14.504,
+     -14.734,
+     -0.073,
+     -15.04,
+     -2.981,
+     -1.194,
+     -19.11,
+     -6.548,
+     -10.338
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.13805493706144054,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -9.936209068837702,
+    "fold_deltas": [
+     -12.382,
+     -13.749,
+     -8.376,
+     -9.969,
+     -8.379,
+     -1.596,
+     -6.839,
+     -14.4,
+     -7.296,
+     -16.377
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.029263084198563362,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -9.614584851966903,
+    "fold_deltas": [
+     -9.162,
+     -8.901,
+     -3.246,
+     -13.607,
+     -3.939,
+     -1.858,
+     -6.749,
+     -18.687,
+     -8.98,
+     -21.015
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.12116458869237154,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": 1.9955318921407166,
+    "fold_deltas": [
+     -4.157,
+     13.32,
+     -1.473,
+     -1.782,
+     -3.238,
+     3.289,
+     14.782,
+     -2.208,
+     12.692,
+     -11.268
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.8009140485524686,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": 2.859264851640508,
+    "fold_deltas": [
+     -1.526,
+     -1.904,
+     -2.92,
+     3.202,
+     -3.78,
+     12.165,
+     1.455,
+     0.685,
+     13.19,
+     8.026
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.6112765906679031,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -9.816567158348253,
+    "fold_deltas": [
+     -14.002,
+     -12.999,
+     -18.277,
+     -7.21,
+     -10.681,
+     -3.319,
+     -5.049,
+     -14.006,
+     -4.444,
+     -8.179
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.04989384720000304,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -1.2983496798625338,
+    "fold_deltas": [
+     2.64,
+     1.103,
+     -4.101,
+     -1.704,
+     -0.808,
+     3.261,
+     3.273,
+     -4.938,
+     4.811,
+     -16.52
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.818264216121568,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": 1.6540965825050193,
+    "fold_deltas": [
+     -0.09,
+     -0.029,
+     0.0,
+     -0.078,
+     -0.174,
+     -0.146,
+     -0.029,
+     14.521,
+     2.65,
+     -0.086
+    ],
+    "folds_agree": 2,
+    "n_folds": 10,
+    "p_nb": 0.6910453525702254,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": -0.748204194351391,
+    "fold_deltas": [
+     -4.727,
+     -0.202,
+     -1.615,
+     -0.241,
+     -5.599,
+     3.212,
+     0.0,
+     2.976,
+     -1.362,
+     0.076
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.7691784778307542,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": -10.63688007800907,
+    "fold_deltas": [
+     -13.901,
+     -10.205,
+     -11.427,
+     -10.141,
+     -14.219,
+     -5.848,
+     -3.211,
+     -22.563,
+     -4.979,
+     -9.875
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.056440151623273406,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -16.826530936719145,
+    "fold_deltas": [
+     -24.22,
+     -33.013,
+     -10.451,
+     -4.108,
+     -5.899,
+     -25.723,
+     -13.369,
+     -34.53,
+     5.1,
+     -22.052
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.17727077630330376,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -14.60653256575221,
+    "fold_deltas": [
+     -21.889,
+     -19.612,
+     -20.094,
+     -1.003,
+     -0.828,
+     -2.905,
+     -29.139,
+     -46.48,
+     4.569,
+     -8.685
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.31889326976157084,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": -9.714373695502488,
+    "fold_deltas": [
+     -10.052,
+     -2.359,
+     -2.692,
+     -0.546,
+     -0.215,
+     0.669,
+     -21.156,
+     -34.988,
+     -21.0,
+     -4.805
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.3812088025236894,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -8.579644569868686,
+    "fold_deltas": [
+     -9.705,
+     -12.517,
+     -13.64,
+     0.189,
+     -13.268,
+     -1.076,
+     -1.213,
+     -16.527,
+     -8.052,
+     -9.988
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.1332472254985904,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "clean",
+    "delta": 1.3020757714366211,
+    "fold_deltas": [
+     -3.079,
+     3.62,
+     1.791,
+     -1.31,
+     -0.491,
+     9.508,
+     2.686,
+     -1.651,
+     -0.234,
+     2.181
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.6883547425848457,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@10dB",
+    "delta": 1.3630345828914365,
+    "fold_deltas": [
+     -6.403,
+     2.932,
+     1.307,
+     -0.503,
+     -0.243,
+     9.517,
+     4.883,
+     0.163,
+     -0.56,
+     2.537
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.7155952813537548,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@5dB",
+    "delta": 0.9101206357846945,
+    "fold_deltas": [
+     -4.392,
+     0.537,
+     -0.608,
+     3.805,
+     -0.253,
+     8.044,
+     1.563,
+     0.01,
+     -2.269,
+     2.664
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.7684509147485995,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@0dB",
+    "delta": -0.3708545626642284,
+    "fold_deltas": [
+     3.853,
+     -2.008,
+     -0.279,
+     9.445,
+     -0.046,
+     -5.141,
+     -0.871,
+     0.544,
+     -10.978,
+     1.773
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.9386709736198521,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@-5dB",
+    "delta": -0.8892943344638663,
+    "fold_deltas": [
+     0.0,
+     -0.281,
+     0.0,
+     4.975,
+     -0.015,
+     -5.722,
+     -0.0,
+     0.0,
+     -5.608,
+     -2.241
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.7501996810559471,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@10dB",
+    "delta": 0.9677903240824068,
+    "fold_deltas": [
+     -6.284,
+     1.657,
+     -0.693,
+     4.536,
+     -0.165,
+     8.823,
+     2.833,
+     -1.074,
+     -0.655,
+     0.701
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.7870166063875657,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@5dB",
+    "delta": -1.2232777628516842,
+    "fold_deltas": [
+     6.4,
+     -1.561,
+     -5.756,
+     0.615,
+     -0.003,
+     -2.81,
+     -8.315,
+     2.409,
+     -2.835,
+     -0.377
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.7424642745030843,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@0dB",
+    "delta": -1.7121103993097424,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     -1.005,
+     0.0,
+     0.0,
+     -7.265,
+     0.0,
+     0.152,
+     -10.456,
+     1.453
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.6269564433918174,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@-5dB",
+    "delta": -0.24823405460333275,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     -6.232,
+     0.0,
+     2.333,
+     5.448,
+     -4.031
+    ],
+    "folds_agree": 2,
+    "n_folds": 10,
+    "p_nb": 0.930373668469469,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@10dB",
+    "delta": 1.0489398975681996,
+    "fold_deltas": [
+     -3.408,
+     1.52,
+     3.0,
+     7.543,
+     -0.018,
+     9.231,
+     -1.212,
+     -4.111,
+     -0.45,
+     -1.604
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.7920981603322301,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@5dB",
+    "delta": -0.0024479073592530653,
+    "fold_deltas": [
+     3.795,
+     2.341,
+     0.494,
+     0.101,
+     -0.019,
+     2.494,
+     -1.824,
+     -10.195,
+     1.904,
+     0.884
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.9994459715396997,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@0dB",
+    "delta": -0.17406152281658827,
+    "fold_deltas": [
+     0.0,
+     0.029,
+     2.54,
+     0.0,
+     0.0,
+     -9.563,
+     0.0,
+     -1.67,
+     7.021,
+     -0.098
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.9621875129584482,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@-5dB",
+    "delta": 0.7448128738241042,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     11.2,
+     0.0,
+     0.0,
+     -0.228,
+     0.0,
+     0.0,
+     0.0,
+     -3.524
+    ],
+    "folds_agree": 1,
+    "n_folds": 10,
+    "p_nb": 0.8294147718230679,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "drift+spikes",
+    "delta": 1.2176579302686712,
+    "fold_deltas": [
+     -3.737,
+     3.515,
+     2.029,
+     -1.378,
+     -0.331,
+     8.965,
+     3.151,
+     -1.76,
+     -0.313,
+     2.036
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.7065966328699692,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "clean",
+    "delta": 0.3615219312903239,
+    "fold_deltas": [
+     1.479,
+     -0.271,
+     -6.633,
+     -2.569,
+     0.732,
+     -2.457,
+     -6.918,
+     11.589,
+     6.426,
+     2.239
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.9432728487171367,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@10dB",
+    "delta": 1.225138056213595,
+    "fold_deltas": [
+     8.024,
+     -2.683,
+     -10.578,
+     2.525,
+     -0.033,
+     -1.801,
+     -2.835,
+     3.281,
+     15.135,
+     1.216
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.8436251231978216,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@5dB",
+    "delta": 0.4653826126898039,
+    "fold_deltas": [
+     3.636,
+     0.165,
+     -13.168,
+     2.759,
+     -0.643,
+     0.046,
+     -2.721,
+     -9.223,
+     23.469,
+     0.335
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.9572231249029034,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@0dB",
+    "delta": -1.583593400879991,
+    "fold_deltas": [
+     1.007,
+     7.187,
+     -17.509,
+     8.019,
+     -0.167,
+     -7.234,
+     -0.795,
+     -13.54,
+     8.582,
+     -1.385
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.8432145430421616,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@-5dB",
+    "delta": -0.492594775262566,
+    "fold_deltas": [
+     0.0,
+     -0.024,
+     0.0,
+     -4.52,
+     -0.002,
+     4.011,
+     -0.943,
+     1.025,
+     -5.95,
+     1.476
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.848424877645224,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@10dB",
+    "delta": 1.8129640175453947,
+    "fold_deltas": [
+     8.774,
+     -1.677,
+     -3.423,
+     4.36,
+     -0.591,
+     -1.75,
+     -2.113,
+     5.349,
+     10.515,
+     -1.314
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.6894143407375724,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@5dB",
+    "delta": -4.355520440281667,
+    "fold_deltas": [
+     0.597,
+     -7.229,
+     -8.097,
+     0.455,
+     -0.034,
+     -8.087,
+     -9.433,
+     -11.184,
+     -0.338,
+     -0.205
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.3281159542246376,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@0dB",
+    "delta": -1.5144618920263877,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     -0.029,
+     0.0,
+     0.0,
+     -0.827,
+     0.0,
+     -10.739,
+     -1.907,
+     -1.642
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.6153322303272025,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@-5dB",
+    "delta": -1.0444056386965435,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.669,
+     0.0,
+     -2.029,
+     -13.539,
+     3.455
+    ],
+    "folds_agree": 2,
+    "n_folds": 10,
+    "p_nb": 0.8016369169053473,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@10dB",
+    "delta": 0.8211621458984506,
+    "fold_deltas": [
+     8.301,
+     0.855,
+     -6.246,
+     2.443,
+     -0.207,
+     -0.169,
+     -2.508,
+     3.854,
+     1.69,
+     0.198
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.8120267430354701,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@5dB",
+    "delta": -2.820020728790673,
+    "fold_deltas": [
+     6.049,
+     0.711,
+     -12.54,
+     0.007,
+     0.461,
+     -1.071,
+     -18.521,
+     1.174,
+     -11.776,
+     7.305
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.7140355825074796,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@0dB",
+    "delta": -0.020709246090176235,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     4.048,
+     0.0,
+     0.0,
+     2.536,
+     0.0,
+     0.078,
+     -10.477,
+     3.607
+    ],
+    "folds_agree": 1,
+    "n_folds": 10,
+    "p_nb": 0.9954364786557655,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@-5dB",
+    "delta": 0.8455873813739541,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     -0.806,
+     0.0,
+     0.0,
+     3.149,
+     0.0,
+     0.0,
+     1.558,
+     4.555
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.5879324159709266,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "drift+spikes",
+    "delta": 0.6563605710665861,
+    "fold_deltas": [
+     3.41,
+     -0.051,
+     -6.726,
+     -1.759,
+     0.432,
+     -1.379,
+     -6.812,
+     9.386,
+     7.761,
+     2.304
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.8916913742554724,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "clean",
+    "delta": -1.0010656613821396,
+    "fold_deltas": [
+     -16.062,
+     -0.925,
+     -17.455,
+     10.738,
+     -7.292,
+     -0.935,
+     11.043,
+     -18.842,
+     15.254,
+     14.464
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.9343918132501586,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@10dB",
+    "delta": -0.8080654068408532,
+    "fold_deltas": [
+     -14.679,
+     3.239,
+     -10.594,
+     7.346,
+     -0.96,
+     1.399,
+     5.5,
+     -21.204,
+     13.342,
+     8.531
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.9358540616857045,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@5dB",
+    "delta": 0.9044524194936031,
+    "fold_deltas": [
+     -9.61,
+     4.999,
+     2.187,
+     9.078,
+     3.551,
+     7.015,
+     1.56,
+     -22.109,
+     10.241,
+     2.132
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.9181063066916532,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@0dB",
+    "delta": 12.795728461700959,
+    "fold_deltas": [
+     0.124,
+     25.865,
+     12.44,
+     13.637,
+     3.525,
+     20.805,
+     15.078,
+     4.752,
+     23.113,
+     8.619
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.12606481866179414,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@-5dB",
+    "delta": 17.148975505753484,
+    "fold_deltas": [
+     10.234,
+     25.361,
+     24.191,
+     11.009,
+     3.728,
+     20.935,
+     21.664,
+     18.23,
+     16.514,
+     19.624
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.01909594593864962,
+    "p_nb_holm": 0.802029729423284
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@10dB",
+    "delta": -1.0625044868808147,
+    "fold_deltas": [
+     -18.545,
+     -0.562,
+     -16.095,
+     10.975,
+     -3.905,
+     4.098,
+     3.494,
+     -20.738,
+     13.918,
+     16.733
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.930769962110697,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@5dB",
+    "delta": 10.627586233456988,
+    "fold_deltas": [
+     4.56,
+     25.082,
+     3.669,
+     13.627,
+     6.822,
+     29.873,
+     3.825,
+     -15.282,
+     18.185,
+     15.916
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.37024802899586323,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@0dB",
+    "delta": 19.52951691927639,
+    "fold_deltas": [
+     11.426,
+     31.64,
+     29.633,
+     12.614,
+     7.617,
+     31.676,
+     21.791,
+     17.575,
+     10.708,
+     20.616
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.03613454457248485,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@-5dB",
+    "delta": 12.032319877720996,
+    "fold_deltas": [
+     5.538,
+     18.218,
+     15.993,
+     11.749,
+     3.023,
+     17.705,
+     17.622,
+     15.294,
+     2.152,
+     13.029
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.05502847287778138,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@10dB",
+    "delta": -2.4759939133258038,
+    "fold_deltas": [
+     -18.779,
+     -4.965,
+     -21.759,
+     7.532,
+     -6.34,
+     1.763,
+     4.709,
+     -18.805,
+     15.814,
+     16.071
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.8448389366016046,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@5dB",
+    "delta": -2.606408742028561,
+    "fold_deltas": [
+     -18.477,
+     -5.978,
+     -25.024,
+     12.555,
+     1.903,
+     3.888,
+     0.509,
+     -20.607,
+     12.698,
+     12.468
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.8402878474724049,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@0dB",
+    "delta": 5.284637968433756,
+    "fold_deltas": [
+     -9.478,
+     17.238,
+     -14.991,
+     14.0,
+     6.363,
+     35.12,
+     -0.265,
+     -23.329,
+     6.557,
+     21.63
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.7425886512613823,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@-5dB",
+    "delta": 7.881634902648633,
+    "fold_deltas": [
+     1.862,
+     23.915,
+     15.972,
+     10.55,
+     6.242,
+     24.639,
+     -0.868,
+     -16.584,
+     0.227,
+     12.861
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.4899803087298876,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "drift+spikes",
+    "delta": -0.306874721482696,
+    "fold_deltas": [
+     -15.954,
+     2.041,
+     -15.004,
+     11.596,
+     -6.082,
+     1.806,
+     9.987,
+     -19.338,
+     13.393,
+     14.485
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.9790766722138127,
+    "p_nb_holm": 1.0
+   }
+  ],
+  "mixed": [
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "clean",
+    "delta": 1.174399168423609,
+    "fold_deltas": [
+     0.502,
+     -12.967,
+     2.924,
+     0.907,
+     -1.251,
+     -0.108,
+     3.933,
+     4.981,
+     -0.69,
+     13.513
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.8428591744595476,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -0.3622222084696201,
+    "fold_deltas": [
+     -1.117,
+     -11.841,
+     -5.42,
+     2.585,
+     -0.316,
+     -0.169,
+     5.594,
+     0.864,
+     1.335,
+     4.862
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.9370855725810131,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -2.607155016500921,
+    "fold_deltas": [
+     -5.895,
+     -3.93,
+     -17.065,
+     3.749,
+     -0.143,
+     -3.376,
+     -2.125,
+     2.981,
+     -0.77,
+     0.502
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.6258361194167406,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": -0.8908918530762616,
+    "fold_deltas": [
+     3.998,
+     11.317,
+     -20.86,
+     -2.474,
+     -0.163,
+     -9.863,
+     19.371,
+     5.985,
+     -21.523,
+     5.304
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.9404149791982546,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": -1.695783591881343,
+    "fold_deltas": [
+     0.0,
+     -3.146,
+     -0.397,
+     2.427,
+     0.345,
+     -2.004,
+     0.01,
+     0.0,
+     -28.167,
+     13.974
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.8568723524821765,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": 1.1553718975939027,
+    "fold_deltas": [
+     -1.323,
+     -1.539,
+     -0.798,
+     7.45,
+     0.074,
+     -1.111,
+     4.097,
+     -0.086,
+     0.623,
+     4.167
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.6735919344243784,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -1.3968288957008859,
+    "fold_deltas": [
+     -6.314,
+     3.019,
+     -7.185,
+     2.174,
+     -0.003,
+     -1.216,
+     -3.109,
+     2.652,
+     -5.71,
+     1.724
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.6948742597015479,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": -0.6873053719391041,
+    "fold_deltas": [
+     0.0,
+     -2.339,
+     -0.029,
+     0.003,
+     0.0,
+     -0.069,
+     0.0,
+     0.345,
+     -3.996,
+     -0.789
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.5868273907786845,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": -0.2509624132466314,
+    "fold_deltas": [
+     0.0,
+     -0.023,
+     0.0,
+     0.0,
+     0.0,
+     -1.803,
+     0.0,
+     -0.109,
+     5.632,
+     -6.206
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.9219717494215486,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": 0.6261804225389078,
+    "fold_deltas": [
+     -1.124,
+     -5.596,
+     0.82,
+     3.152,
+     0.061,
+     -1.909,
+     4.603,
+     1.778,
+     -0.853,
+     5.33
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.8318886103946298,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -3.236298615772813,
+    "fold_deltas": [
+     -6.485,
+     -1.0,
+     -6.656,
+     -1.08,
+     0.055,
+     -5.967,
+     -0.153,
+     -2.447,
+     -11.465,
+     2.836
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.41030566350819997,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -4.852922761619345,
+    "fold_deltas": [
+     3.942,
+     -6.144,
+     -22.654,
+     0.0,
+     0.0,
+     -1.969,
+     0.0,
+     -7.263,
+     -18.659,
+     4.217
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.5596624494015943,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": 0.8647059066463395,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     -1.297,
+     0.0,
+     0.0,
+     -0.416,
+     0.0,
+     -5.077,
+     11.159,
+     4.278
+    ],
+    "folds_agree": 2,
+    "n_folds": 10,
+    "p_nb": 0.8216723968309999,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_hp",
+    "b": "baseline",
+    "question": "Q1 filter at baseline capacity",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": 1.2896590554878689,
+    "fold_deltas": [
+     -0.171,
+     -12.459,
+     2.858,
+     1.207,
+     -1.115,
+     0.205,
+     4.928,
+     5.147,
+     -0.316,
+     12.611
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.8209339253718048,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "clean",
+    "delta": 0.09363739238691124,
+    "fold_deltas": [
+     5.832,
+     9.978,
+     1.895,
+     2.288,
+     -0.248,
+     -0.708,
+     -1.448,
+     -2.907,
+     -2.554,
+     -11.192
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.9852579619459891,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": 0.014250760577609257,
+    "fold_deltas": [
+     4.185,
+     5.953,
+     -1.787,
+     3.113,
+     -0.228,
+     -1.873,
+     -1.046,
+     -2.263,
+     -0.406,
+     -5.505
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.9963209735312188,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -0.9616919537688899,
+    "fold_deltas": [
+     -2.775,
+     2.777,
+     -6.976,
+     2.372,
+     -0.086,
+     -3.737,
+     -0.358,
+     2.832,
+     0.608,
+     -4.274
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.7507615435537478,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": -1.9582382615113132,
+    "fold_deltas": [
+     -3.049,
+     -3.736,
+     -5.857,
+     -0.416,
+     0.087,
+     -2.25,
+     3.586,
+     11.515,
+     -10.339,
+     -9.123
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.7317826410426805,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": -1.917739145049562,
+    "fold_deltas": [
+     0.0,
+     2.115,
+     -0.19,
+     9.103,
+     0.003,
+     -9.15,
+     0.0,
+     -3.462,
+     -9.603,
+     -7.993
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.7142983691792099,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -0.4887303509476869,
+    "fold_deltas": [
+     2.235,
+     4.119,
+     -2.681,
+     2.956,
+     -0.137,
+     -3.621,
+     -0.848,
+     -1.171,
+     -0.626,
+     -5.112
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.8531277486134262,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -3.0080990028187973,
+    "fold_deltas": [
+     -6.912,
+     1.469,
+     -12.921,
+     0.239,
+     0.036,
+     -5.108,
+     -0.661,
+     -0.339,
+     -0.173,
+     -5.711
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.46885073000064004,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": -0.5297772792222013,
+    "fold_deltas": [
+     -0.301,
+     -0.003,
+     -8.049,
+     0.0,
+     0.0,
+     0.098,
+     0.0,
+     -0.985,
+     3.93,
+     0.012
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.8422313883376388,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": 1.161728697861814,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     -0.057,
+     0.0,
+     0.0,
+     -0.327,
+     0.0,
+     -1.09,
+     13.99,
+     -0.898
+    ],
+    "folds_agree": 1,
+    "n_folds": 10,
+    "p_nb": 0.7760359655413666,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": 2.417747382317259e-05,
+    "fold_deltas": [
+     7.02,
+     6.912,
+     -1.389,
+     2.938,
+     -0.405,
+     -4.534,
+     -0.69,
+     0.501,
+     -2.787,
+     -7.565
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.9999953852280526,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -0.3909140983195577,
+    "fold_deltas": [
+     1.895,
+     6.853,
+     -2.41,
+     0.485,
+     -0.322,
+     -5.931,
+     5.633,
+     -2.092,
+     -3.41,
+     -4.611
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.9178250835059905,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -1.7241065565004416,
+    "fold_deltas": [
+     -14.397,
+     0.0,
+     5.732,
+     0.0,
+     0.0,
+     0.717,
+     0.0,
+     2.986,
+     -10.359,
+     -1.921
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.7527729571416976,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": -3.831957275006404,
+    "fold_deltas": [
+     -6.756,
+     0.0,
+     5.331,
+     0.0,
+     0.0,
+     -0.44,
+     0.0,
+     2.194,
+     -34.953,
+     -3.695
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.7097324866563575,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "no_residual",
+    "question": "Q1 filter at PAC capacity",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -0.3854095441657634,
+    "fold_deltas": [
+     5.422,
+     8.3,
+     0.009,
+     3.041,
+     -0.224,
+     -1.337,
+     -1.114,
+     -3.465,
+     -2.13,
+     -12.356
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.938643390103092,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "clean",
+    "delta": 1.9697570473018682,
+    "fold_deltas": [
+     5.192,
+     -0.536,
+     0.712,
+     -1.03,
+     -0.499,
+     11.745,
+     6.237,
+     -0.828,
+     -4.883,
+     3.588
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.6482086224526703,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": 0.03888376414389807,
+    "fold_deltas": [
+     3.342,
+     -4.306,
+     -4.126,
+     -4.45,
+     0.077,
+     10.394,
+     -0.211,
+     -0.37,
+     -3.66,
+     3.699
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.9927222151686335,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -0.8534596500630174,
+    "fold_deltas": [
+     -0.028,
+     -1.237,
+     -9.357,
+     -5.083,
+     0.263,
+     3.557,
+     -3.101,
+     10.896,
+     -5.757,
+     1.312
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.8659870671574452,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": -0.295023110926757,
+    "fold_deltas": [
+     2.41,
+     0.037,
+     -11.128,
+     -2.794,
+     0.052,
+     0.332,
+     13.212,
+     11.893,
+     -16.367,
+     -0.598
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.970791269725348,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": -0.23543419815683642,
+    "fold_deltas": [
+     0.0,
+     -1.709,
+     -0.283,
+     10.178,
+     0.361,
+     3.474,
+     0.01,
+     1.613,
+     -17.065,
+     1.068
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.9692124153672338,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": 0.44272670176618617,
+    "fold_deltas": [
+     1.595,
+     2.741,
+     -0.676,
+     -6.317,
+     0.538,
+     4.739,
+     0.287,
+     0.281,
+     -1.532,
+     2.77
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.8701945840424982,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -1.3983725373842024,
+    "fold_deltas": [
+     -4.872,
+     1.074,
+     0.87,
+     -1.463,
+     0.099,
+     -9.06,
+     -2.285,
+     3.561,
+     -0.773,
+     -1.133
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.6587912539939191,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": 0.9306379454918321,
+    "fold_deltas": [
+     0.0,
+     -2.339,
+     7.855,
+     0.0,
+     0.0,
+     -0.256,
+     0.0,
+     -0.048,
+     3.768,
+     0.327
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.7174285080775141,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": 0.25221092347356977,
+    "fold_deltas": [
+     0.0,
+     -0.023,
+     0.0,
+     0.0,
+     0.0,
+     -2.043,
+     0.0,
+     0.005,
+     7.94,
+     -3.357
+    ],
+    "folds_agree": 2,
+    "n_folds": 10,
+    "p_nb": 0.9241308164515193,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": 0.5872291876398734,
+    "fold_deltas": [
+     2.57,
+     3.635,
+     -1.512,
+     -6.83,
+     0.281,
+     2.953,
+     5.745,
+     1.236,
+     -5.103,
+     2.896
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.8701368179667291,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -3.932002793254837,
+    "fold_deltas": [
+     -2.512,
+     -3.15,
+     -2.251,
+     -0.935,
+     0.078,
+     -18.174,
+     0.672,
+     -0.217,
+     -8.737,
+     -4.095
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.450343508723781,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -1.9845415944922968,
+    "fold_deltas": [
+     -0.041,
+     -6.144,
+     3.44,
+     0.0,
+     0.0,
+     -0.427,
+     0.0,
+     -4.516,
+     -8.148,
+     -4.01
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.5387722669286793,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": 0.3805479708072511,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     14.53,
+     0.0,
+     0.0,
+     -1.166,
+     0.0,
+     -8.486,
+     -1.274,
+     0.202
+    ],
+    "folds_agree": 2,
+    "n_folds": 10,
+    "p_nb": 0.9400959204387762,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "baseline",
+    "question": "PAC vs standard CNN",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": 1.6730889464035257,
+    "fold_deltas": [
+     3.708,
+     -1.418,
+     1.207,
+     -0.864,
+     -0.342,
+     11.537,
+     6.278,
+     -1.313,
+     -4.357,
+     2.295
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.686142372514707,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -3.2835927313764004,
+    "fold_deltas": [
+     -14.488,
+     0.381,
+     -12.418,
+     11.636,
+     -14.424,
+     11.719,
+     0.397,
+     -5.209,
+     -3.662,
+     -6.77
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.7041916704331621,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -4.192461350509114,
+    "fold_deltas": [
+     -10.803,
+     -5.041,
+     -13.327,
+     7.533,
+     -19.167,
+     8.829,
+     0.502,
+     -2.353,
+     0.146,
+     -8.244
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.6053461762574042,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -6.744787651759353,
+    "fold_deltas": [
+     -20.716,
+     0.28,
+     -13.505,
+     0.851,
+     -26.736,
+     3.244,
+     6.326,
+     -14.014,
+     5.648,
+     -8.826
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.5262766325072687,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": -2.1739980350584647,
+    "fold_deltas": [
+     -14.862,
+     2.836,
+     -10.353,
+     -1.087,
+     -22.863,
+     12.935,
+     2.637,
+     -10.004,
+     21.182,
+     -2.161
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.8536895562831861,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": -0.11744025301323582,
+    "fold_deltas": [
+     -1.843,
+     1.823,
+     -10.577,
+     9.463,
+     -5.437,
+     14.313,
+     -12.135,
+     -8.016,
+     12.522,
+     -1.289
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.9890444265981557,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -5.414615254848561,
+    "fold_deltas": [
+     -20.531,
+     -2.287,
+     -15.628,
+     7.134,
+     -19.902,
+     3.619,
+     4.672,
+     -1.661,
+     1.511,
+     -11.072
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.5694447974238246,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -12.424671169490717,
+    "fold_deltas": [
+     -35.911,
+     -3.508,
+     -19.754,
+     4.169,
+     -29.044,
+     -19.246,
+     11.367,
+     -20.738,
+     5.125,
+     -16.706
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.3922868970813228,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": -15.15966959936264,
+    "fold_deltas": [
+     -28.862,
+     -14.606,
+     -22.926,
+     3.11,
+     -25.708,
+     -15.415,
+     -14.134,
+     -23.185,
+     7.728,
+     -17.599
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.18184888561816803,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": -4.732147201839679,
+    "fold_deltas": [
+     -9.459,
+     -0.062,
+     -12.57,
+     1.428,
+     -7.795,
+     -9.452,
+     -12.048,
+     -10.361,
+     13.32,
+     -0.324
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.5265206359112349,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": -3.964190199734996,
+    "fold_deltas": [
+     -14.966,
+     1.216,
+     -12.736,
+     7.754,
+     -18.631,
+     2.662,
+     6.148,
+     0.534,
+     -2.072,
+     -9.55
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.6380236816788134,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -10.057168590910951,
+    "fold_deltas": [
+     -29.98,
+     -9.838,
+     -11.325,
+     4.749,
+     -26.157,
+     -17.046,
+     -0.068,
+     -0.39,
+     3.318,
+     -13.834
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.36633053555359585,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -13.604603132246647,
+    "fold_deltas": [
+     -29.032,
+     -21.56,
+     -13.856,
+     3.117,
+     -27.688,
+     -21.575,
+     -18.008,
+     -12.829,
+     23.537,
+     -18.152
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.35276192969358455,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": -6.5092280108614915,
+    "fold_deltas": [
+     -10.329,
+     -0.334,
+     -9.005,
+     1.919,
+     -7.348,
+     -15.881,
+     -16.172,
+     -12.324,
+     8.427,
+     -4.044
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.37656384571370544,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "wdcnn",
+    "question": "PAC vs WDCNN-style",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -3.6913247842455945,
+    "fold_deltas": [
+     -14.956,
+     -1.709,
+     -12.374,
+     11.192,
+     -15.66,
+     11.543,
+     0.978,
+     -4.184,
+     -2.699,
+     -9.043
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.6754821477591003,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "clean",
+    "delta": -7.159882483591187,
+    "fold_deltas": [
+     -3.421,
+     -11.011,
+     -10.527,
+     -3.341,
+     -15.58,
+     -1.477,
+     0.782,
+     -8.971,
+     -8.095,
+     -9.957
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.1424709942523865,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@10dB",
+    "delta": -8.82489474889509,
+    "fold_deltas": [
+     -2.071,
+     -9.882,
+     -5.673,
+     -13.12,
+     -9.244,
+     -1.077,
+     -10.346,
+     -7.893,
+     -6.824,
+     -22.119
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.12484746378668155,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@5dB",
+    "delta": -9.005689183429626,
+    "fold_deltas": [
+     -9.993,
+     -4.519,
+     5.45,
+     -14.67,
+     -3.855,
+     -0.444,
+     -6.229,
+     -23.843,
+     -6.457,
+     -25.496
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.322337033781379,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@0dB",
+    "delta": -0.21861539062781182,
+    "fold_deltas": [
+     -10.169,
+     8.558,
+     -2.659,
+     -4.074,
+     -3.869,
+     10.319,
+     10.271,
+     -1.103,
+     9.99,
+     -19.451
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.9806915097000997,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "lowpass@-5dB",
+    "delta": 1.0088036033150778,
+    "fold_deltas": [
+     -1.155,
+     -0.093,
+     -2.958,
+     8.565,
+     -4.935,
+     6.586,
+     0.0,
+     -0.044,
+     5.227,
+     -1.106
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.796648151952088,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@10dB",
+    "delta": -7.300245940880022,
+    "fold_deltas": [
+     -7.63,
+     -12.729,
+     -11.167,
+     -7.421,
+     -7.47,
+     -6.027,
+     -1.341,
+     -4.657,
+     -4.081,
+     -10.479
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.040294231349860425,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@5dB",
+    "delta": -3.1344152110050674,
+    "fold_deltas": [
+     -1.46,
+     10.53,
+     -2.171,
+     -3.894,
+     -0.72,
+     -4.415,
+     1.303,
+     -16.169,
+     3.603,
+     -17.95
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.6841463332911814,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@0dB",
+    "delta": 0.460417581471695,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     7.798,
+     -0.01,
+     -0.147,
+     -0.309,
+     -0.085,
+     -2.001,
+     -0.563,
+     -0.079
+    ],
+    "folds_agree": 1,
+    "n_folds": 10,
+    "p_nb": 0.8470494311518244,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "white@-5dB",
+    "delta": -0.3844780072457176,
+    "fold_deltas": [
+     -0.828,
+     -0.029,
+     -0.34,
+     -0.07,
+     -7.808,
+     -0.617,
+     0.0,
+     -0.142,
+     -0.336,
+     6.324
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.8984990122647403,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@10dB",
+    "delta": -8.71360961189244,
+    "fold_deltas": [
+     -7.449,
+     -13.242,
+     -14.859,
+     -9.417,
+     -13.5,
+     -9.271,
+     1.63,
+     -3.187,
+     -6.72,
+     -11.121
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.08102451311539534,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@5dB",
+    "delta": -15.560004507674156,
+    "fold_deltas": [
+     -23.651,
+     -25.694,
+     -19.251,
+     -8.229,
+     -6.857,
+     -29.539,
+     -12.225,
+     -6.153,
+     -4.796,
+     -19.205
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.08088193299442063,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@0dB",
+    "delta": -16.619103931108086,
+    "fold_deltas": [
+     -26.569,
+     -29.565,
+     -19.972,
+     -2.121,
+     -1.463,
+     -7.316,
+     -31.748,
+     -31.401,
+     3.942,
+     -19.978
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.19887262195766742,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "highpass@-5dB",
+    "delta": -9.59240554837132,
+    "fold_deltas": [
+     -16.462,
+     -3.921,
+     5.857,
+     -1.02,
+     -1.831,
+     -2.662,
+     -22.922,
+     -31.937,
+     -19.842,
+     -1.186
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.39476456458602766,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "physics",
+    "b": "rf",
+    "question": "PAC vs classical RF",
+    "family": "primary",
+    "condition": "drift+spikes",
+    "delta": -6.2038070355748305,
+    "fold_deltas": [
+     -3.133,
+     -8.78,
+     -8.562,
+     -2.405,
+     -13.241,
+     1.251,
+     0.443,
+     -8.91,
+     -8.46,
+     -10.242
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.18022371945844567,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "clean",
+    "delta": -0.08892559905816491,
+    "fold_deltas": [
+     1.316,
+     2.121,
+     0.861,
+     -0.786,
+     0.764,
+     -0.123,
+     -0.492,
+     -3.313,
+     0.572,
+     -1.81
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.9506575710196304,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@10dB",
+    "delta": 0.2523949486421106,
+    "fold_deltas": [
+     2.896,
+     2.349,
+     1.176,
+     -0.313,
+     0.199,
+     -0.226,
+     0.145,
+     -2.0,
+     -1.102,
+     -0.6
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.8525356248520872,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@5dB",
+    "delta": 0.44034004832797286,
+    "fold_deltas": [
+     6.395,
+     -1.538,
+     0.487,
+     1.501,
+     -0.008,
+     -0.342,
+     2.62,
+     -0.32,
+     -4.679,
+     0.285
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.8636334703172167,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@0dB",
+    "delta": -1.6384809221110057,
+    "fold_deltas": [
+     0.095,
+     -2.63,
+     -1.111,
+     4.336,
+     0.008,
+     -3.08,
+     -4.643,
+     -1.979,
+     -6.918,
+     -0.463
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.5533872904303045,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "lowpass@-5dB",
+    "delta": -0.3002357133264965,
+    "fold_deltas": [
+     0.0,
+     2.995,
+     0.0,
+     3.174,
+     0.01,
+     -2.799,
+     0.0,
+     0.0,
+     -0.699,
+     -5.683
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.8961969781504383,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@10dB",
+    "delta": 0.28577871784938225,
+    "fold_deltas": [
+     2.121,
+     -0.259,
+     0.958,
+     1.315,
+     0.097,
+     -0.19,
+     1.187,
+     -2.161,
+     -0.753,
+     0.541
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.794986005110036,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@5dB",
+    "delta": -0.14829520452844952,
+    "fold_deltas": [
+     2.366,
+     1.472,
+     -1.823,
+     2.529,
+     -0.01,
+     -0.652,
+     -1.386,
+     0.205,
+     -2.691,
+     -1.493
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.9270494539869004,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@0dB",
+    "delta": -0.10478586033028599,
+    "fold_deltas": [
+     0.0,
+     0.002,
+     0.0,
+     0.005,
+     0.0,
+     0.109,
+     0.0,
+     -0.212,
+     -1.264,
+     0.313
+    ],
+    "folds_agree": 2,
+    "n_folds": 10,
+    "p_nb": 0.7856898694332294,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "white@-5dB",
+    "delta": -0.769827734880489,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     -0.211,
+     0.0,
+     0.0,
+     -6.211,
+     -1.276
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.6632050118350197,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@10dB",
+    "delta": 0.5772445562625623,
+    "fold_deltas": [
+     1.737,
+     0.983,
+     1.536,
+     2.277,
+     0.223,
+     -0.582,
+     0.926,
+     -2.081,
+     0.562,
+     0.191
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.6114117423592299,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@5dB",
+    "delta": 0.9783804400801728,
+    "fold_deltas": [
+     4.266,
+     4.366,
+     3.784,
+     2.418,
+     0.014,
+     -5.008,
+     0.6,
+     -3.336,
+     3.072,
+     -0.393
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.7374913074716344,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@0dB",
+    "delta": 1.247931885881377,
+    "fold_deltas": [
+     -0.795,
+     0.196,
+     5.102,
+     0.0,
+     0.0,
+     1.558,
+     0.0,
+     7.007,
+     2.778,
+     -3.368
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.6474757767061434,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "highpass@-5dB",
+    "delta": 0.2628582556285618,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     -0.75,
+     0.0,
+     4.613,
+     8.376,
+     -9.61
+    ],
+    "folds_agree": 2,
+    "n_folds": 10,
+    "p_nb": 0.9484697695499539,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "baseline_lhp",
+    "b": "baseline_hp",
+    "question": "S1 learnable vs fixed filter",
+    "family": "secondary",
+    "condition": "drift+spikes",
+    "delta": -0.056617299385427346,
+    "fold_deltas": [
+     1.403,
+     2.243,
+     1.012,
+     -0.752,
+     0.76,
+     -0.233,
+     -0.876,
+     -2.818,
+     0.446,
+     -1.75
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.9672789352489319,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "clean",
+    "delta": -1.2932412290362287,
+    "fold_deltas": [
+     -4.124,
+     -7.856,
+     -6.101,
+     1.596,
+     -0.004,
+     -6.146,
+     -1.901,
+     1.075,
+     4.12,
+     6.409
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.7625284024729791,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@10dB",
+    "delta": -0.7810229581702155,
+    "fold_deltas": [
+     -2.844,
+     -7.852,
+     -6.284,
+     5.467,
+     -0.202,
+     -5.214,
+     0.824,
+     1.09,
+     6.671,
+     0.533
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.8565372269228645,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@5dB",
+    "delta": -1.1935235835466675,
+    "fold_deltas": [
+     2.204,
+     -2.278,
+     -9.454,
+     7.223,
+     -0.492,
+     -2.219,
+     -2.344,
+     -7.797,
+     2.81,
+     0.411
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.7875222699430635,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@0dB",
+    "delta": -2.508845710720517,
+    "fold_deltas": [
+     0.92,
+     13.153,
+     -13.695,
+     3.222,
+     -0.212,
+     -9.889,
+     4.658,
+     -10.641,
+     -15.027,
+     2.421
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.7642651645601735,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "lowpass@-5dB",
+    "delta": 0.2764035879822789,
+    "fold_deltas": [
+     0.0,
+     -2.02,
+     -0.114,
+     -1.137,
+     -0.005,
+     7.156,
+     3.066,
+     -1.532,
+     -12.012,
+     9.362
+    ],
+    "folds_agree": 3,
+    "n_folds": 10,
+    "p_nb": 0.9575556810662663,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@10dB",
+    "delta": -0.607919093153852,
+    "fold_deltas": [
+     -1.408,
+     -6.711,
+     -4.248,
+     5.003,
+     -0.41,
+     -2.982,
+     0.749,
+     0.34,
+     2.763,
+     0.824
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.8430457128189849,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@5dB",
+    "delta": -1.454246327817651,
+    "fold_deltas": [
+     3.139,
+     3.512,
+     -14.648,
+     1.472,
+     -0.112,
+     7.029,
+     -0.029,
+     -0.748,
+     -12.114,
+     -2.042
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.8130734616262733,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@0dB",
+    "delta": -1.3623861178299506,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     -7.884,
+     0.0,
+     0.0,
+     -0.381,
+     0.057,
+     4.779,
+     -9.332,
+     -0.864
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.7158736411035812,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "white@-5dB",
+    "delta": -0.6211427227939339,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     3.252,
+     0.0,
+     4.39,
+     -11.735,
+     -2.118
+    ],
+    "folds_agree": 2,
+    "n_folds": 10,
+    "p_nb": 0.87327071489335,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@10dB",
+    "delta": -1.3656192974357033,
+    "fold_deltas": [
+     -3.231,
+     -10.536,
+     -5.799,
+     2.988,
+     -0.045,
+     1.379,
+     -2.425,
+     -2.988,
+     5.51,
+     1.49
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.7450207405587806,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@5dB",
+    "delta": 1.4155307321855042,
+    "fold_deltas": [
+     3.384,
+     5.087,
+     -8.517,
+     1.989,
+     -0.032,
+     9.689,
+     5.485,
+     -7.165,
+     -0.577,
+     4.812
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.783173235026675,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@0dB",
+    "delta": -3.159932455018362,
+    "fold_deltas": [
+     -0.015,
+     0.03,
+     -17.523,
+     0.0,
+     0.0,
+     -1.396,
+     0.0,
+     -1.24,
+     -10.979,
+     -0.476
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.5667149457338105,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "highpass@-5dB",
+    "delta": -0.0024582478523246464,
+    "fold_deltas": [
+     0.0,
+     0.0,
+     -15.77,
+     0.0,
+     0.0,
+     1.703,
+     0.0,
+     -2.197,
+     16.153,
+     0.087
+    ],
+    "folds_agree": 2,
+    "n_folds": 10,
+    "p_nb": 0.999712616622494,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "no_dual",
+    "b": "physics",
+    "question": "S2 single residual stream vs PAC",
+    "family": "secondary",
+    "condition": "drift+spikes",
+    "delta": -0.8284234845306842,
+    "fold_deltas": [
+     -2.997,
+     -6.875,
+     -6.012,
+     1.533,
+     -0.11,
+     -5.585,
+     -1.294,
+     1.902,
+     4.151,
+     7.002
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.8416946743813011,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "clean",
+    "delta": -1.3244521645959282,
+    "fold_deltas": [
+     -15.899,
+     -2.337,
+     -16.72,
+     9.724,
+     -8.506,
+     -0.519,
+     11.547,
+     -18.035,
+     16.226,
+     11.275
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.9103771000433895,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@10dB",
+    "delta": -2.1003750228934654,
+    "fold_deltas": [
+     -13.233,
+     3.539,
+     -10.182,
+     4.613,
+     -2.294,
+     1.759,
+     0.17,
+     -22.642,
+     15.599,
+     1.666
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.8280478578312072,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@5dB",
+    "delta": 0.6097223592019596,
+    "fold_deltas": [
+     -9.957,
+     5.991,
+     5.275,
+     7.434,
+     3.412,
+     9.986,
+     -0.835,
+     -25.453,
+     12.742,
+     -2.498
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.9520778673068178,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@0dB",
+    "delta": 12.761252270383151,
+    "fold_deltas": [
+     -1.489,
+     25.586,
+     13.106,
+     12.607,
+     2.953,
+     24.216,
+     15.206,
+     6.037,
+     24.323,
+     5.067
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.1654967803933286,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "lowpass@-5dB",
+    "delta": 16.11098895413797,
+    "fold_deltas": [
+     10.057,
+     25.958,
+     24.697,
+     10.078,
+     2.421,
+     16.724,
+     21.691,
+     16.573,
+     16.745,
+     16.165
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.03045713354543228,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@10dB",
+    "delta": 0.08194746372346344,
+    "fold_deltas": [
+     -15.65,
+     -0.909,
+     -12.576,
+     9.125,
+     -0.754,
+     4.692,
+     5.369,
+     -19.842,
+     15.593,
+     15.77
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.9942258382189786,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@5dB",
+    "delta": 10.130926900605283,
+    "fold_deltas": [
+     3.637,
+     22.988,
+     5.758,
+     13.3,
+     6.623,
+     30.447,
+     1.771,
+     -13.839,
+     20.062,
+     10.562
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.3785775665703693,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@0dB",
+    "delta": 19.93445957843219,
+    "fold_deltas": [
+     11.532,
+     32.226,
+     28.995,
+     12.941,
+     7.622,
+     31.827,
+     21.517,
+     16.459,
+     15.388,
+     20.838
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.028004295443070128,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "white@-5dB",
+    "delta": 12.351587650426222,
+    "fold_deltas": [
+     9.991,
+     18.153,
+     17.439,
+     12.084,
+     0.67,
+     16.821,
+     17.46,
+     14.492,
+     2.708,
+     13.698
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.04924571341997656,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@10dB",
+    "delta": -2.477542202908979,
+    "fold_deltas": [
+     -18.593,
+     -5.552,
+     -20.733,
+     5.812,
+     -5.87,
+     1.55,
+     6.978,
+     -18.555,
+     16.623,
+     13.565
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.8400200478088214,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@5dB",
+    "delta": -3.363293447085715,
+    "fold_deltas": [
+     -20.864,
+     -7.809,
+     -23.205,
+     8.95,
+     1.276,
+     2.887,
+     0.451,
+     -19.773,
+     13.616,
+     10.839
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.7865408984243624,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@0dB",
+    "delta": 1.899843933518874,
+    "fold_deltas": [
+     -14.907,
+     7.817,
+     -17.148,
+     12.726,
+     5.577,
+     31.144,
+     -2.635,
+     -22.27,
+     8.113,
+     10.582
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.8968984544691536,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "highpass@-5dB",
+    "delta": 6.239353830784088,
+    "fold_deltas": [
+     -5.107,
+     22.189,
+     15.064,
+     9.905,
+     3.957,
+     23.123,
+     -2.878,
+     -15.907,
+     1.702,
+     10.345
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.5785016679003452,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "kin",
+    "b": "rf",
+    "question": "S3 kinematic vs spectral features",
+    "family": "secondary",
+    "condition": "drift+spikes",
+    "delta": -0.21349812048559152,
+    "fold_deltas": [
+     -14.991,
+     1.96,
+     -14.313,
+     10.195,
+     -6.788,
+     2.825,
+     10.221,
+     -18.257,
+     15.075,
+     11.937
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.9848210151878898,
+    "p_nb_holm": 1.0
+   }
+  ]
+ }
+}
