@@ -218,5 +218,8 @@ streamlit run app.py
 - Nadeau & Bengio, "Inference for the Generalization Error", *Machine Learning* 52(3) (2003) 239-281.
 - Ovadia et al., "Can You Trust Your Model's Uncertainty? Evaluating Predictive Uncertainty Under Dataset Shift", NeurIPS 2019.
 
+## Licence and reuse
+No licence is granted at this time. All rights are reserved by the author: beyond viewing and forking on GitHub, which GitHub's Terms of Service allow for public repositories, the code, results and manuscript may not be used, copied, modified or redistributed without the author's written permission. A licence will be chosen when the accompanying paper is published. The datasets are not included in this repository and remain under their own terms (CWRU Bearing Data Center; Paderborn KAt-DataCenter, CC BY-NC 4.0).
+
 ## Author
 **Vaibhav Goel** — School of Computer Science and Engineering (SCOPE), Vellore Institute of Technology — [vaibhav.goel0531@gmail.com](mailto:vaibhav.goel0531@gmail.com) | GitHub: [@Vaibhav8075](https://github.com/Vaibhav8075)
