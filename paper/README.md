@@ -33,10 +33,9 @@ decimated to 12 kHz (see the main README). Values quoted from Lessmeier et al. (
 and 11) are typed into `main.tex` by hand and were checked against the published PDF
 (Table 11 gives 98.3%, its running text 98.5%).
 
-Open items for submission: the author's school/department (placeholder in the author
-block; `check_paper.py --submission` fails until it is filled in), and the target venue
-with its template, page limit and review mode (the manuscript is currently 10 pages plus
-two references on an 11th; an anonymous author block is needed for double-blind review).
+Open item for submission: the target venue with its template, page limit and review mode
+(the manuscript is currently 10 pages plus two references on an 11th; an anonymous author
+block, and removal of the repository URL, are needed for double-blind review).
 
 The earlier drafts in the repository root (`IEEE_Research_Paper_Physics_1DCNN.*`) contain
 claims these results do not support and are superseded by this manuscript.
