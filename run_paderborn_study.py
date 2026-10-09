@@ -15,8 +15,10 @@ protocols from Lessmeier et al. (PHM Society European Conference 2016) are used:
 Classes: healthy / inner ring / outer ring. Vibration channel only, decimated to
 16 kHz (preprocess_paderborn.py), 2048-sample windows (128 ms), each window
 z-normalised. Operating setting N15_M07_F10 only by default, as in the paper.
-Test conditions, training regimes, models and statistics follow
-run_robustness_study.py (fault-size study on CWRU).
+Test conditions, training regimes, models, contrasts and statistics follow
+run_robustness_study.py (fault-size study on CWRU). --add-models trains only the given
+models and merges them into the saved results of a protocol; the test noise depends only
+on (fold, condition), so the added models are scored on exactly the same inputs.
 """
 import os
 import sys
@@ -33,9 +35,10 @@ import matplotlib.pyplot as plt
 import config
 from common import set_seed, make_loaders, train_model, predict_logits, NOISE_SPECTRA
 from models import Baseline1DCNN, WideKernelCNN, PhysicsAugmentedCalibratedCNN
+from kinematic_features import kinematic_features, PADERBORN_ORDERS
 from preprocess_paderborn import PROCESSED_DIR, FS
-from run_robustness_study import (REGIMES, METRICS, TEST_SNR_DB, test_conditions, impair_fixed,
-                                  spectral_features, train_rf, score, holm)
+from run_robustness_study import (REGIMES, METRICS, TEST_SNR_DB, CLASSICAL, CONTRASTS, test_conditions,
+                                  impair_fixed, spectral_features, train_rf, score, contrast_rows)
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -60,16 +63,24 @@ MODEL_SPECS = {
     "baseline_hp": ("Standard 1D-CNN + fixed filter", lambda: Baseline1DCNN(1, 3, highpass_input=True)),
     "no_residual": ("PAC w/o fixed filter", lambda: PhysicsAugmentedCalibratedCNN(1, 3, use_residual_filter=False)),
     "physics": ("PAC-1DCNN (full)", lambda: PhysicsAugmentedCalibratedCNN(1, 3)),
-    "wdcnn": ("WDCNN-style wide-kernel CNN", lambda: WideKernelCNN(1, 3)),
+    "wdcnn": ("WDCNN-style wide-kernel CNN", lambda: WideKernelCNN(1, 3, input_length=WINDOW)),
     "rf": ("Envelope spectrum + Random Forest", None),
+    "baseline_lhp": ("Standard 1D-CNN + learnable filter",
+                     lambda: Baseline1DCNN(1, 3, highpass_input=True, learnable_highpass=True)),
+    "no_dual": ("PAC single residual stream", lambda: PhysicsAugmentedCalibratedCNN(1, 3, use_dual_stream=False)),
+    "kin": ("Kinematic envelope features + Random Forest", None),
 }
-CONTRASTS = [
-    ("baseline_hp", "baseline", "Q1 filter at baseline capacity"),
-    ("physics", "no_residual", "Q1 filter at PAC capacity"),
-    ("physics", "baseline", "PAC vs standard CNN"),
-    ("physics", "wdcnn", "PAC vs WDCNN-style"),
-    ("physics", "rf", "PAC vs classical RF"),
-]
+
+
+def shaft_hz(meas_id):
+    """Nominal shaft frequency of each window from its setting (N15 = 1500 rpm, N09 = 900 rpm)."""
+    return np.array([int(m.split("/")[1][1:3]) * 100 / 60.0 for m in meas_id])
+
+
+def featurizer(key, meas_id):
+    if key == "rf":
+        return lambda X: spectral_features(X, fs=FS)
+    return lambda X: kinematic_features(X, shaft_hz(meas_id), PADERBORN_ORDERS, FS)
 
 
 def label_of(bearing):
@@ -129,27 +140,34 @@ def protocol_header(protocol, seeds, epochs, regimes, settings):
             "test_noise_seed_base": config.BENCHMARK_NOISE_SEED}
 
 
-def run_protocol(protocol, seeds, epochs, regimes, model_keys, settings, resume):
+def run_protocol(protocol, seeds, epochs, regimes, model_keys, settings, resume, add_models=False):
     out_json = os.path.join(config.RESULTS_DIR, f"paderborn_{protocol}_metrics.json")
     header = protocol_header(protocol, seeds, epochs, regimes, settings)
     results = {"header": header, "runs": []}
-    if resume and os.path.exists(out_json):
+    if (resume or add_models) and os.path.exists(out_json):
         with open(out_json, encoding="utf-8") as fh:
             saved = json.load(fh)
         if saved["header"] != header:
-            raise SystemExit(f"--resume: settings in {out_json} differ from this run; refusing to merge.")
+            raise SystemExit(f"--resume/--add-models: settings in {out_json} differ from this run; refusing to merge.")
         results["runs"] = saved["runs"]
-    done_folds = {r["fold"] for r in results["runs"]}
+    elif add_models:
+        raise SystemExit(f"--add-models needs saved results in {out_json}")
+    if add_models:  # rerun every fold for the given models only, replacing any earlier runs of them
+        results["runs"] = [r for r in results["runs"] if r["model"] not in model_keys]
+        done_folds = set()
+    else:
+        done_folds = {r["fold"] for r in results["runs"]}
 
     conds = test_conditions()
-    nn_keys = [k for k in model_keys if k != "rf"]
+    nn_keys = [k for k in model_keys if k not in CLASSICAL]
+    classical = [k for k in CLASSICAL if k in model_keys]
     folds = folds_for(protocol)
     t0, n_done, n_total = time.time(), 0, sum(f[0] not in done_folds for f in folds) * len(seeds) * len(regimes)
     for fold_index, (fold_name, train_b, test_b) in enumerate(folds):
         if fold_name in done_folds:
             print(f"[{protocol}] fold {fold_name}: already done, skipped")
             continue
-        X_tr, y_tr, _ = windows(train_b, settings, TRAIN_STRIDE)
+        X_tr, y_tr, meas_tr = windows(train_b, settings, TRAIN_STRIDE)
         X_te, y_te, meas_te = windows(test_b, settings, TEST_STRIDE)
         print(f"\n=== [{protocol}] fold {fold_name} | train {train_b} -> {len(y_tr)} windows "
               f"{np.bincount(y_tr, minlength=3).tolist()} | test {test_b} -> {len(y_te)} windows "
@@ -170,7 +188,7 @@ def run_protocol(protocol, seeds, epochs, regimes, model_keys, settings, resume)
 
         records = {(r, s, k): {"fold": fold_name, "regime": r, "seed": s, "model": k, "test": {}}
                    for r in regimes for s in seeds for k in model_keys}
-        rf_feats = {}
+        rf_feats = {key: {} for key in classical}
         for ci, (name, params) in enumerate(conds):
             # test noise depends only on (fold, condition): identical for every model and regime
             X_c = X_te if params is None else impair_fixed(X_te, config.BENCHMARK_NOISE_SEED + 1000 * fold_index + ci,
@@ -178,19 +196,19 @@ def run_protocol(protocol, seeds, epochs, regimes, model_keys, settings, resume)
             for k, model in trained.items():
                 probs = F.softmax(predict_logits(model, X_c, calibrated=False), dim=1).numpy()
                 records[k]["test"][name] = full_score(probs, y_te, meas_te)
-            if "rf" in model_keys:
-                rf_feats[name] = spectral_features(X_c, fs=FS)
+            for key in classical:
+                rf_feats[key][name] = featurizer(key, meas_te)(X_c)
             del X_c
         del trained
         torch.cuda.empty_cache()
 
-        if "rf" in model_keys:  # one forest in memory at a time
+        for key in classical:  # one forest in memory at a time
             for regime in regimes:
                 for seed in seeds:
-                    rf = train_rf(X_tr, y_tr, REGIMES[regime], seed, fs=FS)
-                    for name in rf_feats:
-                        records[(regime, seed, "rf")]["test"][name] = full_score(rf.predict_proba(rf_feats[name]),
-                                                                                  y_te, meas_te)
+                    rf = train_rf(X_tr, y_tr, REGIMES[regime], seed, fs=FS, featurize=featurizer(key, meas_tr))
+                    for name, feats in rf_feats[key].items():
+                        records[(regime, seed, key)]["test"][name] = full_score(rf.predict_proba(feats),
+                                                                                 y_te, meas_te)
                     del rf
         for name in ("clean", "lowpass@0dB", "white@0dB"):
             print(f"  {name:<12} macro-F1 " + " ".join(
@@ -214,7 +232,6 @@ def values(results, regime, model, cond, metric="macro_f1"):
 
 
 def summarize(results):
-    from scipy.stats import wilcoxon
     h = results["header"]
     models = [k for k in MODEL_SPECS if any(r["model"] == k for r in results["runs"])]
     summary = {"means": {}, "contrasts": {}}
@@ -223,26 +240,16 @@ def summarize(results):
             m: {c: {met: {"mean": float(values(results, regime, m, c, met).mean()),
                           "std": float(values(results, regime, m, c, met).std(ddof=1))}
                     for met in METRICS + ["measurement_accuracy"]} for c in h["test_conditions"]} for m in models}
-        rows = []
-        for a, b, label in CONTRASTS:
-            if a not in models or b not in models:
-                continue
-            for c in h["test_conditions"]:
-                va, vb = values(results, regime, a, c), values(results, regime, b, c)
-                d = va - vb
-                p = 1.0 if np.allclose(d, 0) else float(wilcoxon(va, vb).pvalue)
-                rows.append({"a": a, "b": b, "question": label, "condition": c, "delta": float(d.mean()),
-                             "a_wins": int((d > 0).sum()), "n": len(d), "p": p})
-        for row, p_adj in zip(rows, holm(np.array([r["p"] for r in rows]))):
-            row["p_holm"] = float(p_adj)
-        summary["contrasts"][regime] = rows
+        summary["contrasts"][regime] = contrast_rows(lambda m, c: values(results, regime, m, c), models,
+                                                     h["test_conditions"])
     results["summary"] = summary
     return results, models
 
 
 def plot(all_results):
     colors = {"baseline": "#64748b", "baseline_hp": "#38bdf8", "no_residual": "#ef4444",
-              "physics": "#059669", "wdcnn": "#a855f7", "rf": "#f59e0b"}
+              "physics": "#059669", "wdcnn": "#a855f7", "rf": "#f59e0b",
+              "baseline_lhp": "#1d4ed8", "no_dual": "#84cc16", "kin": "#b45309"}
     panels = [(p, reg) for p, (res, _) in all_results.items() for reg in res["header"]["regimes"]]
     fig, axes = plt.subplots(len(panels), len(NOISE_SPECTRA), figsize=(16, 4.2 * len(panels)), squeeze=False)
     x_labels = ["clean"] + [f"{s:g}" for s in TEST_SNR_DB]
@@ -281,7 +288,8 @@ def write_report(all_results):
                 "healthy / inner ring / outer ring. Every test bearing is a physical specimen never seen in "
                 "training (healthy bearings included). Noise conditions add only coloured noise; "
                 "`drift+spikes` adds only drift and spikes. Paired Wilcoxon signed-rank tests over (fold, seed) "
-                "pairs, Holm-corrected over all contrasts × conditions within each protocol and training regime. "
+                "pairs, Holm-corrected over all contrasts × conditions within each protocol, training regime and "
+                "contrast family (primary: Q1-Q4; secondary: S1-S3, the added models). "
                 "`meas. acc.` = accuracy per 4-s measurement (mean of window probabilities).\n\n")
         for protocol, (res, models) in all_results.items():
             h = res["header"]
@@ -301,13 +309,13 @@ def write_report(all_results):
                         "significant after Holm):\n\n| Contrast | " + " | ".join(conds) + " |\n|"
                         + " :--- |" * (len(conds) + 1) + "\n")
                 rows = res["summary"]["contrasts"][regime]
-                for a, b, label in CONTRASTS:
+                for a, b, label, family in CONTRASTS:
                     rs = {r["condition"]: r for r in rows if r["a"] == a and r["b"] == b}
                     if not rs:
                         continue
                     cells = [(f"**{rs[c]['delta']:+.1f} ({rs[c]['a_wins']}/{rs[c]['n']})**" if rs[c]["p_holm"] < 0.05
                               else f"{rs[c]['delta']:+.1f} ({rs[c]['a_wins']}/{rs[c]['n']})") for c in conds]
-                    f.write(f"| {label}: {a} − {b} | " + " | ".join(cells) + " |\n")
+                    f.write(f"| {label} ({family}): {a} − {b} | " + " | ".join(cells) + " |\n")
                 f.write("\nPer-class recall, clean (healthy / inner / outer): "
                         + "; ".join(f"{MODEL_SPECS[m][0]} " + "/".join(
                             f"{v:.0f}" for v in np.mean([r["test"]["clean"]["recall_per_class"] for r in res["runs"]
@@ -326,6 +334,8 @@ if __name__ == "__main__":
     parser.add_argument("--models", nargs="+", default=list(MODEL_SPECS), choices=list(MODEL_SPECS))
     parser.add_argument("--settings", nargs="+", default=["N15_M07_F10"])
     parser.add_argument("--resume", action="store_true", help="skip folds already saved with identical settings")
+    parser.add_argument("--add-models", action="store_true",
+                        help="train only --models on every fold and merge them into the saved results")
     parser.add_argument("--summarize-only", action="store_true")
     args = parser.parse_args()
 
@@ -337,7 +347,8 @@ if __name__ == "__main__":
                 res = json.load(fh)
         else:
             seeds = args.seeds_cv if protocol == "real_cv" else args.seeds_a2r
-            res = run_protocol(protocol, seeds, args.epochs, args.regimes, args.models, args.settings, args.resume)
+            res = run_protocol(protocol, seeds, args.epochs, args.regimes, args.models, args.settings, args.resume,
+                               args.add_models)
         res, models = summarize(res)
         with open(os.path.join(config.RESULTS_DIR, f"paderborn_{protocol}_metrics.json"), "w", encoding="utf-8") as fh:
             json.dump(res, fh, indent=1)

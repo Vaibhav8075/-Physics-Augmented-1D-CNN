@@ -89,7 +89,20 @@ def test_recordings_are_at_12khz_after_loading(name, rpm):
     f, p = welch(x, fs=config.SAMPLING_RATE_HZ, nperseg=2 ** 16)
     band = (f > 26) & (f < 32)
     assert f[band][np.argmax(p[band])] == pytest.approx(rpm / 60, abs=0.4)
-    assert len(x) / config.SAMPLING_RATE_HZ == pytest.approx(10.1, abs=0.4)  # ~10-s recordings
+    assert len(x) / config.SAMPLING_RATE_HZ == pytest.approx(10.1, abs=0.4)
+
+
+@pytest.mark.skipif(not HAS_RAW, reason="raw CWRU data not downloaded")
+@pytest.mark.parametrize("name", ["Normal_1.mat", "IR007_1.mat", "B014_1.mat", "OR021_6_1.mat"])
+def test_band_above_decimation_edge_is_empty_for_every_class(name):
+    """Only the healthy recordings are decimated from 48 kHz, and that filter rolls off above
+    4.8 kHz; the common band limit must leave nothing there in any class, or the roll-off alone
+    identifies healthy windows (cwru_shortcut_check.py)."""
+    from scipy.signal import welch
+    from preprocess_data import load_recording
+    x = load_recording(os.path.join(config.DATA_DIR, name))[0].astype(np.float64)
+    f, p = welch(x, fs=config.SAMPLING_RATE_HZ, window="blackmanharris", nperseg=1024)
+    assert p[f >= 5200].sum() / p.sum() < 1e-9  # below -90 dB  # ~10-s recordings
 
 
 @pytest.mark.skipif(not HAS_DATA, reason="run preprocess_data.py first")
@@ -201,8 +214,11 @@ def test_spectral_features_unchanged_for_cwru_windows():
 def test_models_accept_paderborn_windows():
     from models import WideKernelCNN, PhysicsAugmentedCalibratedCNN
     x = torch.randn(4, 1, 2048)
-    for model in (Baseline1DCNN(1, 3), Baseline1DCNN(1, 3, highpass_input=True), WideKernelCNN(1, 3),
-                  PhysicsAugmentedCalibratedCNN(1, 3), PhysicsAugmentedCalibratedCNN(1, 3, use_residual_filter=False)):
+    for model in (Baseline1DCNN(1, 3), Baseline1DCNN(1, 3, highpass_input=True),
+                  Baseline1DCNN(1, 3, highpass_input=True, learnable_highpass=True),
+                  WideKernelCNN(1, 3, input_length=2048), PhysicsAugmentedCalibratedCNN(1, 3),
+                  PhysicsAugmentedCalibratedCNN(1, 3, use_residual_filter=False),
+                  PhysicsAugmentedCalibratedCNN(1, 3, use_dual_stream=False)):
         assert model(x)[0].shape == (4, 3)
     assert WideKernelCNN()(torch.randn(4, 2, 1024))[0].shape == (4, 4)
 

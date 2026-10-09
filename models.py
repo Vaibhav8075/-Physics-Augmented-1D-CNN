@@ -9,10 +9,13 @@ class Baseline1DCNN(nn.Module):
     """
     highpass_input=True puts the same fixed residual filter as the PAC model in front
     of the network, so the filter's effect can be measured without the other components.
+    learnable_highpass=True makes that filter's 11 taps trainable (initialised to the
+    moving average), to compare a fixed with a learned front end of the same form.
     """
-    def __init__(self, in_channels=2, num_classes=4, highpass_input=False):
+    def __init__(self, in_channels=2, num_classes=4, highpass_input=False, learnable_highpass=False):
         super(Baseline1DCNN, self).__init__()
-        self.highpass = PhysicalHarmonicResidualFilter(in_channels, filter_size=11) if highpass_input else None
+        self.highpass = (PhysicalHarmonicResidualFilter(in_channels, filter_size=11, learnable=learnable_highpass)
+                         if highpass_input else None)
         self.conv1 = nn.Conv1d(in_channels, 32, kernel_size=15, stride=2, padding=7)
         self.bn1 = nn.BatchNorm1d(32)
         
@@ -43,25 +46,32 @@ class Baseline1DCNN(nn.Module):
 
 class WideKernelCNN(nn.Module):
     """
-    WDCNN-style baseline (Zhang et al., Sensors 2017): a wide, strided first-layer kernel
-    followed by small 3-tap convolutions with max-pooling. Layer sizes follow our reading of
-    that design adapted to 1024-sample windows; they have not been checked against the
-    paper's architecture table.
+    WDCNN (Zhang et al., Sensors 17(2):425, 2017), layers as in its Table 2: a 64-tap first
+    convolution with stride 16 and 16 kernels, four 3-tap convolutions (32, 64, 64, 64 kernels;
+    the last without padding), each followed by batch normalisation, ReLU and 2x max-pooling;
+    the flattened feature map feeds one hidden layer of 100 units with batch normalisation and
+    ReLU, then the output layer. Differences from the paper: windows of `input_length` samples
+    (1024 on CWRU here, 2048 in the paper and on Paderborn), K output classes, and no AdaBN
+    (the paper's test-time re-estimation of batch-norm statistics on the target domain).
     """
-    def __init__(self, in_channels=2, num_classes=4):
+    def __init__(self, in_channels=2, num_classes=4, input_length=1024):
         super(WideKernelCNN, self).__init__()
         def block(c_in, c_out, k, s, p):
             return [nn.Conv1d(c_in, c_out, kernel_size=k, stride=s, padding=p),
                     nn.BatchNorm1d(c_out), nn.ReLU(), nn.MaxPool1d(2)]
         self.features = nn.Sequential(
-            *block(in_channels, 16, 64, 16, 24),  # 1024 -> 64 -> 32
-            *block(16, 32, 3, 1, 1),              # -> 16
-            *block(32, 64, 3, 1, 1),              # -> 8
-            *block(64, 64, 3, 1, 1),              # -> 4
-            *block(64, 64, 3, 1, 0),              # -> 2 -> 1
-            nn.AdaptiveAvgPool1d(1),              # identity at 1024 samples; lets longer windows through
+            *block(in_channels, 16, 64, 16, 24),  # 2048 -> 128 -> 64 (1024 -> 64 -> 32)
+            *block(16, 32, 3, 1, 1),
+            *block(32, 64, 3, 1, 1),
+            *block(64, 64, 3, 1, 1),
+            *block(64, 64, 3, 1, 0),              # 2048: -> 6 -> 3 (1024: -> 2 -> 1)
+            nn.Flatten(),
         )
-        self.fc = nn.Sequential(nn.Flatten(), nn.Linear(64, 100), nn.ReLU(), nn.Linear(100, num_classes))
+        with torch.no_grad():
+            n_flat = self.features.eval()(torch.zeros(1, in_channels, input_length)).shape[1]
+        self.features.train()
+        self.fc = nn.Sequential(nn.Linear(n_flat, 100), nn.BatchNorm1d(100), nn.ReLU(),
+                                nn.Linear(100, num_classes))
         self.register_buffer("temperature", torch.ones(1))
 
     def forward(self, x, return_calibrated=True):
@@ -72,35 +82,38 @@ class WideKernelCNN(nn.Module):
 
 
 # -------------------------------------------------------------
-# 2. NOVEL PATENT ARCHITECTURE: Physics-Augmented Calibrated CNN
+# 2. PAC-1DCNN: residual front end, dual stream, attention, temperature
 # -------------------------------------------------------------
 class PhysicalHarmonicResidualFilter(nn.Module):
     """
-    Patent Claim Component 1:
-    Kinematic baseline estimator that separates low-frequency operational/drift
-    baseline from high-frequency transient fault impact bursts.
+    Residual front end r = x - MA_11(x) per channel (zero padding): a fixed high-pass filter
+    with its amplitude response reaching 0.5 at about 660 Hz for 12 kHz sampling. It removes slow
+    drift but also any signal or noise below that frequency. learnable=True turns the 11 moving-
+    average taps into trainable parameters (same initialisation), i.e. a learned FIR front end.
     """
-    def __init__(self, in_channels=2, filter_size=11):
+    def __init__(self, in_channels=2, filter_size=11, learnable=False):
         super(PhysicalHarmonicResidualFilter, self).__init__()
-        # Fixed moving-average smoothing kernel (represents physical shaft speed baseline)
         weight = torch.ones(in_channels, 1, filter_size) / filter_size
-        self.register_buffer('smooth_kernel', weight)
+        if learnable:
+            self.smooth_kernel = nn.Parameter(weight)
+        else:
+            self.register_buffer('smooth_kernel', weight)
         self.padding = filter_size // 2
         self.in_channels = in_channels
 
     def forward(self, x):
         # x: (B, 2, L)
         baseline = F.conv1d(x, self.smooth_kernel, padding=self.padding, groups=self.in_channels)
-        residual = x - baseline  # Isolates high-frequency impact harmonics & eliminates sensor drift
+        residual = x - baseline
         return residual, baseline
 
 
 class SensorTemporalAttention(nn.Module):
     """
-    Patent Claim Component 2:
-    Channel and Temporal Self-Attention block that maps latent activations
-    back to physical sensor channels (Drive End vs Fan End) and specific time windows,
-    generating an explainable attribution heatmap for operators.
+    Squeeze-and-excitation-style weights over the learned feature channels, then a temporal
+    weight per position from a length-7 convolution (a simplified variant of CBAM's spatial
+    attention). The channel weights act on learned feature maps, not on the physical sensors,
+    so they are not sensor attributions; they were not evaluated as explanations.
     """
     def __init__(self, in_channels, reduction=8):
         super(SensorTemporalAttention, self).__init__()
@@ -141,12 +154,11 @@ class PhysicsAugmentedCalibratedCNN(nn.Module):
         self.use_dual_stream = use_dual_stream
         self.use_attention = use_attention
 
-        # Novel Component 1: Physical Harmonic Residual Separator
+        # Fixed residual (high-pass) front end
         self.residual_filter = PhysicalHarmonicResidualFilter(in_channels=in_channels, filter_size=11)
 
         if use_dual_stream:
-            # Novel Component 2: Dual-Stream Multi-Scale Conv (Residual + Raw Features)
-            # Stream 1: High-frequency fault impact extractor (on physics residual)
+            # Dual stream: stream R on the residual, stream X on the raw window
             self.stream_residual = nn.Sequential(
                 nn.Conv1d(in_channels, 32, kernel_size=5, stride=2, padding=2),
                 nn.BatchNorm1d(32),
@@ -155,7 +167,7 @@ class PhysicsAugmentedCalibratedCNN(nn.Module):
                 nn.BatchNorm1d(64),
                 nn.ReLU()
             )
-            # Stream 2: Wide receptive field envelope extractor (on raw signal)
+            # stream X (the attribute name is kept for compatibility with saved checkpoints)
             self.stream_envelope = nn.Sequential(
                 nn.Conv1d(in_channels, 32, kernel_size=15, stride=2, padding=7),
                 nn.BatchNorm1d(32),
@@ -184,18 +196,18 @@ class PhysicsAugmentedCalibratedCNN(nn.Module):
                 nn.ReLU()
             )
 
-        # Novel Component 3: Sensor & Temporal Explainability Attention
+        # Channel and temporal attention
         if use_attention:
             self.attention = SensorTemporalAttention(in_channels=128)
 
         self.pool = nn.AdaptiveAvgPool1d(1)
         self.fc = nn.Linear(128, num_classes)
 
-        # Novel Component 4: Temperature, fitted post-hoc on validation NLL (not trained)
+        # Temperature, fitted post hoc on held-out NLL (not trained)
         self.register_buffer("temperature", torch.ones(1))
 
     def forward(self, x, return_calibrated=True):
-        # 1. Physical residual extraction
+        # 1. Residual front end
         if self.use_residual_filter:
             residual, _ = self.residual_filter(x)
         else:
@@ -210,7 +222,7 @@ class PhysicsAugmentedCalibratedCNN(nn.Module):
         else:
             features = self.single_stream(residual)
 
-        # 3. Sensor & Temporal Attention
+        # 3. Channel and temporal attention
         if self.use_attention:
             attended, (c_weights, t_weights) = self.attention(features)
         else:

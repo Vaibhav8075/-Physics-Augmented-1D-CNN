@@ -36,9 +36,11 @@ TBD = r"\textit{TBD}"
 plt.rcParams.update({"font.family": "serif", "font.size": 8, "axes.titlesize": 8, "axes.labelsize": 8,
                      "legend.fontsize": 6.5, "xtick.labelsize": 7, "ytick.labelsize": 7, "pdf.fonttype": 42})
 COLORS = {"baseline": "#475569", "baseline_hp": "#0ea5e9", "no_residual": "#dc2626", "physics": "#059669",
-          "wdcnn": "#7c3aed", "rf": "#d97706", "no_dual": "#f97316", "no_attention": "#ca8a04"}
+          "wdcnn": "#7c3aed", "rf": "#d97706", "no_dual": "#f97316", "no_attention": "#ca8a04",
+          "baseline_lhp": "#1d4ed8", "kin": "#92400e"}
 SHORT = {"baseline": "CNN", "baseline_hp": "CNN+HP", "no_residual": "PAC$-$HP", "physics": "PAC",
-         "wdcnn": "WDCNN-s", "rf": "Env-RF", "no_dual": "PAC$-$dual", "no_attention": "PAC$-$att"}
+         "wdcnn": "WDCNN-s", "rf": "Env-RF", "no_dual": "PAC$-$dual", "no_attention": "PAC$-$att",
+         "baseline_lhp": "CNN+LHP", "kin": "Kin-RF"}
 
 
 def put(key, value, fmt="{:.1f}"):
@@ -82,19 +84,24 @@ def rel_p(p):
 def model_table():
     from models import Baseline1DCNN, WideKernelCNN, PhysicsAugmentedCalibratedCNN
     count = lambda m: sum(p.numel() for p in m.parameters())
+    # (key, name, constructor(channels, classes, window length)); CWRU: 2 ch, 4 classes, 1024; PU: 1, 3, 2048
     specs = [
-        ("baseline", "Standard 1D-CNN (3 conv layers)", lambda c, k: Baseline1DCNN(c, k)),
-        ("baseline_hp", "Standard 1D-CNN with fixed HP front end", lambda c, k: Baseline1DCNN(c, k, highpass_input=True)),
-        ("no_residual", "PAC-1DCNN without fixed HP front end", lambda c, k: PhysicsAugmentedCalibratedCNN(c, k, use_residual_filter=False)),
-        ("physics", "PAC-1DCNN (full)", lambda c, k: PhysicsAugmentedCalibratedCNN(c, k)),
-        ("wdcnn", "WDCNN-style wide-kernel CNN", lambda c, k: WideKernelCNN(c, k)),
+        ("baseline", "Standard 1D-CNN (3 conv layers)", lambda c, k, n: Baseline1DCNN(c, k)),
+        ("baseline_hp", "Standard 1D-CNN with fixed HP front end", lambda c, k, n: Baseline1DCNN(c, k, highpass_input=True)),
+        ("baseline_lhp", "Standard 1D-CNN with learnable HP front end",
+         lambda c, k, n: Baseline1DCNN(c, k, highpass_input=True, learnable_highpass=True)),
+        ("no_residual", "PAC-1DCNN without fixed HP front end", lambda c, k, n: PhysicsAugmentedCalibratedCNN(c, k, use_residual_filter=False)),
+        ("physics", "PAC-1DCNN (full)", lambda c, k, n: PhysicsAugmentedCalibratedCNN(c, k)),
+        ("no_dual", "PAC-1DCNN, single stream on the residual", lambda c, k, n: PhysicsAugmentedCalibratedCNN(c, k, use_dual_stream=False)),
+        ("wdcnn", "WDCNN-style wide-kernel CNN", lambda c, k, n: WideKernelCNN(c, k, input_length=n)),
     ]
     rows = []
     for key, name, make in specs:
-        cw, pu = count(make(2, 4)), count(make(1, 3))
+        cw, pu = count(make(2, 4, 1024)), count(make(1, 3, 2048))
         put(f"params-{key}-cwru", f"{cw:,}".replace(",", "{,}"))
         rows.append(f"{name} & {SHORT[key]} & {cw:,} & {pu:,} \\\\".replace(",", "{,}"))
     rows.append("Envelope spectrum + random forest (300 trees) & Env-RF & -- & -- \\\\")
+    rows.append("Kinematic envelope features + random forest (300 trees) & Kin-RF & -- & -- \\\\")
     write("tab_models.tex", "\n".join(rows) + "\n")
 
 

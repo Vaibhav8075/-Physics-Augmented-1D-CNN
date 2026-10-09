@@ -18,8 +18,15 @@ Questions tested:
   Q3  Does it survive training on mixed noise spectra instead of low-pass only?
   Q4  How do the models compare with a WDCNN-style CNN and an envelope-spectrum
       Random Forest (classical baseline)?
-Paired Wilcoxon tests over (fold, seed) pairs, Holm-corrected within each
-training regime over all pre-specified contrasts and test conditions.
+Secondary questions (added models, separate Holm family):
+  S1  Does a learnable front end of the same form beat the fixed one?
+  S2  Does PAC-1DCNN's single residual-only stream (best model under leave-one-load-out)
+      beat the full model once bearings are held out?
+  S3  Do bearing-kinematics features (fault frequencies x shaft speed) transfer better
+      than generic spectral features, with the same Random Forest?
+Paired Wilcoxon tests over (fold, seed) pairs, Holm-corrected within each training
+regime and contrast family (primary Q1-Q4, secondary S1-S3) over all its contrasts and
+test conditions.
 """
 import os
 import sys
@@ -39,6 +46,7 @@ import config
 from common import (set_seed, make_loaders, train_model, predict_logits, classification_metrics,
                     add_real_world_impairments, NOISE_SPECTRA)
 from models import Baseline1DCNN, WideKernelCNN, PhysicsAugmentedCalibratedCNN
+from kinematic_features import kinematic_features, CWRU_DE_ORDERS
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -58,14 +66,22 @@ MODEL_SPECS = {
     "physics": ("PAC-1DCNN (full)", lambda: PhysicsAugmentedCalibratedCNN()),
     "wdcnn": ("WDCNN-style wide-kernel CNN", lambda: WideKernelCNN()),
     "rf": ("Envelope spectrum + Random Forest", None),
+    "baseline_lhp": ("Standard 1D-CNN + learnable filter",
+                     lambda: Baseline1DCNN(highpass_input=True, learnable_highpass=True)),
+    "no_dual": ("PAC single residual stream", lambda: PhysicsAugmentedCalibratedCNN(use_dual_stream=False)),
+    "kin": ("Kinematic envelope features + Random Forest", None),
 }
-# (a, b, question): effect = mean(a - b); positive = a better
+CLASSICAL = ("rf", "kin")  # feature-based models, trained with train_rf
+# (a, b, question, family): effect = mean(a - b); positive = a better. Holm runs per regime and family.
 CONTRASTS = [
-    ("baseline_hp", "baseline", "Q1 filter at baseline capacity"),
-    ("physics", "no_residual", "Q1 filter at PAC capacity"),
-    ("physics", "baseline", "PAC vs standard CNN"),
-    ("physics", "wdcnn", "PAC vs WDCNN-style"),
-    ("physics", "rf", "PAC vs classical RF"),
+    ("baseline_hp", "baseline", "Q1 filter at baseline capacity", "primary"),
+    ("physics", "no_residual", "Q1 filter at PAC capacity", "primary"),
+    ("physics", "baseline", "PAC vs standard CNN", "primary"),
+    ("physics", "wdcnn", "PAC vs WDCNN-style", "primary"),
+    ("physics", "rf", "PAC vs classical RF", "primary"),
+    ("baseline_lhp", "baseline_hp", "S1 learnable vs fixed filter", "secondary"),
+    ("no_dual", "physics", "S2 single residual stream vs PAC", "secondary"),
+    ("kin", "rf", "S3 kinematic vs spectral features", "secondary"),
 ]
 METRICS = ["macro_f1", "accuracy", "false_alarm_rate", "missed_fault_rate", "ece"]
 
@@ -75,7 +91,7 @@ METRICS = ["macro_f1", "accuracy", "false_alarm_rate", "missed_fault_rate", "ece
 # -------------------------------------------------------------
 def load_all():
     parts = [dict(np.load(os.path.join(config.PROCESSED_DIR, f"load{l}.npz"))) for l in config.ALL_LOADS]
-    data = {k: np.concatenate([p[k] for p in parts]) for k in ("X", "y", "size", "pos")}
+    data = {k: np.concatenate([p[k] for p in parts]) for k in ("X", "y", "size", "pos", "rpm")}
     data["load"] = np.concatenate([np.full(len(p["y"]), l) for l, p in zip(config.ALL_LOADS, parts)])
     return data
 
@@ -123,11 +139,21 @@ def spectral_features(X, fs=config.SAMPLING_RATE_HZ, env_max_hz=610.0):
     return np.concatenate([bands, env_spec], axis=-1).reshape(len(X), -1).astype(np.float32)
 
 
-def train_rf(X_train, y_train, impairments, seed, copies=2, fs=config.SAMPLING_RATE_HZ):
+def cwru_featurizer(key, shaft_hz):
+    """Feature function of a classical model; shaft_hz: shaft frequency of each window."""
+    if key == "rf":
+        return lambda X: spectral_features(X)
+    return lambda X: kinematic_features(X, shaft_hz, CWRU_DE_ORDERS, config.SAMPLING_RATE_HZ)
+
+
+def train_rf(X_train, y_train, impairments, seed, copies=2, fs=config.SAMPLING_RATE_HZ, featurize=None):
+    """Random Forest on features of `copies` impaired copies of the training windows
+    (Env-RF by default; pass featurize for other feature sets, e.g. kinematic features)."""
+    featurize = featurize or (lambda X: spectral_features(X, fs=fs))
     feats, labels = [], []
     for c in range(copies):
         Xi = impair_fixed(X_train, seed * 100 + c, **impairments)
-        feats.append(spectral_features(Xi, fs=fs))
+        feats.append(featurize(Xi))
         labels.append(y_train)
     rf = RandomForestClassifier(n_estimators=300, class_weight="balanced", n_jobs=-1, random_state=seed)
     return rf.fit(np.concatenate(feats), np.concatenate(labels))
@@ -168,12 +194,13 @@ def run(seeds, epochs, regimes, model_keys, folds=FAULT_SIZES, resume=False):
         kept = sorted({r["held_out_size"] for r in results["runs"]})
         print(f"Resuming: keeping {len(results['runs'])} saved runs from folds {kept}, running folds {folds}")
 
-    nn_keys = [k for k in model_keys if k != "rf"]
+    nn_keys = [k for k in model_keys if k not in CLASSICAL]
     total = len(folds) * len(seeds) * len(regimes) * len(model_keys)
     done, t0 = 0, time.time()
     for held_out in folds:
         tr, te = fold_masks(data, held_out)
         X_tr, y_tr, X_te, y_te = data["X"][tr], data["y"][tr], data["X"][te], data["y"][te]
+        shaft_tr, shaft_te = data["rpm"][tr] / 60.0, data["rpm"][te] / 60.0
         print(f"\n=== Fold: hold out {held_out / 1000:.3f} in. | train {len(y_tr)} "
               f"{np.bincount(y_tr, minlength=4).tolist()} | test {len(y_te)} {np.bincount(y_te, minlength=4).tolist()} ===",
               flush=True)
@@ -191,8 +218,9 @@ def run(seeds, epochs, regimes, model_keys, folds=FAULT_SIZES, resume=False):
                     eta = (time.time() - t0) / done * (total - done) / 60
                     print(f"[{done}/{total}] {held_out:02d} {regime:<7} seed {seed} {key:<12} trained | "
                           f"ETA {eta:.0f} min", flush=True)
-                if "rf" in model_keys:
-                    trained[(regime, seed, "rf")] = train_rf(X_tr, y_tr, REGIMES[regime], seed)
+                for key in (k for k in CLASSICAL if k in model_keys):
+                    trained[(regime, seed, key)] = train_rf(X_tr, y_tr, REGIMES[regime], seed,
+                                                            featurize=cwru_featurizer(key, shaft_tr))
                     done += 1
 
         records = {k: {"held_out_size": held_out, "regime": k[0], "seed": k[1], "model": k[2], "test": {}}
@@ -200,10 +228,10 @@ def run(seeds, epochs, regimes, model_keys, folds=FAULT_SIZES, resume=False):
         for ci, (name, params) in enumerate(conds):
             X_c = X_te if params is None else impair_fixed(X_te, config.BENCHMARK_NOISE_SEED + 100 * held_out + ci,
                                                            **params)
-            feats = spectral_features(X_c) if "rf" in model_keys else None
+            feats = {key: cwru_featurizer(key, shaft_te)(X_c) for key in CLASSICAL if key in model_keys}
             for k, model in trained.items():
-                if k[2] == "rf":
-                    probs = model.predict_proba(feats)
+                if k[2] in CLASSICAL:
+                    probs = model.predict_proba(feats[k[2]])
                 else:
                     probs = F.softmax(predict_logits(model, X_c, calibrated=False), dim=1).numpy()
                 records[k]["test"][name] = score(probs, y_te)
@@ -238,6 +266,26 @@ def holm(pvals):
     return adj
 
 
+def contrast_rows(vals, models, conds, contrasts=None):
+    """Paired Wilcoxon test for every contrast and condition; Holm within each contrast family.
+    vals(model, condition) -> paired per-run values."""
+    rows = []
+    for a, b, label, family in contrasts or CONTRASTS:
+        if a not in models or b not in models:
+            continue
+        for c in conds:
+            va, vb = vals(a, c), vals(b, c)
+            d = va - vb
+            p = 1.0 if np.allclose(d, 0) else float(wilcoxon(va, vb).pvalue)
+            rows.append({"a": a, "b": b, "question": label, "family": family, "condition": c,
+                         "delta": float(d.mean()), "a_wins": int((d > 0).sum()), "n": len(d), "p": p})
+    for family in sorted({r["family"] for r in rows}):
+        fam = [r for r in rows if r["family"] == family]
+        for row, p_adj in zip(fam, holm(np.array([r["p"] for r in fam]))):
+            row["p_holm"] = float(p_adj)
+    return rows
+
+
 def summarize(results):
     regimes = list(results["protocol"]["regimes"])
     conds = results["protocol"]["test_conditions"]
@@ -248,19 +296,7 @@ def summarize(results):
             m: {c: {met: {"mean": float(values(results, regime, m, c, met).mean()),
                           "std": float(values(results, regime, m, c, met).std(ddof=1))}
                     for met in METRICS} for c in conds} for m in models}
-        rows = []
-        for a, b, label in CONTRASTS:
-            if a not in models or b not in models:
-                continue
-            for c in conds:
-                va, vb = values(results, regime, a, c), values(results, regime, b, c)
-                d = va - vb
-                p = 1.0 if np.allclose(d, 0) else float(wilcoxon(va, vb).pvalue)
-                rows.append({"a": a, "b": b, "question": label, "condition": c, "delta": float(d.mean()),
-                             "a_wins": int((d > 0).sum()), "n": len(d), "p": p})
-        for row, p_adj in zip(rows, holm(np.array([r["p"] for r in rows]))):
-            row["p_holm"] = float(p_adj)
-        summary["contrasts"][regime] = rows
+        summary["contrasts"][regime] = contrast_rows(lambda m, c: values(results, regime, m, c), models, conds)
     results["summary"] = summary
     with open(OUT_JSON, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=1)
@@ -270,7 +306,8 @@ def summarize(results):
 
 def plot(summary, regimes, models, conds):
     colors = {"baseline": "#64748b", "baseline_hp": "#38bdf8", "no_residual": "#ef4444",
-              "physics": "#059669", "wdcnn": "#a855f7", "rf": "#f59e0b"}
+              "physics": "#059669", "wdcnn": "#a855f7", "rf": "#f59e0b",
+              "baseline_lhp": "#1d4ed8", "no_dual": "#84cc16", "kin": "#b45309"}
     fig, axes = plt.subplots(len(regimes), len(NOISE_SPECTRA), figsize=(16, 4.3 * len(regimes)), squeeze=False)
     x_labels = ["clean"] + [f"{s:g}" for s in TEST_SNR_DB]
     for i, regime in enumerate(regimes):
@@ -309,7 +346,8 @@ def write_report(results, summary, regimes, models, conds):
                 f"{len(proto['seeds'])} seeds). Noise conditions add only coloured noise (no drift or spikes); "
                 f"`drift+spikes` adds only drift and spikes at the test probabilities. "
                 f"Contrasts use a paired Wilcoxon signed-rank test over the {n} (fold, seed) pairs, "
-                f"Holm-corrected over all contrasts × conditions within each training regime.\n\n"
+                f"Holm-corrected over all contrasts × conditions within each training regime and contrast "
+                f"family (primary: Q1-Q4; secondary: S1-S3, the added models).\n\n"
                 f"**Limitation:** CWRU has one healthy bearing, so Normal windows in train and test come from the "
                 f"same recordings (split by time). WDCNN-style layer sizes were not checked against the "
                 f"original paper's table.\n\n")
@@ -322,7 +360,7 @@ def write_report(results, summary, regimes, models, conds):
             f.write("\n### Contrasts (macro-F1 difference a − b; significant after Holm correction in bold)\n\n"
                     "| Contrast | " + " | ".join(conds) + " |\n|" + " :--- |" * (len(conds) + 1) + "\n")
             rows = summary["contrasts"][regime]
-            for a, b, label in CONTRASTS:
+            for a, b, label, family in CONTRASTS:
                 rs = {r["condition"]: r for r in rows if r["a"] == a and r["b"] == b}
                 if not rs:
                     continue
@@ -331,7 +369,7 @@ def write_report(results, summary, regimes, models, conds):
                     r = rs[c]
                     cell = f"{r['delta']:+.1f} ({r['a_wins']}/{r['n']})"
                     cells.append(f"**{cell}**" if r["p_holm"] < 0.05 else cell)
-                f.write(f"| {label}: {a} − {b} | " + " | ".join(cells) + " |\n")
+                f.write(f"| {label} ({family}): {a} − {b} | " + " | ".join(cells) + " |\n")
             f.write("\nCell = mean difference (runs where a > b / total).\n\n")
             f.write("### Per-class recall at clean / lowpass@0dB (PAC-1DCNN)\n\n")
             for c in ("clean", "lowpass@0dB"):
