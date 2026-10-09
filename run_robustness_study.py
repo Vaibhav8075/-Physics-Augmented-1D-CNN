@@ -358,8 +358,8 @@ def write_report(results, summary, regimes, models, conds):
                 f"Holm-corrected over all contrasts × conditions within each training regime and contrast "
                 f"family (primary: Q1-Q4; secondary: S1-S3, the added models).\n\n"
                 f"**Limitation:** CWRU has one healthy bearing, so Normal windows in train and test come from the "
-                f"same recordings (split by time). WDCNN-style layer sizes were not checked against the "
-                f"original paper's table.\n\n")
+                f"same recordings (split by time). The WDCNN-style network follows Table 2 of Zhang et al. "
+                f"(2017) except for the input length (1024 samples) and AdaBN.\n\n")
         for regime in regimes:
             f.write(f"## Training noise: {regime}\n\n| Model | " + " | ".join(conds) + " |\n|"
                     + " :--- |" * (len(conds) + 1) + "\n")
