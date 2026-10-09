@@ -183,11 +183,12 @@ def predict_logits(model, X, calibrated=True, batch_size=256):
 
 
 def train_model(model, train_loader, val_loader, y_train, epochs=config.EPOCHS, lr=config.LR, verbose=True,
-                impairments=config.IMPAIRMENTS["train"], seed=0):
+                impairments=config.IMPAIRMENTS["train"], seed=0, on_epoch_end=None):
     """
     Trains with class-weighted CE on clean windows plus fresh per-batch impairments.
     With a val_loader, keeps the epoch with the best validation macro-F1;
     with val_loader=None, returns the final epoch.
+    on_epoch_end(epoch, model, mean_train_loss) is called after every epoch (diagnostics only).
     """
     model = model.to(DEVICE)
     params = [p for p in model.parameters() if p.requires_grad]
@@ -215,6 +216,8 @@ def train_model(model, train_loader, val_loader, y_train, epochs=config.EPOCHS, 
             optimizer.step()
             total_loss += loss.item() * X_batch.size(0)
             total += X_batch.size(0)
+        if on_epoch_end is not None:
+            on_epoch_end(epoch, model, total_loss / total)
 
         if val_loader is None:
             if verbose and ((epoch + 1) % 3 == 0 or epoch == epochs - 1):
