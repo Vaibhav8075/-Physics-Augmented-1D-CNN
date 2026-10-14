@@ -84,24 +84,49 @@ def rel_p(p):
 def model_table():
     from models import Baseline1DCNN, WideKernelCNN, PhysicsAugmentedCalibratedCNN
     count = lambda m: sum(p.numel() for p in m.parameters())
-    # (key, name, constructor(channels, classes, window length)); CWRU: 2 ch, 4 classes, 1024; PU: 1, 3, 2048
+    # (key, name, group, purpose, protocols, constructor(channels, classes, window length));
+    # CWRU: 2 ch, 4 classes, 1024 samples; PU: 1 ch, 3 classes, 2048 samples. None = random forest.
     specs = [
-        ("baseline", "Standard 1D-CNN (3 conv layers)", lambda c, k, n: Baseline1DCNN(c, k)),
-        ("baseline_hp", "Standard 1D-CNN with fixed HP front end", lambda c, k, n: Baseline1DCNN(c, k, highpass_input=True)),
-        ("baseline_lhp", "Standard 1D-CNN with learnable HP front end",
+        ("physics", "PAC-1DCNN (full model)", "Studied",
+         "Fixed front end, two streams, attention and temperature scaling", "P1--P4",
+         lambda c, k, n: PhysicsAugmentedCalibratedCNN(c, k)),
+        ("no_residual", "PAC-1DCNN without the fixed front end", "Ablation",
+         "Effect of the front end inside PAC-1DCNN (vs.\\ PAC)", "P1--P4",
+         lambda c, k, n: PhysicsAugmentedCalibratedCNN(c, k, use_residual_filter=False)),
+        ("no_dual", "PAC-1DCNN, single stream on the residual", "Ablation",
+         "Effect of the raw-signal stream (vs.\\ PAC)", "P1--P4",
+         lambda c, k, n: PhysicsAugmentedCalibratedCNN(c, k, use_dual_stream=False)),
+        ("no_attention", "PAC-1DCNN without attention", "Ablation",
+         "Effect of the attention block (vs.\\ PAC)", "P1",
+         lambda c, k, n: PhysicsAugmentedCalibratedCNN(c, k, use_attention=False)),
+        ("baseline", "Standard 1D-CNN (3 convolutional layers)", "Baseline",
+         "Reference network without the front end", "P1--P4",
+         lambda c, k, n: Baseline1DCNN(c, k)),
+        ("baseline_hp", "Standard 1D-CNN with the fixed front end", "Baseline",
+         "Effect of the front end at small capacity (vs.\\ CNN)", "P2--P4",
+         lambda c, k, n: Baseline1DCNN(c, k, highpass_input=True)),
+        ("baseline_lhp", "Standard 1D-CNN with a learnable front end", "Baseline",
+         "Fixed vs.\\ learned filter taps (vs.\\ CNN+HP)", "P2--P4",
          lambda c, k, n: Baseline1DCNN(c, k, highpass_input=True, learnable_highpass=True)),
-        ("no_residual", "PAC-1DCNN without fixed HP front end", lambda c, k, n: PhysicsAugmentedCalibratedCNN(c, k, use_residual_filter=False)),
-        ("physics", "PAC-1DCNN (full)", lambda c, k, n: PhysicsAugmentedCalibratedCNN(c, k)),
-        ("no_dual", "PAC-1DCNN, single stream on the residual", lambda c, k, n: PhysicsAugmentedCalibratedCNN(c, k, use_dual_stream=False)),
-        ("wdcnn", "WDCNN-style wide-kernel CNN", lambda c, k, n: WideKernelCNN(c, k, input_length=n)),
+        ("wdcnn", "WDCNN-style wide-kernel CNN \\cite{zhang2017wdcnn}", "Baseline",
+         "Published noise-robust 1D-CNN design", "P2--P4",
+         lambda c, k, n: WideKernelCNN(c, k, input_length=n)),
+        ("rf", "Envelope-spectrum random forest (300 trees)", "Baseline",
+         "Classical classifier on generic spectral features", "P2--P4", None),
+        ("kin", "Kinematic random forest (300 trees)", "Baseline",
+         "Classical classifier on fault-frequency features", "P2--P4", None),
     ]
     rows = []
-    for key, name, make in specs:
-        cw, pu = count(make(2, 4, 1024)), count(make(1, 3, 2048))
-        put(f"params-{key}-cwru", f"{cw:,}".replace(",", "{,}"))
-        rows.append(f"{name} & {SHORT[key]} & {cw:,} & {pu:,} \\\\".replace(",", "{,}"))
-    rows.append("Envelope spectrum + random forest (300 trees) & Env-RF & -- & -- \\\\")
-    rows.append("Kinematic envelope features + random forest (300 trees) & Kin-RF & -- & -- \\\\")
+    for key, name, group, purpose, protocols, make in specs:
+        if make is None:
+            cw = pu = "--"
+        else:
+            cw, pu = count(make(2, 4, 1024)), count(make(1, 3, 2048))
+            put(f"params-{key}-cwru", f"{cw:,}".replace(",", "{,}"))
+            put(f"params-{key}-pu", f"{pu:,}".replace(",", "{,}"))
+            cw, pu = f"{cw:,}".replace(",", "{,}"), f"{pu:,}".replace(",", "{,}")
+        rows.append(f"{name} & {SHORT[key]} & {group} & {purpose} & {protocols} & {cw} & {pu} \\\\")
+    put("n-models", str(len(specs)))
     write("tab_models.tex", "\n".join(rows) + "\n")
 
 

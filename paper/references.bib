@@ -1,44 +1,113 @@
 % Bibliography for paper/main.tex.
-% Every entry was checked on 2026-10-09 against the source named in its "verified" comment
+% Every entry was checked against the source named in its "verified" comment
 % (Crossref = api.crossref.org metadata for the DOI; arXiv = export.arxiv.org API record;
 % publisher = the publisher's or proceedings' own page). Fields that could not be confirmed
-% were left out rather than guessed.
+% were left out rather than guessed. Journal names use IEEE/ISO 4 abbreviations, and the DOI
+% is printed at the end of each entry (note field), as in the IEEE Reference Guide.
+%
+% Recency (supervisor's request, 2026-10-14): related-work references are from 2021-2026.
+% Older entries are kept only where the paper uses the source's data, protocol, architecture
+% or method directly and no recent source can stand in for it: the two datasets and their
+% papers (cwrudata, smith2015cwru, lessmeier2016kat, kat2016data), the reimplemented WDCNN
+% baseline (zhang2017wdcnn), temperature scaling and ECE (guo2017calibration), and the
+% corrected resampled t-test applied in fold_level_stats.py (nadeau2003). Standard textbook
+% methods (Wilcoxon signed-rank test, Holm-Bonferroni procedure, random forests, AdamW,
+% envelope analysis) are named without a citation.
 
-% --- Bearing diagnosis with deep learning -------------------------------------------------
-% verified: Crossref (DOI 10.3390/s17020425)
-@article{zhang2017wdcnn,
-  author  = {Zhang, Wei and Peng, Gaoliang and Li, Chuanhao and Chen, Yuanhang and Zhang, Zhujun},
-  title   = {A New Deep Learning Model for Fault Diagnosis with Good Anti-Noise and Domain Adaptation Ability on Raw Vibration Signals},
-  journal = {Sensors},
-  volume  = {17},
-  number  = {2},
-  pages   = {425},
-  year    = {2017},
-  doi     = {10.3390/s17020425}
+% --- Reviews (2021-2026) --------------------------------------------------------------------
+% verified: Crossref (DOI 10.1016/j.asej.2022.101945); abstract via OpenAlex (covers CNN, RNN,
+% auto-encoder, GAN and transfer-learning methods for bearing fault diagnosis), 2026-10-14
+@article{hakim2023review,
+  author  = {Hakim, Mohammed and Omran, Abdoulhdi A. Borhana and Ahmed, Ali Najah and Al-Waily, Muhannad and Abdellatif, Abdallah},
+  title   = {A systematic review of rolling bearing fault diagnoses based on deep learning and transfer learning: Taxonomy, overview, application, open challenges, weaknesses and recommendations},
+  journal = {Ain Shams Eng. J.},
+  volume  = {14},
+  number  = {4},
+  pages   = {101945},
+  year    = {2023},
+  doi     = {10.1016/j.asej.2022.101945},
+  note    = {doi: 10.1016/j.asej.2022.101945}
 }
 
-% verified: Crossref (DOI 10.1016/j.ymssp.2017.06.022). NOTE: earlier drafts of this project cited this
-% paper as IEEE Trans. Ind. Electron. 65(5):4088-4097; Crossref shows it appeared in MSSP vol. 100.
-@article{zhang2018ticnn,
-  author  = {Zhang, Wei and Li, Chuanhao and Peng, Gaoliang and Chen, Yuanhang and Zhang, Zhujun},
-  title   = {A deep convolutional neural network with new training methods for bearing fault diagnosis under noisy environment and different working load},
-  journal = {Mechanical Systems and Signal Processing},
-  volume  = {100},
-  pages   = {439--453},
-  year    = {2018},
-  doi     = {10.1016/j.ymssp.2017.06.022}
+% verified: Crossref (DOI 10.1007/s10462-022-10293-3), abstract in the Crossref record, 2026-10-14
+@article{tama2023review,
+  author  = {Tama, Bayu Adhi and Vania, Malinda and Lee, Seungchul and Lim, Sunghoon},
+  title   = {Recent advances in the application of deep learning for fault diagnosis of rotating machinery using vibration signals},
+  journal = {Artif. Intell. Rev.},
+  volume  = {56},
+  number  = {5},
+  pages   = {4667--4709},
+  year    = {2023},
+  doi     = {10.1007/s10462-022-10293-3},
+  note    = {doi: 10.1007/s10462-022-10293-3}
 }
 
+% verified: Crossref (DOI 10.1016/j.ress.2022.108900); cited only for its scope (review of physics-informed
+% machine learning for reliability and system safety), 2026-10-14
+@article{xu2023piml,
+  author  = {Xu, Yanwen and Kohtz, Sara and Boakye, Jessica and Gardoni, Paolo and Wang, Pingfeng},
+  title   = {Physics-informed machine learning for reliability and systems safety applications: State of the art and challenges},
+  journal = {Reliab. Eng. Syst. Saf.},
+  volume  = {230},
+  pages   = {108900},
+  year    = {2023},
+  doi     = {10.1016/j.ress.2022.108900},
+  note    = {doi: 10.1016/j.ress.2022.108900}
+}
+
+% --- Noise-robust and physics-informed networks ----------------------------------------------------
 % verified: Crossref (DOI 10.1109/TSMC.2020.3048950) and arXiv:1911.07925 journal reference
 @article{li2022wkn,
   author  = {Li, Tianfu and Zhao, Zhibin and Sun, Chuang and Cheng, Li and Chen, Xuefeng and Yan, Ruqiang and Gao, Robert X.},
   title   = {{WaveletKernelNet}: An Interpretable Deep Neural Network for Industrial Intelligent Diagnosis},
-  journal = {IEEE Transactions on Systems, Man, and Cybernetics: Systems},
+  journal = {IEEE Trans. Syst., Man, Cybern., Syst.},
   volume  = {52},
   number  = {4},
   pages   = {2302--2312},
   year    = {2022},
-  doi     = {10.1109/TSMC.2020.3048950}
+  doi     = {10.1109/TSMC.2020.3048950},
+  note    = {doi: 10.1109/TSMC.2020.3048950}
+}
+
+% verified: Crossref (DOI 10.1016/j.ymssp.2023.110314); abstract not accessible here, so cited only for
+% what its title states (interpretable, multilayer-wavelet CNN for noise-robust fault diagnosis), 2026-10-14
+@article{wang2023mwcnn,
+  author  = {Wang, Huan and Liu, Zhiliang and Peng, Dandan and Zuo, Ming J.},
+  title   = {Interpretable convolutional neural network with multilayer wavelet for noise-robust machinery fault diagnosis},
+  journal = {Mech. Syst. Signal Process.},
+  volume  = {195},
+  pages   = {110314},
+  year    = {2023},
+  doi     = {10.1016/j.ymssp.2023.110314},
+  note    = {doi: 10.1016/j.ymssp.2023.110314}
+}
+
+% verified: Crossref (DOI 10.1109/TNNLS.2023.3282599); abstract via Semantic Scholar (wavelet-packet
+% constrained kernels; soft-threshold activation with threshold from the estimated noise std), 2026-10-14
+@article{li2024wpconvnet,
+  author  = {Li, Sinan and Li, Tianfu and Sun, Chuang and Chen, Xuefeng and Yan, Ruqiang},
+  title   = {{WPConvNet}: An Interpretable Wavelet Packet Kernel-Constrained Convolutional Network for Noise-Robust Fault Diagnosis},
+  journal = {IEEE Trans. Neural Netw. Learn. Syst.},
+  volume  = {35},
+  number  = {10},
+  pages   = {14974--14988},
+  year    = {2024},
+  doi     = {10.1109/TNNLS.2023.3282599},
+  note    = {doi: 10.1109/TNNLS.2023.3282599}
+}
+
+% verified: Crossref (DOI 10.1016/j.ymssp.2023.110544); abstract via Semantic Scholar and the UTS and Brunel
+% repository records (modal-property-dominant-generated layer first, domain-conversion layer for varying
+% speed, parallel bi-channel residual network), 2026-10-14
+@article{ni2023piresnet,
+  author  = {Ni, Qing and Ji, J. C. and Halkon, Benjamin and Feng, Ke and Nandi, Asoke K.},
+  title   = {Physics-Informed Residual Network ({PIResNet}) for rolling element bearing fault diagnostics},
+  journal = {Mech. Syst. Signal Process.},
+  volume  = {200},
+  pages   = {110544},
+  year    = {2023},
+  doi     = {10.1016/j.ymssp.2023.110544},
+  note    = {doi: 10.1016/j.ymssp.2023.110544}
 }
 
 % verified: Crossref (DOI 10.3390/s23239311)
@@ -50,46 +119,57 @@
   number  = {23},
   pages   = {9311},
   year    = {2023},
-  doi     = {10.3390/s23239311}
+  doi     = {10.3390/s23239311},
+  note    = {doi: 10.3390/s23239311}
 }
 
-% verified: Crossref (DOI 10.1016/j.isatra.2020.08.010) and arXiv:2003.03315
-@article{zhao2020benchmark,
-  author  = {Zhao, Zhibin and Li, Tianfu and Wu, Jingyao and Sun, Chuang and Wang, Shibin and Yan, Ruqiang and Chen, Xuefeng},
-  title   = {Deep learning algorithms for rotating machinery intelligent diagnosis: An open source benchmark study},
-  journal = {ISA Transactions},
-  volume  = {107},
-  pages   = {224--255},
-  year    = {2020},
-  doi     = {10.1016/j.isatra.2020.08.010}
+% verified: Crossref (DOI 10.3390/s22155793) and the PMC full text (PMC9371231): additive white Gaussian
+% noise, test SNR -10 to 10 dB, CWRU 12 kHz drive-end data, 2026-10-14
+@article{hakim2022lightweight,
+  author  = {Hakim, Mohammed and Omran, Abdoulhadi A. Borhana and Inayat-Hussain, Jawaid I. and Ahmed, Ali Najah and Abdellatef, Hamdan and Abdellatif, Abdallah and Gheni, Hassan Muwafaq},
+  title   = {Bearing Fault Diagnosis Using Lightweight and Robust One-Dimensional Convolution Neural Network in the Frequency Domain},
+  journal = {Sensors},
+  volume  = {22},
+  number  = {15},
+  pages   = {5793},
+  year    = {2022},
+  doi     = {10.3390/s22155793},
+  note    = {doi: 10.3390/s22155793}
 }
 
-% verified: Crossref (DOI 10.1016/j.ymssp.2019.106587)
-@article{lei2020review,
-  author  = {Lei, Yaguo and Yang, Bin and Jiang, Xinwei and Jia, Feng and Li, Naipeng and Nandi, Asoke K.},
-  title   = {Applications of machine learning to machine fault diagnosis: A review and roadmap},
-  journal = {Mechanical Systems and Signal Processing},
-  volume  = {138},
-  pages   = {106587},
-  year    = {2020},
-  doi     = {10.1016/j.ymssp.2019.106587}
+% verified: Crossref (DOI 10.1007/s41095-022-0271-y) and arXiv:2111.07624 abstract (survey of channel,
+% spatial, temporal and branch attention), 2026-10-14
+@article{guo2022attention,
+  author  = {Guo, Meng-Hao and Xu, Tian-Xing and Liu, Jiang-Jiang and Liu, Zheng-Ning and Jiang, Peng-Tao and Mu, Tai-Jiang and Zhang, Song-Hai and Martin, Ralph R. and Cheng, Ming-Ming and Hu, Shi-Min},
+  title   = {Attention mechanisms in computer vision: A survey},
+  journal = {Comput. Vis. Media},
+  volume  = {8},
+  number  = {3},
+  pages   = {331--368},
+  year    = {2022},
+  doi     = {10.1007/s41095-022-0271-y},
+  note    = {doi: 10.1007/s41095-022-0271-y}
 }
 
-% --- Signal processing for bearings -----------------------------------------------------
-% verified: Crossref (DOI 10.1016/j.ymssp.2010.07.017)
-@article{randall2011tutorial,
-  author  = {Randall, Robert B. and Antoni, J{\'e}r{\^o}me},
-  title   = {Rolling element bearing diagnostics---A tutorial},
-  journal = {Mechanical Systems and Signal Processing},
-  volume  = {25},
+% --- Baseline network (used directly) ----------------------------------------------------------------
+% verified: Crossref (DOI 10.3390/s17020425). Kept although older than five years: the WDCNN-s baseline
+% reimplements the layers of its Table 2.
+@article{zhang2017wdcnn,
+  author  = {Zhang, Wei and Peng, Gaoliang and Li, Chuanhao and Chen, Yuanhang and Zhang, Zhujun},
+  title   = {A New Deep Learning Model for Fault Diagnosis with Good Anti-Noise and Domain Adaptation Ability on Raw Vibration Signals},
+  journal = {Sensors},
+  volume  = {17},
   number  = {2},
-  pages   = {485--520},
-  year    = {2011},
-  doi     = {10.1016/j.ymssp.2010.07.017}
+  pages   = {425},
+  year    = {2017},
+  doi     = {10.3390/s17020425},
+  note    = {doi: 10.3390/s17020425}
 }
 
 % --- Datasets and evaluation methodology --------------------------------------------------
 % verified: Crossref (DOI 10.1016/j.ymssp.2015.04.021) and the published PDF (supplied by the author, 2026-10-09).
+% Kept although older than five years: it is the reference analysis of the CWRU data used here and the only
+% source for the facts taken from it.
 % Statements used in main.tex were checked against: abstract and Sec. 1 (three methods, every record categorised);
 % Sec. 2 (slip shifts fault frequencies by up to 1-2%); Sec. 4 (load mainly lowers speed, by almost 4%, no radial
 % load); Sec. 6.1.1 (EMI at harmonics of about 4.2 kHz from the dynamometer controller); Sec. 6.2 (outcome depends
@@ -100,11 +180,12 @@
 @article{smith2015cwru,
   author  = {Smith, Wade A. and Randall, Robert B.},
   title   = {Rolling element bearing diagnostics using the {Case Western Reserve University} data: A benchmark study},
-  journal = {Mechanical Systems and Signal Processing},
+  journal = {Mech. Syst. Signal Process.},
   volume  = {64--65},
   pages   = {100--131},
   year    = {2015},
-  doi     = {10.1016/j.ymssp.2015.04.021}
+  doi     = {10.1016/j.ymssp.2015.04.021},
+  note    = {doi: 10.1016/j.ymssp.2015.04.021}
 }
 
 % verified: Crossref (DOI 10.1016/j.ymssp.2021.108732) and the published PDF (supplied by the author, 2026-10-09).
@@ -114,11 +195,12 @@
 @article{hendriks2022cwru,
   author  = {Hendriks, Jacob and Dumond, Patrick and Knox, D. A.},
   title   = {Towards better benchmarking using the {CWRU} bearing fault dataset},
-  journal = {Mechanical Systems and Signal Processing},
+  journal = {Mech. Syst. Signal Process.},
   volume  = {169},
   pages   = {108732},
   year    = {2022},
-  doi     = {10.1016/j.ymssp.2021.108732}
+  doi     = {10.1016/j.ymssp.2021.108732},
+  note    = {doi: 10.1016/j.ymssp.2021.108732}
 }
 
 % verified: arXiv API record (no journal reference listed; venue not confirmed, so cited as preprint)
@@ -128,7 +210,7 @@
   year          = {2023},
   eprint        = {2309.17001},
   archivePrefix = {arXiv},
-  howpublished  = {arXiv preprint arXiv:2309.17001}
+  howpublished  = {arXiv:2309.17001}
 }
 
 % verified: arXiv API record (v1, no journal reference listed). Content checked in the v1 PDF on 2026-10-09:
@@ -140,30 +222,34 @@
   year          = {2024},
   eprint        = {2407.14625},
   archivePrefix = {arXiv},
-  howpublished  = {arXiv preprint arXiv:2407.14625}
+  howpublished  = {arXiv:2407.14625}
 }
 
 % verified: Crossref (DOI 10.1016/j.ymssp.2026.114640) and arXiv:2509.22267 journal reference
 @article{vieira2026realistic,
   author  = {Vieira, Jo{\~a}o Paulo and Bauler, Victor Afonso and Rosa, Rodrigo Kobashikawa and Silva, Danilo},
   title   = {Towards a more realistic evaluation of machine learning models for bearing fault diagnosis},
-  journal = {Mechanical Systems and Signal Processing},
+  journal = {Mech. Syst. Signal Process.},
   volume  = {258},
   pages   = {114640},
   year    = {2026},
-  doi     = {10.1016/j.ymssp.2026.114640}
+  doi     = {10.1016/j.ymssp.2026.114640},
+  note    = {doi: 10.1016/j.ymssp.2026.114640}
 }
 
 % verified: Crossref (DOI 10.36001/phme.2016.v3i1.1577) and the paper PDF (papers.phmsociety.org/index.php/phme/article/view/1577);
-% Tables 8-11 re-read 2026-10-09: Table 9 vibration RF 64.1, ensemble 75.0; Table 11 vibration CART/RF/ensemble 98.3 (text: 98.5)
+% Tables 8-11 re-read 2026-10-09: Table 9 vibration RF 64.1, ensemble 75.0; Table 11 vibration CART/RF/ensemble 98.3 (text: 98.5).
+% Kept although older than five years: it describes the Paderborn data and defines protocols P3 and P4; the
+% data licence (CC BY-NC 4.0) asks users to cite it.
 @inproceedings{lessmeier2016kat,
   author    = {Lessmeier, Christian and Kimotho, James Kuria and Zimmer, Detmar and Sextro, Walter},
   title     = {Condition Monitoring of Bearing Damage in Electromechanical Drive Systems by Using Motor Current Signals of Electric Motors: A Benchmark Data Set for Data-Driven Classification},
-  booktitle = {Proceedings of the European Conference of the Prognostics and Health Management Society},
+  booktitle = {Proc. Eur. Conf. Prognostics Health Manag. Soc.},
   volume    = {3},
   number    = {1},
   year      = {2016},
-  doi       = {10.36001/phme.2016.v3i1.1577}
+  doi       = {10.36001/phme.2016.v3i1.1577},
+  note      = {doi: 10.36001/phme.2016.v3i1.1577}
 }
 
 % verified: Crossref (DOI 10.1016/j.patter.2023.100804)
@@ -175,7 +261,8 @@
   number  = {9},
   pages   = {100804},
   year    = {2023},
-  doi     = {10.1016/j.patter.2023.100804}
+  doi     = {10.1016/j.patter.2023.100804},
+  note    = {doi: 10.1016/j.patter.2023.100804}
 }
 
 % verified: official data-center page reached on 2026-10-09
@@ -194,113 +281,42 @@
   note         = {Data downloaded from \url{https://groups.uni-paderborn.de/kat/BearingDataCenter/} on Oct. 9, 2026}
 }
 
-% --- Network components and training -------------------------------------------------------
-% verified: Crossref (DOI 10.1109/CVPR.2018.00745)
-@inproceedings{hu2018se,
-  author    = {Hu, Jie and Shen, Li and Sun, Gang},
-  title     = {Squeeze-and-Excitation Networks},
-  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-  pages     = {7132--7141},
-  year      = {2018},
-  doi       = {10.1109/CVPR.2018.00745}
-}
-
-% verified: Crossref (DOI 10.1007/978-3-030-01234-2_1); LNCS volume number not confirmed, omitted
-@inproceedings{woo2018cbam,
-  author    = {Woo, Sanghyun and Park, Jongchan and Lee, Joon-Young and Kweon, In So},
-  title     = {{CBAM}: Convolutional Block Attention Module},
-  booktitle = {Computer Vision -- ECCV 2018, Lecture Notes in Computer Science},
-  pages     = {3--19},
-  year      = {2018},
-  doi       = {10.1007/978-3-030-01234-2_1}
-}
-
-% verified: arXiv abstract page of 1711.05101 (v3, 4 Jan 2019), Comments field: "Published as a conference paper
-% at ICLR 2019" (checked 2026-10-09; OpenReview and dblp were not reachable from here).
-@inproceedings{loshchilov2019adamw,
-  author    = {Loshchilov, Ilya and Hutter, Frank},
-  title     = {Decoupled Weight Decay Regularization},
-  booktitle = {Proc. International Conference on Learning Representations (ICLR)},
-  year      = {2019}
-}
-
-% verified: Crossref (DOI 10.1023/A:1010933404324)
-@article{breiman2001rf,
-  author  = {Breiman, Leo},
-  title   = {Random Forests},
-  journal = {Machine Learning},
-  volume  = {45},
-  number  = {1},
-  pages   = {5--32},
-  year    = {2001},
-  doi     = {10.1023/A:1010933404324}
-}
-
 % --- Calibration -----------------------------------------------------------------------------
-% verified: PMLR proceedings page (proceedings.mlr.press/v70/guo17a.html)
+% verified: PMLR proceedings page (proceedings.mlr.press/v70/guo17a.html). Kept although older than five
+% years: it introduced the temperature scaling used in PAC-1DCNN and the ECE definition used here.
 @inproceedings{guo2017calibration,
   author    = {Guo, Chuan and Pleiss, Geoff and Sun, Yu and Weinberger, Kilian Q.},
   title     = {On Calibration of Modern Neural Networks},
-  booktitle = {Proceedings of the 34th International Conference on Machine Learning},
-  series    = {Proceedings of Machine Learning Research},
+  booktitle = {Proc. 34th Int. Conf. Mach. Learn. (ICML)},
+  series    = {Proc. Mach. Learn. Res.},
   volume    = {70},
   pages     = {1321--1330},
   year      = {2017}
 }
 
-% verified: NeurIPS proceedings page (papers.nips.cc, NeurIPS 2019)
-@inproceedings{ovadia2019shift,
-  author    = {Ovadia, Yaniv and Fertig, Emily and Ren, Jie and Nado, Zachary and Sculley, D. and Nowozin, Sebastian and Dillon, Joshua and Lakshminarayanan, Balaji and Snoek, Jasper},
-  title     = {Can you trust your model's uncertainty? {E}valuating predictive uncertainty under dataset shift},
-  booktitle = {Advances in Neural Information Processing Systems},
-  volume    = {32},
-  year      = {2019}
+% verified: Crossref (DOI 10.1109/CVPR46437.2021.00999) and arXiv:2012.10988 (Comments: CVPR 2021); abstract
+% states that existing post-hoc calibration methods give highly over-confident predictions under domain shift
+@inproceedings{tomani2021drift,
+  author    = {Tomani, Christian and Gruber, Sebastian and Erdem, Muhammed Ebrar and Cremers, Daniel and Buettner, Florian},
+  title     = {Post-hoc Uncertainty Calibration for Domain Drift Scenarios},
+  booktitle = {Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR)},
+  pages     = {10119--10127},
+  year      = {2021},
+  doi       = {10.1109/CVPR46437.2021.00999},
+  note      = {doi: 10.1109/CVPR46437.2021.00999}
 }
 
 % --- Statistics --------------------------------------------------------------------------------
-% verified: Crossref (DOI 10.2307/3001968); Crossref lists only the first page, so the page range is omitted
-@article{wilcoxon1945,
-  author  = {Wilcoxon, Frank},
-  title   = {Individual Comparisons by Ranking Methods},
-  journal = {Biometrics Bulletin},
-  volume  = {1},
-  number  = {6},
-  year    = {1945},
-  doi     = {10.2307/3001968}
-}
-
-% verified: Crossref (DOI 10.1162/089976698300017197), 2026-10-09
-@article{dietterich1998,
-  author  = {Dietterich, Thomas G.},
-  title   = {Approximate Statistical Tests for Comparing Supervised Classification Learning Algorithms},
-  journal = {Neural Computation},
-  volume  = {10},
-  number  = {7},
-  pages   = {1895--1923},
-  year    = {1998},
-  doi     = {10.1162/089976698300017197}
-}
-
-% verified: Crossref (DOI 10.1023/A:1024068626366), 2026-10-09
+% verified: Crossref (DOI 10.1023/A:1024068626366), 2026-10-09. Kept although older than five years: the
+% corrected resampled t-test of this paper is applied to the P4 fold means (fold_level_stats.py).
 @article{nadeau2003,
   author  = {Nadeau, Claude and Bengio, Yoshua},
   title   = {Inference for the Generalization Error},
-  journal = {Machine Learning},
+  journal = {Mach. Learn.},
   volume  = {52},
   number  = {3},
   pages   = {239--281},
   year    = {2003},
-  doi     = {10.1023/A:1024068626366}
-}
-
-% verified: bibliographic databases and a scan of the first page (not in Crossref); JSTOR stable URL
-@article{holm1979,
-  author  = {Holm, Sture},
-  title   = {A Simple Sequentially Rejective Multiple Test Procedure},
-  journal = {Scandinavian Journal of Statistics},
-  volume  = {6},
-  number  = {2},
-  pages   = {65--70},
-  year    = {1979},
-  url     = {https://www.jstor.org/stable/4615733}
+  doi     = {10.1023/A:1024068626366},
+  note    = {doi: 10.1023/A:1024068626366}
 }
