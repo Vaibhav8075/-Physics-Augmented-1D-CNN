@@ -119,7 +119,7 @@ def model_table():
     rows = []
     for key, name, group, purpose, protocols, make in specs:
         if make is None:
-            cw = pu = "--"
+            cw = pu = "n/a$^{*}$"  # a forest has no trainable weights; its size depends on the data
         else:
             cw, pu = count(make(2, 4, 1024)), count(make(1, 3, 2048))
             put(f"params-{key}-cwru", f"{cw:,}".replace(",", "{,}"))
