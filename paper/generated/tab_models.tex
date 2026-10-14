@@ -1,9 +1,10 @@
-Standard 1D-CNN (3 conv layers) & CNN & 57{,}444 & 56{,}835 \\
-Standard 1D-CNN with fixed HP front end & CNN+HP & 57{,}444 & 56{,}835 \\
-Standard 1D-CNN with learnable HP front end & CNN+LHP & 57{,}466 & 56{,}846 \\
-PAC-1DCNN without fixed HP front end & PAC$-$HP & 98{,}005 & 97{,}236 \\
-PAC-1DCNN (full) & PAC & 98{,}005 & 97{,}236 \\
-PAC-1DCNN{,} single stream on the residual & PAC$-$dual & 46{,}197 & 45{,}588 \\
-WDCNN-style wide-kernel CNN & WDCNN-s & 42{,}128 & 53{,}803 \\
-Envelope spectrum + random forest (300 trees) & Env-RF & -- & -- \\
-Kinematic envelope features + random forest (300 trees) & Kin-RF & -- & -- \\
+PAC-1DCNN (full model) & PAC & Studied & Fixed front end, two streams, attention and temperature scaling & P1--P4 & 98{,}005 & 97{,}236 \\
+PAC-1DCNN without the fixed front end & PAC$-$HP & Ablation & Effect of the front end inside PAC-1DCNN (vs.\ PAC) & P1--P4 & 98{,}005 & 97{,}236 \\
+PAC-1DCNN, single stream on the residual & PAC$-$dual & Ablation & Effect of the raw-signal stream (vs.\ PAC) & P1--P4 & 46{,}197 & 45{,}588 \\
+PAC-1DCNN without attention & PAC$-$att & Ablation & Effect of the attention block (vs.\ PAC) & P1 & 92{,}868 & 92{,}099 \\
+Standard 1D-CNN (3 convolutional layers) & CNN & Baseline & Reference network without the front end & P1--P4 & 57{,}444 & 56{,}835 \\
+Standard 1D-CNN with the fixed front end & CNN+HP & Baseline & Effect of the front end at small capacity (vs.\ CNN) & P2--P4 & 57{,}444 & 56{,}835 \\
+Standard 1D-CNN with a learnable front end & CNN+LHP & Baseline & Fixed vs.\ learned filter taps (vs.\ CNN+HP) & P2--P4 & 57{,}466 & 56{,}846 \\
+WDCNN-style wide-kernel CNN \cite{zhang2017wdcnn} & WDCNN-s & Baseline & Published noise-robust 1D-CNN design & P2--P4 & 42{,}128 & 53{,}803 \\
+Envelope-spectrum random forest (300 trees) & Env-RF & Baseline & Classical classifier on generic spectral features & P2--P4 & -- & -- \\
+Kinematic random forest (300 trees) & Kin-RF & Baseline & Classical classifier on fault-frequency features & P2--P4 & -- & -- \\
