@@ -6,40 +6,40 @@ Each of the 4 loads is held out in turn; models train on the other three loads w
 
 | Model | clean | 10dB | 5dB | 0dB | -5dB | -10dB |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| Standard 1D-CNN | 99.89 ± 0.16 (-0.04, p=0.017, Holm 0.299) | 99.47 ± 1.15 (-0.41, p=0.074, Holm 1.000) | 96.95 ± 6.48 (-2.43, p=0.030, Holm 0.508) | 54.90 ± 11.52 (-11.48, p=0.002, Holm 0.051) | 12.14 ± 10.33 (-3.47, p=0.368, Holm 1.000) | 7.11 ± 6.33 (-0.07, p=0.955, Holm 1.000) |
-| PAC-1DCNN (full) | 99.93 ± 0.15 | 99.88 ± 0.23 | 99.38 ± 0.95 | 66.38 ± 12.53 | 15.61 ± 9.94 | 7.18 ± 6.00 |
-| PAC w/o Residual Filter | 99.94 ± 0.12 (+0.01, p=0.232, Holm 1.000) | 99.91 ± 0.18 (+0.03, p=0.047, Holm 0.750) | 99.38 ± 0.98 (-0.00, p=0.532, Holm 1.000) | 66.36 ± 12.24 (-0.01, p=0.756, Holm 1.000) | 20.46 ± 10.95 (+4.85, p=0.009, Holm 0.178) | 11.01 ± 7.91 (+3.83, p=0.015, Holm 0.277) |
-| PAC w/o Dual-Stream | 99.37 ± 2.02 (-0.57, p=0.213, Holm 1.000) | 99.16 ± 2.26 (-0.72, p=0.110, Holm 1.000) | 98.24 ± 4.01 (-1.14, p=0.191, Holm 1.000) | 80.37 ± 12.13 (+13.99, p=0.001, Holm 0.033) | 43.93 ± 17.32 (+28.31, p=0.000, Holm 0.000) | 15.67 ± 7.78 (+8.49, p=0.004, Holm 0.089) |
-| PAC w/o Attention | 99.90 ± 0.27 (-0.03, p=0.310, Holm 1.000) | 99.80 ± 0.62 (-0.08, p=0.833, Holm 1.000) | 99.30 ± 1.49 (-0.08, p=0.594, Holm 1.000) | 64.59 ± 16.42 (-1.78, p=0.674, Holm 1.000) | 18.43 ± 12.63 (+2.82, p=0.330, Holm 1.000) | 8.90 ± 6.53 (+1.72, p=0.334, Holm 1.000) |
+| Standard 1D-CNN | 99.86 ± 0.20 (-0.00, p=0.333, Holm 1.000) | 99.69 ± 0.61 (-0.06, p=0.575, Holm 1.000) | 98.42 ± 3.27 (-0.76, p=0.075, Holm 1.000) | 62.79 ± 12.61 (-11.97, p=0.000, Holm 0.000) | 12.95 ± 9.06 (-4.31, p=0.349, Holm 1.000) | 10.69 ± 7.66 (-0.31, p=0.879, Holm 1.000) |
+| PAC-1DCNN (full) | 99.86 ± 0.29 | 99.75 ± 0.56 | 99.18 ± 1.73 | 74.76 ± 12.19 | 17.25 ± 12.57 | 11.00 ± 8.58 |
+| PAC w/o Residual Filter | 99.86 ± 0.37 (+0.00, p=0.314, Holm 1.000) | 99.76 ± 0.68 (+0.02, p=0.286, Holm 1.000) | 99.15 ± 1.81 (-0.02, p=0.754, Holm 1.000) | 70.66 ± 14.31 (-4.10, p=0.261, Holm 1.000) | 23.23 ± 14.20 (+5.97, p=0.008, Holm 0.166) | 13.92 ± 9.12 (+2.91, p=0.053, Holm 1.000) |
+| PAC w/o Dual-Stream | 99.94 ± 0.10 (+0.08, p=0.314, Holm 1.000) | 99.95 ± 0.09 (+0.20, p=0.093, Holm 1.000) | 99.43 ± 1.20 (+0.25, p=0.347, Holm 1.000) | 89.16 ± 9.01 (+14.40, p=0.000, Holm 0.000) | 41.86 ± 16.23 (+24.60, p=0.000, Holm 0.000) | 12.46 ± 1.75 (+1.46, p=0.478, Holm 1.000) |
+| PAC w/o Attention | 99.80 ± 0.49 (-0.06, p=0.398, Holm 1.000) | 99.64 ± 0.94 (-0.11, p=0.594, Holm 1.000) | 98.90 ± 2.30 (-0.27, p=0.110, Holm 1.000) | 70.47 ± 13.48 (-4.29, p=0.004, Holm 0.077) | 19.43 ± 8.93 (+2.18, p=0.355, Holm 1.000) | 13.25 ± 7.82 (+2.24, p=0.492, Holm 1.000) |
 
 ## Macro-F1 (%) by held-out load (clean / 0 dB)
 
 | Model | 0 HP | 1 HP | 2 HP | 3 HP |
 | :--- | :--- | :--- | :--- | :--- |
-| Standard 1D-CNN | 99.7 / 44.1 | 100.0 / 61.8 | 99.9 / 51.4 | 99.9 / 62.3 |
-| PAC-1DCNN (full) | 99.7 / 56.7 | 100.0 / 71.1 | 100.0 / 64.5 | 100.0 / 73.3 |
-| PAC w/o Residual Filter | 99.8 / 56.1 | 100.0 / 75.0 | 100.0 / 56.9 | 100.0 / 77.4 |
-| PAC w/o Dual-Stream | 99.9 / 70.3 | 100.0 / 88.3 | 100.0 / 78.6 | 97.6 / 84.2 |
-| PAC w/o Attention | 99.6 / 53.7 | 100.0 / 70.0 | 100.0 / 52.5 | 100.0 / 82.2 |
+| Standard 1D-CNN | 99.5 / 48.8 | 100.0 / 67.6 | 100.0 / 62.9 | 99.9 / 71.8 |
+| PAC-1DCNN (full) | 99.5 / 60.7 | 100.0 / 82.7 | 100.0 / 71.2 | 99.9 / 84.4 |
+| PAC w/o Residual Filter | 99.5 / 57.7 | 100.0 / 71.4 | 100.0 / 72.6 | 100.0 / 80.9 |
+| PAC w/o Dual-Stream | 100.0 / 75.7 | 100.0 / 94.7 | 100.0 / 92.0 | 99.8 / 94.3 |
+| PAC w/o Attention | 99.2 / 53.6 | 100.0 / 78.2 | 100.0 / 68.4 | 100.0 / 81.7 |
 
 ## False alarm rate and calibration at 0 dB
 
 | Model | False alarms (%) | Missed faults (%) | ECE calibrated (%) | ECE uncalibrated (%) | Mean T | Calib-set accuracy (%) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| Standard 1D-CNN | 0.00 ± 0.00 | 44.75 ± 13.43 | 38.76 ± 12.66 | 31.80 | 0.316 | 99.93 |
-| PAC-1DCNN (full) | 0.00 ± 0.00 | 32.64 ± 13.56 | 26.95 ± 12.55 | 20.51 | 0.347 | 100.00 |
-| PAC w/o Residual Filter | 0.00 ± 0.00 | 32.31 ± 12.79 | 26.30 ± 12.17 | 19.99 | 0.367 | 100.00 |
-| PAC w/o Dual-Stream | 0.00 ± 0.00 | 14.97 ± 11.20 | 12.92 ± 9.71 | 8.46 | 0.387 | 99.63 |
-| PAC w/o Attention | 0.00 ± 0.00 | 35.21 ± 18.30 | 28.82 ± 17.32 | 21.45 | 0.330 | 99.99 |
+| Standard 1D-CNN | 0.00 ± 0.00 | 37.24 ± 12.90 | 31.46 ± 13.50 | 23.71 | 0.300 | 99.96 |
+| PAC-1DCNN (full) | 0.00 ± 0.00 | 23.28 ± 12.29 | 19.40 ± 11.64 | 13.43 | 0.339 | 100.00 |
+| PAC w/o Residual Filter | 0.00 ± 0.00 | 28.70 ± 15.39 | 23.53 ± 14.52 | 17.34 | 0.322 | 100.00 |
+| PAC w/o Dual-Stream | 0.03 ± 0.10 | 8.15 ± 7.76 | 6.64 ± 6.61 | 4.40 | 0.354 | 100.00 |
+| PAC w/o Attention | 0.00 ± 0.00 | 29.02 ± 14.20 | 23.16 ± 13.35 | 16.20 | 0.333 | 99.99 |
 
 ## Findings (generated from the numbers above)
 
-- **clean**: no significant difference between baseline and PAC-1DCNN after Holm correction (baseline − PAC = -0.04, p=0.017, Holm 0.299).
-- **10dB**: no significant difference between baseline and PAC-1DCNN after Holm correction (baseline − PAC = -0.41, p=0.074, Holm 1.000).
-- **5dB**: no significant difference between baseline and PAC-1DCNN after Holm correction (baseline − PAC = -2.43, p=0.030, Holm 0.508).
-- **0dB**: no significant difference between baseline and PAC-1DCNN after Holm correction (baseline − PAC = -11.48, p=0.002, Holm 0.051).
-- **-5dB**: no significant difference between baseline and PAC-1DCNN after Holm correction (baseline − PAC = -3.47, p=0.368, Holm 1.000).
-- **-10dB**: no significant difference between baseline and PAC-1DCNN after Holm correction (baseline − PAC = -0.07, p=0.955, Holm 1.000).
+- **clean**: no significant difference between baseline and PAC-1DCNN after Holm correction (baseline − PAC = -0.00, p=0.333, Holm 1.000).
+- **10dB**: no significant difference between baseline and PAC-1DCNN after Holm correction (baseline − PAC = -0.06, p=0.575, Holm 1.000).
+- **5dB**: no significant difference between baseline and PAC-1DCNN after Holm correction (baseline − PAC = -0.76, p=0.075, Holm 1.000).
+- **0dB**: PAC-1DCNN is significantly better after Holm correction (baseline − PAC = -11.97 macro-F1, p=0.000, Holm 0.000).
+- **-5dB**: no significant difference between baseline and PAC-1DCNN after Holm correction (baseline − PAC = -4.31, p=0.349, Holm 1.000).
+- **-10dB**: no significant difference between baseline and PAC-1DCNN after Holm correction (baseline − PAC = -0.31, p=0.879, Holm 1.000).
 - **PAC w/o Residual Filter**: no significant macro-F1 change at any noise level after Holm correction.
-- **PAC w/o Dual-Stream**: significant change vs full model at 0dB: +13.99, -5dB: +28.31 (negative = component helps).
+- **PAC w/o Dual-Stream**: significant change vs full model at 0dB: +14.40, -5dB: +24.60 (negative = component helps).
 - **PAC w/o Attention**: no significant macro-F1 change at any noise level after Holm correction.
