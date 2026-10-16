@@ -35,3 +35,6 @@ paper/main.pdf
 
 # Review PDFs (shared directly, not via the public repository)
 paper/review/*.pdf
+
+# Run logs
+logs/
