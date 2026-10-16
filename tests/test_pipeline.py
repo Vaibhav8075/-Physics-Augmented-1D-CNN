@@ -115,7 +115,7 @@ def test_band_above_decimation_edge_is_empty_for_every_class(name):
     assert p[f >= 5200].sum() / p.sum() < 1e-9  # below -90 dB  # ~10-s recordings
 
 
-def test_band_limit_keeps_the_resonance_band_and_removes_the_interference_line():
+def test_band_limit_is_flat_to_3500_hz_and_removes_the_interference_line():
     """Zero-phase filtering applies the filter twice, hence |H|^2."""
     from scipy.signal import sosfreqz
     from preprocess_data import BAND_LIMIT_SOS
