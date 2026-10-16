@@ -285,6 +285,10 @@ def classification_metrics(probs, labels):
     return {
         "accuracy": accuracy_score(labels, preds) * 100.0,
         "macro_f1": f1_score(labels, preds, average="macro") * 100.0,
+        # Mean F1 of the fault classes only (class 0 = healthy). On CWRU the healthy class comes from a
+        # single bearing split by time, so its near-perfect F1 inflates macro-F1 for every model.
+        "fault_f1": f1_score(labels, preds, labels=np.arange(1, probs.shape[1]), average="macro",
+                             zero_division=0) * 100.0,
         "false_alarm_rate": float((preds[normal] != 0).mean() * 100.0) if normal.any() else 0.0,
         "missed_fault_rate": float((preds[~normal] == 0).mean() * 100.0) if (~normal).any() else 0.0,
         "ece": compute_ece(probs, labels),

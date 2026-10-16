@@ -48,6 +48,16 @@ def test_ece_perfect_and_overconfident():
     assert compute_ece(wrong, labels) == pytest.approx(100.0)
 
 
+def test_fault_f1_ignores_the_healthy_class_but_counts_its_mistakes():
+    from common import classification_metrics
+    labels = np.array([0, 0, 1, 1, 2, 2, 3, 3])
+    preds = np.array([0, 0, 1, 1, 1, 1, 3, 0])  # healthy perfect; ball all wrong; one outer race called healthy
+    m = classification_metrics(np.eye(4)[preds], labels)
+    # F1 inner 2/3, ball 0, outer 2/3 (the window called healthy is a missed fault)
+    assert m["fault_f1"] == pytest.approx((2 / 3 + 0 + 2 / 3) / 3 * 100)
+    assert m["macro_f1"] > m["fault_f1"]
+
+
 def test_impairments_are_reproducible():
     x = np.random.default_rng(0).standard_normal((5, 2, config.WINDOW_SIZE)).astype(np.float32)
     assert np.array_equal(impair_array(x, "test", 42), impair_array(x, "test", 42))
