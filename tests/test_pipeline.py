@@ -115,6 +115,30 @@ def test_band_above_decimation_edge_is_empty_for_every_class(name):
     assert p[f >= 5200].sum() / p.sum() < 1e-9  # below -90 dB  # ~10-s recordings
 
 
+def test_band_limit_keeps_the_resonance_band_and_removes_the_interference_line():
+    """Zero-phase filtering applies the filter twice, hence |H|^2."""
+    from scipy.signal import sosfreqz
+    from preprocess_data import BAND_LIMIT_SOS
+    f = np.array([3000.0, 3500.0, 4000.0, 4200.0])
+    _, h = sosfreqz(BAND_LIMIT_SOS, worN=f, fs=config.SAMPLING_RATE_HZ)
+    gain_db = 20 * np.log10(np.abs(h) ** 2)
+    assert np.all(np.abs(gain_db[:2]) < 0.2)
+    assert np.all(gain_db[2:] < -45)
+
+
+@pytest.mark.skipif(not HAS_RAW, reason="raw CWRU data not downloaded")
+@pytest.mark.parametrize("name", ["Normal_0.mat", "Normal_1.mat", "Normal_2.mat", "Normal_3.mat"])
+def test_interference_line_is_far_below_the_training_noise(name):
+    """The ~4.2 kHz interference line marked the healthy class (cwru_shortcut_check.py). After the
+    band limit its share of a healthy recording's power must be far below what 15 dB training noise
+    puts into 4.0-4.4 kHz (about -27 dB for white noise)."""
+    from scipy.signal import welch
+    from preprocess_data import load_recording
+    x = load_recording(os.path.join(config.DATA_DIR, name))[0].astype(np.float64)
+    f, p = welch(x, fs=config.SAMPLING_RATE_HZ, window="blackmanharris", nperseg=1024)
+    assert p[(f >= 4000) & (f < 4400)].sum() / p.sum() < 10 ** (-55 / 10)
+
+
 @pytest.mark.skipif(not HAS_DATA, reason="run preprocess_data.py first")
 def test_no_window_shared_between_splits():
     def hashes(split):

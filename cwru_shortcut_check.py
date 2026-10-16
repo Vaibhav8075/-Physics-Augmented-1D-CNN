@@ -13,9 +13,10 @@ what every model sees during training: a difference buried under that noise cann
 
 A third cue is not created by the preprocessing but survives it: Smith and Randall (MSSP 2015,
 Sec. 6.1.1) report electromagnetic interference at harmonics of about 4.2 kHz in the CWRU data,
-attributed to the dynamometer controller. Its first harmonic lies just above the band limit,
-where the filter attenuates by only a few dB. The script reports the same statistics for the
-share of drive-end power in 4.0-4.4 kHz, and the median absolute (unstandardised) power there.
+attributed to the dynamometer controller. With the earlier 4.0 kHz band limit the 4.0-4.2 kHz band
+was attenuated by only 0-21 dB and still separated the classes under the training noise; the
+band limit now ends at 3.6 kHz (47-73 dB there). The script reports the same statistics for the share of
+drive-end power in 4.0-4.4 kHz, and the median absolute (unstandardised) power there.
 
 Writes results/cwru_shortcut_check.json.  Usage: python cwru_shortcut_check.py
 """

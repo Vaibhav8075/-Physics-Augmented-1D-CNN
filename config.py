@@ -9,8 +9,11 @@ CLASS_NAMES = ["Normal (Healthy)", "Inner Race Fault", "Ball Fault", "Outer Race
 SAMPLING_RATE_HZ = 12000
 # Every CWRU recording is low-passed to this band limit (preprocess_data.py). The healthy
 # recordings are decimated from 48 kHz, and their anti-aliasing filter rolls off from 4.8 kHz;
-# without a common band limit that roll-off alone identifies the healthy class.
-BAND_LIMIT_HZ = 4000
+# without a common band limit that roll-off alone identifies the healthy class. The passband edge
+# lies below 4 kHz so that the ~4.2 kHz interference line (Smith and Randall 2015, Sec. 6.1.1),
+# which also marks healthy windows, is suppressed too (47 dB at 4.0 kHz, 73 dB at 4.2 kHz, after the zero-phase double pass), while
+# the bearing resonance band around 3.5 kHz stays in the passband.
+BAND_LIMIT_HZ = 3600
 WINDOW_SIZE = 1024
 STRIDE = 256
 
