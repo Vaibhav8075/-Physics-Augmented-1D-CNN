@@ -427,6 +427,13 @@ def fault_size():
         nets = [means[m]["clean"]["macro_f1"]["mean"] for m in FS_MODELS if m != "rf"]
         put(f"fs-{regime}-nets-clean-min", min(nets))
         put(f"fs-{regime}-nets-clean-max", max(nets))
+        # fault-class F1 (healthy excluded; the healthy class leaks through the time split)
+        if "fault_f1" in means["physics"]["clean"]:
+            for m, v in means.items():
+                put(f"fs-{regime}-{m}-clean-faultf1", v["clean"]["fault_f1"]["mean"])
+            nets_ff = [means[m]["clean"]["fault_f1"]["mean"] for m in means if m not in ("rf", "kin")]
+            put(f"fs-{regime}-nets-clean-faultf1-min", min(nets_ff))
+            put(f"fs-{regime}-nets-clean-faultf1-max", max(nets_ff))
         rec = {m: np.mean([r["test"]["clean"]["recall_per_class"] for r in runs
                            if r["regime"] == regime and r["model"] == m], axis=0) for m in FS_MODELS}
         put(f"fs-{regime}-normal-recall-min", min(v[0] for v in rec.values()))
@@ -713,6 +720,21 @@ def shortcut_numbers():
         # noise condition; median share of window power per load (%); absolute level healthy - faulty
         put(f"shortcut-{tag}-line-sep-min",
             min(min(v["line_clean"], v["line_lowpass_15dB"], v["line_white_15dB"]) for v in loads), "{:.2f}")
+        put(f"shortcut-{tag}-line-cleansep-min", min(v["line_clean"] for v in loads), "{:.2f}")
+        if tag == "before" and "transition_share_pct" in next(iter(loads)):
+            # share of window power in 3.6-4.0 kHz before band limiting, median over loads, per class
+            shares = np.median([v["transition_share_pct"] for v in loads], axis=0)
+            for name, value in zip(("normal", "inner", "ball", "outer"), shares):
+                put(f"shortcut-transition-{name}-pct", float(value))
+            peaks = np.array([v["peak_above_2khz_hz"] for v in loads])  # (loads, classes)
+            put("shortcut-faultpeak-hz-min", float(peaks[:, 1:].min()), "{:.0f}")
+            put("shortcut-faultpeak-hz-max", float(peaks[:, 1:].max()), "{:.0f}")
+        put(f"shortcut-{tag}-line-noisysep-max",
+            max(max(v["line_lowpass_15dB"], v["line_white_15dB"]) for v in loads), "{:.2f}")
+        for cls in ("healthy", "faulty"):
+            levels = [v[f"line_clean_{cls}_db"] for v in loads]
+            put(f"shortcut-{tag}-line-{cls}-db-min", min(levels), "{:.0f}")
+            put(f"shortcut-{tag}-line-{cls}-db-max", max(levels), "{:.0f}")
         for cls in ("healthy", "faulty"):
             shares = [100 * 10 ** (v[f"line_clean_{cls}_db"] / 10) for v in loads]
             put(f"shortcut-{tag}-line-{cls}-pct-min", min(shares), "{:.2f}" if cls == "faulty" else "{:.1f}")
