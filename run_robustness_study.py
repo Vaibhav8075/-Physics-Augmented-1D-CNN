@@ -50,7 +50,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 import config
 from common import (set_seed, make_loaders, train_model, predict_logits, classification_metrics,
-                    add_real_world_impairments, adapt_batchnorm, NOISE_SPECTRA)
+                    add_real_world_impairments, adapt_batchnorm, epoch_logger, NOISE_SPECTRA)
 from models import Baseline1DCNN, WideKernelCNN, PhysicsAugmentedCalibratedCNN, SpectrogramResNet
 from kinematic_features import kinematic_features, CWRU_DE_ORDERS
 
@@ -233,7 +233,9 @@ def run(seeds, epochs, regimes, model_keys, folds=FAULT_SIZES, resume=False, add
                     loader, _ = make_loaders(X_tr, y_tr, X_tr[:1], y_tr[:1], seed)
                     trained[(regime, seed, key)] = train_model(MODEL_SPECS[key][1](), loader, None, y_tr,
                                                                epochs=epochs, verbose=False,
-                                                               impairments=REGIMES[regime], seed=seed)
+                                                               impairments=REGIMES[regime], seed=seed,
+                                                               on_epoch_end=epoch_logger(
+                                                                   f"{key} {regime} seed {seed}", epochs))
                     done += 1
                     eta = (time.time() - t0) / done * (total - done) / 60
                     print(f"[{done}/{total}] {held_out:02d} {regime:<7} seed {seed} {key:<12} trained | "

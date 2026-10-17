@@ -33,7 +33,7 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 
 import config
-from common import set_seed, make_loaders, train_model, predict_logits, adapt_batchnorm, NOISE_SPECTRA
+from common import set_seed, make_loaders, train_model, predict_logits, adapt_batchnorm, epoch_logger, NOISE_SPECTRA
 from models import Baseline1DCNN, WideKernelCNN, PhysicsAugmentedCalibratedCNN, SpectrogramResNet
 from kinematic_features import kinematic_features, PADERBORN_ORDERS
 from preprocess_paderborn import PROCESSED_DIR, FS
@@ -183,7 +183,9 @@ def run_protocol(protocol, seeds, epochs, regimes, model_keys, settings, resume,
                     loader, _ = make_loaders(X_tr, y_tr, X_tr[:1], y_tr[:1], seed)
                     trained[(regime, seed, key)] = train_model(MODEL_SPECS[key][1](), loader, None, y_tr,
                                                                epochs=epochs, verbose=False,
-                                                               impairments=REGIMES[regime], seed=seed)
+                                                               impairments=REGIMES[regime], seed=seed,
+                                                               on_epoch_end=epoch_logger(
+                                                                   f"{key} {regime} seed {seed}", epochs))
                 n_done += 1
                 eta = (time.time() - t0) / n_done * (n_total - n_done) / 60
                 print(f"  trained {regime} seed {seed} ({n_done}/{n_total}) | ETA {eta:.0f} min", flush=True)

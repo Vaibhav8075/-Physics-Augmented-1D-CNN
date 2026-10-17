@@ -202,6 +202,14 @@ def predict_logits(model, X, calibrated=True, batch_size=256):
     return torch.cat(out)
 
 
+def epoch_logger(label, epochs):
+    """An on_epoch_end hook for train_model that prints one line per epoch (its mean training loss),
+    so a long study can be followed in its log."""
+    def log(epoch, model, loss):
+        print(f"    {label} | epoch {epoch + 1:02d}/{epochs} | train loss {loss:.4f}", flush=True)
+    return log
+
+
 def train_model(model, train_loader, val_loader, y_train, epochs=config.EPOCHS, lr=config.LR, verbose=True,
                 impairments=config.IMPAIRMENTS["train"], seed=0, on_epoch_end=None):
     """
