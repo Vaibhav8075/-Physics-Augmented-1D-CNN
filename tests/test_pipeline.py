@@ -269,6 +269,33 @@ def test_models_accept_paderborn_windows():
     assert WideKernelCNN()(torch.randn(4, 2, 1024))[0].shape == (4, 4)
 
 
+def test_spectrogram_resnet_accepts_both_datasets():
+    """pretrained=False: same architecture without downloading the ImageNet weights."""
+    from models import SpectrogramResNet
+    cwru = SpectrogramResNet(pretrained=False)
+    assert cwru.spectrogram(torch.randn(3, 2, 1024)).shape == (3, 2, 128, 128)
+    assert cwru(torch.randn(3, 2, 1024))[0].shape == (3, 4)
+    assert SpectrogramResNet(1, 3, pretrained=False)(torch.randn(3, 1, 2048))[0].shape == (3, 3)
+
+
+def test_adabn_re_estimates_batchnorm_statistics_only():
+    from common import adapt_batchnorm
+    from models import WideKernelCNN
+    model = WideKernelCNN().eval()
+    before = {k: v.clone() for k, v in model.state_dict().items()}
+    target = (3.0 + 2.0 * np.random.default_rng(0).standard_normal((300, 2, 1024))).astype(np.float32)
+    adapted = adapt_batchnorm(model, target).cpu()
+    for k, v in model.state_dict().items():
+        assert torch.equal(v, before[k])  # the trained model itself is untouched
+    weights = {n for n, _ in model.named_parameters()}
+    for k, v in adapted.state_dict().items():
+        if k in weights:
+            assert torch.equal(v.cpu(), before[k].cpu())  # learned weights unchanged
+    first_bn = adapted.features[1]
+    assert not torch.allclose(first_bn.running_mean, before["features.1.running_mean"])
+    assert not adapted.training and not first_bn.training
+
+
 def test_paderborn_folds_separate_physical_bearings():
     from run_paderborn_study import folds_for, label_of
     cv = folds_for("real_cv")
