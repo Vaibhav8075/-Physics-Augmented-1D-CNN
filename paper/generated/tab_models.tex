@@ -8,3 +8,5 @@ Standard 1D-CNN with a learnable front end & CNN+LHP & Baseline & Fixed vs.\ lea
 WDCNN-style wide-kernel CNN \cite{zhang2017wdcnn} & WDCNN-s & Baseline & Published noise-robust 1D-CNN design & P2--P4 & 42{,}128 & 53{,}803 \\
 Envelope-spectrum random forest (300 trees) & Env-RF & Baseline & Classical classifier on generic spectral features & P2--P4 & n/a$^{*}$ & n/a$^{*}$ \\
 Kinematic random forest (300 trees) & Kin-RF & Baseline & Classical classifier on fault-frequency features & P2--P4 & n/a$^{*}$ & n/a$^{*}$ \\
+ResNet-18 on spectrograms, ImageNet-pre-trained \cite{he2016resnet} & ResNet-2D & Baseline & Strongest network under the fault-size split of \cite{hendriks2022cwru} (vs.\ WDCNN-s) & P2--P4 & 11{,}178{,}717 & 11{,}178{,}129 \\
+WDCNN-style CNN with AdaBN \cite{li2018adabn} & WDCNN-s+AdaBN & Baseline & Batch-norm statistics re-estimated on the test windows, as in \cite{zhang2017wdcnn} (vs.\ WDCNN-s) & P2--P4 & 42{,}128 & 53{,}803 \\
