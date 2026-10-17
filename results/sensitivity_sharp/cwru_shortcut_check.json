@@ -1,0 +1,223 @@
+{
+  "edge_band_hz": [
+    5200,
+    6000
+  ],
+  "line_band_hz": [
+    4000,
+    4400
+  ],
+  "band_limit_hz": 3600,
+  "without_band_limit": {
+    "load0": {
+      "edge_clean": 0.9852953527435611,
+      "edge_clean_healthy_db": -39.58987865079037,
+      "edge_clean_faulty_db": -30.619838932138084,
+      "distinct_values": 1.0,
+      "line_clean": 1.0,
+      "line_clean_healthy_db": -1.9207559122787108,
+      "line_clean_faulty_db": -21.065252173445238,
+      "line_abs_healthy_vs_faulty_db": 8.128398595850168,
+      "transition_share_pct": [
+        1.0634256590416835,
+        10.562009297661962,
+        0.659444390542907,
+        8.178944469911068
+      ],
+      "peak_above_2khz_hz": [
+        4148.4375,
+        2882.8125,
+        3269.53125,
+        3445.3125
+      ],
+      "edge_lowpass_15dB": 0.9257858742601184,
+      "line_lowpass_15dB": 1.0,
+      "edge_white_15dB": 0.7323318269076948,
+      "line_white_15dB": 1.0
+    },
+    "load1": {
+      "edge_clean": 0.8138976094848904,
+      "edge_clean_healthy_db": -35.47087059179516,
+      "edge_clean_faulty_db": -30.46834310561715,
+      "distinct_values": 1.0,
+      "line_clean": 1.0,
+      "line_clean_healthy_db": -4.393890969653383,
+      "line_clean_faulty_db": -22.343740658290013,
+      "line_abs_healthy_vs_faulty_db": 7.249302393191359,
+      "transition_share_pct": [
+        1.4356514537008482,
+        14.435450643193871,
+        0.7883573752923544,
+        9.801019336019056
+      ],
+      "peak_above_2khz_hz": [
+        4265.625,
+        2847.65625,
+        3386.71875,
+        3375.0
+      ],
+      "edge_lowpass_15dB": 0.8082416522390565,
+      "line_lowpass_15dB": 1.0,
+      "edge_white_15dB": 0.7348475016223232,
+      "line_white_15dB": 1.0
+    },
+    "load2": {
+      "edge_clean": 0.5955395690651404,
+      "edge_clean_healthy_db": -32.59306252358743,
+      "edge_clean_faulty_db": -31.666643044741996,
+      "distinct_values": 1.0,
+      "line_clean": 1.0,
+      "line_clean_healthy_db": -4.993773186123603,
+      "line_clean_faulty_db": -23.03544945037972,
+      "line_abs_healthy_vs_faulty_db": 7.167208396840136,
+      "transition_share_pct": [
+        1.7882188085484085,
+        13.258294243813335,
+        0.6231481158794685,
+        9.746010853594948
+      ],
+      "peak_above_2khz_hz": [
+        4265.625,
+        2812.5,
+        3351.5625,
+        3468.75
+      ],
+      "edge_lowpass_15dB": 0.640598626251307,
+      "line_lowpass_15dB": 1.0,
+      "edge_white_15dB": 0.6745871499967482,
+      "line_white_15dB": 1.0
+    },
+    "load3": {
+      "edge_clean": 0.8108246380147076,
+      "edge_clean_healthy_db": -36.35765249504168,
+      "edge_clean_faulty_db": -32.73138532340302,
+      "distinct_values": 1.0,
+      "line_clean": 1.0,
+      "line_clean_healthy_db": -5.650948357183534,
+      "line_clean_faulty_db": -23.30753542064084,
+      "line_abs_healthy_vs_faulty_db": 6.656072192583745,
+      "transition_share_pct": [
+        1.868619666183537,
+        9.285262800078906,
+        0.46347044374022783,
+        10.96474181573191
+      ],
+      "peak_above_2khz_hz": [
+        4265.625,
+        2824.21875,
+        3304.6875,
+        3410.15625
+      ],
+      "edge_lowpass_15dB": 0.7896295809210113,
+      "line_lowpass_15dB": 1.0,
+      "edge_white_15dB": 0.6953320759867729,
+      "line_white_15dB": 1.0
+    }
+  },
+  "with_band_limit": {
+    "load0": {
+      "edge_clean": 0.5239751639737642,
+      "edge_clean_healthy_db": -122.7408507935196,
+      "edge_clean_faulty_db": -122.570968142465,
+      "distinct_values": 0.5037593984962406,
+      "line_clean": 0.5023516237402016,
+      "line_clean_healthy_db": -117.6823444038524,
+      "line_clean_faulty_db": -117.55473733025633,
+      "line_abs_healthy_vs_faulty_db": -14.44310593870755,
+      "transition_share_pct": [
+        2.198669987154893,
+        10.510951820384573,
+        0.6458922372635688,
+        8.056255639855145
+      ],
+      "peak_above_2khz_hz": [
+        2695.3125,
+        2882.8125,
+        3210.9375,
+        3445.3125
+      ],
+      "edge_lowpass_15dB": 0.5083746600543914,
+      "line_lowpass_15dB": 0.5157004879219325,
+      "edge_white_15dB": 0.507073868181091,
+      "line_white_15dB": 0.5218315069588866
+    },
+    "load1": {
+      "edge_clean": 0.5356933646356099,
+      "edge_clean_healthy_db": -122.40147608813429,
+      "edge_clean_faulty_db": -122.16372821343006,
+      "distinct_values": 0.5010405417932997,
+      "line_clean": 0.5680095410140835,
+      "line_clean_healthy_db": -118.8504923951692,
+      "line_clean_faulty_db": -117.49557007340543,
+      "line_abs_healthy_vs_faulty_db": -13.798601284823135,
+      "transition_share_pct": [
+        1.6656768941582463,
+        14.258733997838263,
+        0.7691380316027028,
+        9.668623794972628
+      ],
+      "peak_above_2khz_hz": [
+        2683.59375,
+        2847.65625,
+        3386.71875,
+        3375.0
+      ],
+      "edge_lowpass_15dB": 0.528340169222713,
+      "line_lowpass_15dB": 0.5312390540164712,
+      "edge_white_15dB": 0.5380956556816388,
+      "line_white_15dB": 0.5343348725568065
+    },
+    "load2": {
+      "edge_clean": 0.5240621138520494,
+      "edge_clean_healthy_db": -122.01529720516965,
+      "edge_clean_faulty_db": -121.63354317346179,
+      "distinct_values": 0.5008056891005599,
+      "line_clean": 0.577317137840123,
+      "line_clean_healthy_db": -118.65822429322483,
+      "line_clean_faulty_db": -117.07836776214697,
+      "line_abs_healthy_vs_faulty_db": -14.495082317429501,
+      "transition_share_pct": [
+        1.94339815668363,
+        12.952725751160465,
+        0.5990633592547414,
+        9.660231068541478
+      ],
+      "peak_above_2khz_hz": [
+        2800.78125,
+        2812.5,
+        3351.5625,
+        3468.75
+      ],
+      "edge_lowpass_15dB": 0.5255064009885388,
+      "line_lowpass_15dB": 0.5256970048676528,
+      "edge_white_15dB": 0.5276370621988984,
+      "line_white_15dB": 0.5281858612944054
+    },
+    "load3": {
+      "edge_clean": 0.534425590888123,
+      "edge_clean_healthy_db": -121.65722201242582,
+      "edge_clean_faulty_db": -121.83197144649498,
+      "distinct_values": 0.503900065856266,
+      "line_clean": 0.568284778036487,
+      "line_clean_healthy_db": -119.17147917508599,
+      "line_clean_faulty_db": -117.76618310844208,
+      "line_abs_healthy_vs_faulty_db": -14.066093792783462,
+      "transition_share_pct": [
+        1.8097262617706587,
+        9.090558708585437,
+        0.4378461619767393,
+        10.905697724739708
+      ],
+      "peak_above_2khz_hz": [
+        2414.0625,
+        2824.21875,
+        3304.6875,
+        3410.15625
+      ],
+      "edge_lowpass_15dB": 0.5272630992696032,
+      "line_lowpass_15dB": 0.5249780562139521,
+      "edge_white_15dB": 0.5270130247952328,
+      "line_white_15dB": 0.5254194227165261
+    }
+  }
+}

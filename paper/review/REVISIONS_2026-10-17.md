@@ -40,3 +40,27 @@ re-run. Every number in the paper is still generated from the saved results.
    forest), clean data, mixed training regime.
 
 5. **Abstract** rewritten for points 2 and 3 and kept within 250 words.
+
+## Addendum (later on 2026-10-17): sensitivity check and two added models
+
+6. **Band-limit sensitivity check (new Section "Sensitivity to the Band Limit", Table "tab:sens").**
+   P1 and P2 were repeated with a sharp elliptic low-pass (order 11, flat to 3.9 kHz, at least 120 dB
+   down from 4.0 kHz) instead of the 3.6 kHz band limit, so the fault windows keep their 3.6-4 kHz
+   content. Every mean difference keeps its sign and every conclusion holds; two significance calls near
+   the threshold change (PAC-1DCNN's lead at 5 dB in P1 becomes significant; the white-noise loss of
+   CNN+HP in the mixed regime does not remain so). Results: `results/sensitivity_sharp/`.
+
+7. **Two models added (tertiary family, 28 tests per protocol and regime), both compared with WDCNN-s.**
+   An ImageNet-pre-trained ResNet-18 on spectrograms (the network Hendriks et al. (2022) found strongest
+   under their fault-size split) and WDCNN-s with AdaBN (batch-normalisation statistics re-estimated on
+   the unlabelled test windows of each condition, as in the original WDCNN). The ResNet is never
+   significantly better than WDCNN-s on CWRU and significantly worse in 9 of 28 P2 conditions, all at
+   0 or -5 dB. AdaBN is significantly better at -5 dB under every noise spectrum in P2, P3 and P4 and
+   significantly worse nowhere, while its clean scores do not change significantly. The abstract,
+   model descriptions, statistics, results, discussion, threats and conclusion were updated; the model
+   count is now twelve and the abstract stays within 250 words.
+
+8. **Ranges now cover every network.** "The networks reach ..." ranges include the added models (P4
+   clean macro-F1 now 36.7-45.0%, at most 12 points above random guessing; P2 fault-class F1 28.7-37.0%
+   in the mixed regime). Kin-RF is the best model at 0 and -5 dB in every P3 condition, but in P4
+   WDCNN-s+AdaBN is higher in 10 of 12; the discussion was corrected accordingly.

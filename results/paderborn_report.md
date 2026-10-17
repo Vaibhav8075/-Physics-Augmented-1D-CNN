@@ -1,6 +1,6 @@
 # Paderborn Bearing Study: Unseen Physical Bearings, Noise Spectra, Stronger Baselines
 
-Data: Paderborn University KAt Bearing DataCenter (Lessmeier et al., 2016; CC BY-NC 4.0). Vibration channel decimated 64 kHz -> 16 kHz, 2048-sample windows, classes healthy / inner ring / outer ring. Every test bearing is a physical specimen never seen in training (healthy bearings included). Noise conditions add only coloured noise; `drift+spikes` adds only drift and spikes. Paired Wilcoxon signed-rank tests over (fold, seed) pairs, Holm-corrected over all contrasts × conditions within each protocol, training regime and contrast family (primary: Q1-Q4; secondary: S1-S3, the added models). `meas. acc.` = accuracy per 4-s measurement (mean of window probabilities).
+Data: Paderborn University KAt Bearing DataCenter (Lessmeier et al., 2016; CC BY-NC 4.0). Vibration channel decimated 64 kHz -> 16 kHz, 2048-sample windows, classes healthy / inner ring / outer ring. Every test bearing is a physical specimen never seen in training (healthy bearings included). Noise conditions add only coloured noise; `drift+spikes` adds only drift and spikes. Paired Wilcoxon signed-rank tests over (fold, seed) pairs, Holm-corrected over all contrasts × conditions within each protocol, training regime and contrast family (primary: Q1-Q4; secondary: S1-S3 and tertiary: T1-T2, the added models). `meas. acc.` = accuracy per 4-s measurement (mean of window probabilities).
 
 ## Protocol `real_cv`
 
@@ -19,6 +19,8 @@ Data: Paderborn University KAt Bearing DataCenter (Lessmeier et al., 2016; CC BY
 | Standard 1D-CNN + learnable filter | 42.5 ± 13.5 | 38.0 ± 13.7 | 38.3 ± 13.4 | 35.5 ± 11.9 | 29.5 ± 10.6 | 19.6 ± 5.0 | 38.6 ± 13.6 | 27.9 ± 8.7 | 19.7 ± 6.1 | 18.5 ± 4.1 | 36.6 ± 12.9 | 29.2 ± 11.4 | 21.6 ± 9.0 | 19.0 ± 6.0 | 37.9 ± 13.4 |
 | PAC single residual stream | 40.9 ± 12.4 | 37.4 ± 12.4 | 37.3 ± 12.3 | 34.7 ± 13.0 | 30.2 ± 13.1 | 21.8 ± 9.4 | 38.1 ± 13.0 | 27.1 ± 9.6 | 18.4 ± 6.7 | 17.7 ± 2.5 | 37.9 ± 13.8 | 27.9 ± 11.4 | 22.2 ± 11.9 | 18.3 ± 3.2 | 37.5 ± 12.4 |
 | Kinematic envelope features + Random Forest | 51.5 ± 13.6 | 45.4 ± 11.1 | 45.2 ± 11.0 | 44.7 ± 11.1 | 42.6 ± 10.5 | 36.6 ± 7.1 | 45.0 ± 11.4 | 43.4 ± 10.9 | 37.8 ± 8.4 | 31.5 ± 3.5 | 45.2 ± 11.1 | 44.9 ± 11.1 | 42.1 ± 10.4 | 35.0 ± 6.5 | 45.1 ± 11.0 |
+| Pre-trained ResNet-18 on spectrograms | 46.0 ± 14.9 | 44.0 ± 13.5 | 45.5 ± 14.4 | 42.6 ± 12.3 | 34.1 ± 9.8 | 20.3 ± 6.2 | 44.7 ± 15.1 | 42.5 ± 14.7 | 25.3 ± 10.2 | 16.8 ± 0.5 | 41.9 ± 15.5 | 36.3 ± 15.7 | 27.1 ± 11.2 | 21.8 ± 9.4 | 44.1 ± 12.8 |
+| WDCNN-style CNN + AdaBN | 46.7 ± 19.2 | 44.9 ± 16.0 | 44.7 ± 15.6 | 44.1 ± 14.8 | 42.4 ± 13.2 | 37.7 ± 9.0 | 44.8 ± 15.6 | 44.5 ± 15.1 | 42.6 ± 13.3 | 37.7 ± 9.4 | 44.9 ± 15.9 | 44.7 ± 15.2 | 43.6 ± 14.3 | 39.8 ± 11.6 | 44.8 ± 15.8 |
 
 Macro-F1 (%) per window unless stated.
 
@@ -34,8 +36,10 @@ Macro-F1 (%) per window unless stated.
 | S1 learnable vs fixed filter (secondary): baseline_lhp − baseline_hp | +1.3 (10/20) | +1.4 (10/20) | +0.9 (9/20) | -0.4 (7/20) | -0.9 (2/20) | +1.0 (11/20) | -1.2 (4/20) | -1.7 (2/20) | -0.2 (4/20) | +1.0 (12/20) | -0.0 (11/20) | -0.2 (6/20) | +0.7 (3/20) | +1.2 (9/20) |
 | S2 single residual stream vs PAC (secondary): no_dual − physics | +0.4 (12/20) | +1.2 (11/20) | +0.5 (11/20) | -1.6 (9/20) | -0.5 (7/20) | +1.8 (13/20) | -4.4 (7/20) | -1.5 (1/20) | -1.0 (3/20) | +0.8 (11/20) | -2.8 (9/20) | -0.0 (7/20) | +0.8 (5/20) | +0.7 (12/20) |
 | S3 kinematic vs spectral features (secondary): kin − rf | -1.0 (8/20) | -0.8 (12/20) | +0.9 (15/20) | **+12.8 (19/20)** | **+17.1 (20/20)** | -1.1 (11/20) | +10.6 (18/20) | **+19.5 (20/20)** | **+12.0 (20/20)** | -2.5 (10/20) | -2.6 (12/20) | +5.3 (13/20) | +7.9 (14/20) | -0.3 (12/20) |
+| T1 pre-trained 2D ResNet vs WDCNN-style (tertiary): resnet2d − wdcnn | +3.4 (14/20) | +5.2 (16/20) | +4.6 (15/20) | +4.9 (13/20) | -0.4 (10/20) | +4.4 (13/20) | +4.6 (14/20) | -2.0 (9/20) | -3.8 (4/20) | +1.4 (11/20) | -3.2 (9/20) | -5.6 (7/20) | +1.3 (7/20) | +3.4 (14/20) |
+| T2 AdaBN vs WDCNN-style (tertiary): wdcnn_adabn − wdcnn | +4.3 (17/20) | +4.4 (16/20) | **+6.1 (17/20)** | **+13.2 (15/20)** | **+17.0 (19/20)** | +4.5 (16/20) | **+6.6 (18/20)** | **+15.3 (16/20)** | **+17.1 (19/20)** | +4.4 (16/20) | **+5.1 (17/20)** | **+10.9 (15/20)** | **+19.3 (19/20)** | +4.1 (16/20) |
 
-Per-class recall, clean (healthy / inner / outer): Standard 1D-CNN 59/36/28; Standard 1D-CNN + fixed filter 62/36/24; PAC w/o fixed filter 57/32/36; PAC-1DCNN (full) 58/29/35; WDCNN-style wide-kernel CNN 64/23/45; Envelope spectrum + Random Forest 71/33/46; Standard 1D-CNN + learnable filter 60/36/30; PAC single residual stream 59/31/34; Kinematic envelope features + Random Forest 67/33/42
+Per-class recall, clean (healthy / inner / outer): Standard 1D-CNN 59/36/28; Standard 1D-CNN + fixed filter 62/36/24; PAC w/o fixed filter 57/32/36; PAC-1DCNN (full) 58/29/35; WDCNN-style wide-kernel CNN 64/23/45; Envelope spectrum + Random Forest 71/33/46; Standard 1D-CNN + learnable filter 60/36/30; PAC single residual stream 59/31/34; Kinematic envelope features + Random Forest 67/33/42; Pre-trained ResNet-18 on spectrograms 53/34/53; WDCNN-style CNN + AdaBN 56/45/35
 
 ### Training noise: mixed
 
@@ -50,6 +54,8 @@ Per-class recall, clean (healthy / inner / outer): Standard 1D-CNN 59/36/28; Sta
 | Standard 1D-CNN + learnable filter | 43.6 ± 13.8 | 39.0 ± 13.3 | 38.8 ± 13.2 | 34.1 ± 10.7 | 27.7 ± 10.3 | 19.7 ± 4.6 | 38.9 ± 12.2 | 30.1 ± 10.5 | 16.7 ± 0.5 | 17.5 ± 2.8 | 39.9 ± 13.1 | 34.5 ± 13.1 | 22.3 ± 9.6 | 19.8 ± 7.5 | 39.1 ± 13.2 |
 | PAC single residual stream | 41.4 ± 12.0 | 38.6 ± 12.7 | 38.1 ± 13.1 | 34.2 ± 10.7 | 27.5 ± 12.4 | 21.8 ± 9.0 | 37.3 ± 13.1 | 28.8 ± 11.8 | 17.1 ± 2.2 | 18.1 ± 3.0 | 37.9 ± 12.9 | 34.3 ± 12.3 | 20.7 ± 7.6 | 19.1 ± 7.7 | 38.7 ± 12.6 |
 | Kinematic envelope features + Random Forest | 52.3 ± 14.3 | 45.7 ± 11.3 | 45.6 ± 11.3 | 45.0 ± 11.2 | 43.0 ± 10.8 | 36.6 ± 7.3 | 45.3 ± 11.6 | 43.5 ± 11.0 | 37.9 ± 8.4 | 31.5 ± 3.3 | 45.5 ± 11.2 | 45.1 ± 11.2 | 42.4 ± 10.7 | 34.9 ± 6.8 | 45.5 ± 11.4 |
+| Pre-trained ResNet-18 on spectrograms | 47.7 ± 14.5 | 43.5 ± 14.9 | 42.2 ± 16.3 | 36.5 ± 9.9 | 32.6 ± 8.3 | 22.2 ± 7.4 | 43.9 ± 15.9 | 35.2 ± 11.8 | 17.5 ± 2.0 | 16.7 ± 0.0 | 44.7 ± 15.5 | 38.2 ± 13.2 | 23.9 ± 9.4 | 19.4 ± 6.6 | 42.6 ± 14.2 |
+| WDCNN-style CNN + AdaBN | 46.7 ± 18.7 | 45.0 ± 15.4 | 44.7 ± 15.2 | 44.0 ± 14.7 | 42.0 ± 12.5 | 37.7 ± 8.1 | 44.9 ± 15.2 | 44.4 ± 14.6 | 42.3 ± 12.9 | 38.1 ± 9.3 | 45.0 ± 15.2 | 44.6 ± 14.8 | 43.4 ± 13.8 | 39.8 ± 11.3 | 44.7 ± 15.3 |
 
 Macro-F1 (%) per window unless stated.
 
@@ -65,8 +71,10 @@ Macro-F1 (%) per window unless stated.
 | S1 learnable vs fixed filter (secondary): baseline_lhp − baseline_hp | -0.1 (11/20) | +0.3 (12/20) | +0.4 (10/20) | -1.6 (6/20) | -0.3 (6/20) | +0.3 (13/20) | -0.1 (9/20) | -0.1 (5/20) | -0.8 (0/20) | +0.6 (15/20) | +1.0 (11/20) | +1.2 (5/20) | +0.3 (3/20) | -0.1 (11/20) |
 | S2 single residual stream vs PAC (secondary): no_dual − physics | -1.3 (11/20) | -0.8 (12/20) | -1.2 (9/20) | -2.5 (8/20) | +0.3 (8/20) | -0.6 (9/20) | -1.5 (8/20) | -1.4 (4/20) | -0.6 (4/20) | -1.4 (7/20) | +1.4 (11/20) | -3.2 (4/20) | -0.0 (4/20) | -0.8 (12/20) |
 | S3 kinematic vs spectral features (secondary): kin − rf | -1.3 (8/20) | -2.1 (10/20) | +0.6 (14/20) | **+12.8 (19/20)** | **+16.1 (20/20)** | +0.1 (11/20) | +10.1 (18/20) | **+19.9 (20/20)** | **+12.4 (19/20)** | -2.5 (10/20) | -3.4 (11/20) | +1.9 (12/20) | +6.2 (13/20) | -0.2 (12/20) |
+| T1 pre-trained 2D ResNet vs WDCNN-style (tertiary): resnet2d − wdcnn | +0.3 (13/20) | -0.9 (13/20) | -5.7 (8/20) | +0.4 (10/20) | +0.6 (12/20) | +0.5 (14/20) | -7.5 (6/20) | **-16.1 (2/20)** | -6.8 (3/20) | +1.4 (13/20) | -4.7 (8/20) | **-13.6 (2/20)** | -6.2 (5/20) | -0.6 (10/20) |
+| T2 AdaBN vs WDCNN-style (tertiary): wdcnn_adabn − wdcnn | +1.8 (13/20) | +1.6 (12/20) | +1.9 (12/20) | **+9.8 (16/20)** | **+16.1 (18/20)** | +1.6 (14/20) | +1.8 (11/20) | **+8.8 (16/20)** | **+14.6 (19/20)** | +1.7 (12/20) | +1.7 (13/20) | +5.9 (15/20) | **+14.2 (16/20)** | +1.5 (14/20) |
 
-Per-class recall, clean (healthy / inner / outer): Standard 1D-CNN 60/37/26; Standard 1D-CNN + fixed filter 63/36/28; PAC w/o fixed filter 57/37/35; PAC-1DCNN (full) 59/40/32; WDCNN-style wide-kernel CNN 68/25/46; Envelope spectrum + Random Forest 70/35/47; Standard 1D-CNN + learnable filter 63/36/29; PAC single residual stream 60/37/31; Kinematic envelope features + Random Forest 67/33/43
+Per-class recall, clean (healthy / inner / outer): Standard 1D-CNN 60/37/26; Standard 1D-CNN + fixed filter 63/36/28; PAC w/o fixed filter 57/37/35; PAC-1DCNN (full) 59/40/32; WDCNN-style wide-kernel CNN 68/25/46; Envelope spectrum + Random Forest 70/35/47; Standard 1D-CNN + learnable filter 63/36/29; PAC single residual stream 60/37/31; Kinematic envelope features + Random Forest 67/33/43; Pre-trained ResNet-18 on spectrograms 60/37/44; WDCNN-style CNN + AdaBN 55/45/36
 
 ## Protocol `a2r`
 
@@ -85,6 +93,8 @@ Per-class recall, clean (healthy / inner / outer): Standard 1D-CNN 60/37/26; Sta
 | Standard 1D-CNN + learnable filter | 38.9 ± 3.4 | 30.5 ± 4.5 | 31.1 ± 4.6 | 32.3 ± 4.9 | 32.2 ± 6.6 | 25.0 ± 6.2 | 29.8 ± 4.3 | 30.1 ± 4.3 | 28.1 ± 3.7 | 26.1 ± 4.3 | 26.9 ± 3.1 | 27.2 ± 3.5 | 26.9 ± 4.0 | 23.0 ± 3.2 | 30.5 ± 4.5 |
 | PAC single residual stream | 37.7 ± 3.7 | 30.9 ± 4.6 | 32.2 ± 5.2 | 34.1 ± 6.1 | 32.9 ± 5.1 | 25.4 ± 7.1 | 30.5 ± 4.1 | 29.9 ± 3.8 | 26.9 ± 3.2 | 22.1 ± 3.7 | 27.7 ± 2.1 | 28.2 ± 2.0 | 25.0 ± 4.4 | 21.7 ± 2.8 | 31.2 ± 4.8 |
 | Kinematic envelope features + Random Forest | 62.4 ± 0.3 | 43.2 ± 0.5 | 43.8 ± 0.5 | 43.2 ± 0.2 | 43.5 ± 0.5 | 41.0 ± 0.2 | 44.3 ± 0.5 | 43.8 ± 0.5 | 42.2 ± 0.5 | 36.2 ± 0.5 | 43.7 ± 0.4 | 43.7 ± 0.6 | 43.0 ± 0.4 | 40.4 ± 0.4 | 43.9 ± 0.5 |
+| Pre-trained ResNet-18 on spectrograms | 43.5 ± 7.9 | 29.9 ± 5.7 | 30.0 ± 4.8 | 33.7 ± 7.4 | 32.6 ± 7.7 | 21.0 ± 10.2 | 30.1 ± 5.0 | 30.1 ± 6.1 | 26.1 ± 5.8 | 21.6 ± 4.0 | 29.7 ± 5.5 | 30.3 ± 7.3 | 26.5 ± 5.5 | 22.2 ± 3.3 | 30.4 ± 5.6 |
+| WDCNN-style CNN + AdaBN | 42.3 ± 7.1 | 30.9 ± 2.9 | 31.1 ± 2.8 | 31.3 ± 2.7 | 31.8 ± 2.5 | 32.1 ± 1.8 | 31.2 ± 2.8 | 31.2 ± 2.8 | 31.1 ± 2.5 | 30.9 ± 1.7 | 31.0 ± 2.9 | 30.9 ± 2.8 | 30.7 ± 2.7 | 30.5 ± 2.1 | 31.0 ± 2.8 |
 
 Macro-F1 (%) per window unless stated.
 
@@ -100,8 +110,10 @@ Macro-F1 (%) per window unless stated.
 | S1 learnable vs fixed filter (secondary): baseline_lhp − baseline_hp | -0.5 (10/20) | -0.7 (8/20) | -0.8 (6/20) | -1.1 (7/20) | -1.0 (6/20) | -0.5 (7/20) | -0.6 (5/20) | -0.4 (9/20) | +1.4 (11/20) | -0.5 (5/20) | -1.0 (4/20) | -0.3 (6/20) | +1.1 (9/20) | -0.5 (9/20) |
 | S2 single residual stream vs PAC (secondary): no_dual − physics | -2.1 (6/20) | -2.4 (6/20) | -2.3 (7/20) | +1.0 (10/20) | +3.4 (12/20) | -1.5 (9/20) | -0.0 (11/20) | +0.8 (12/20) | -1.3 (5/20) | -0.9 (10/20) | +1.7 (14/20) | -0.5 (8/20) | +0.4 (4/20) | -2.2 (7/20) |
 | S3 kinematic vs spectral features (secondary): kin − rf | **+3.6 (20/20)** | **+6.7 (20/20)** | **+8.1 (20/20)** | **+9.0 (20/20)** | **+17.5 (20/20)** | **+6.8 (20/20)** | **+7.4 (20/20)** | **+4.7 (20/20)** | **+3.2 (19/20)** | **+5.0 (20/20)** | **+5.2 (20/20)** | **+5.8 (20/20)** | **+7.0 (20/20)** | **+5.0 (20/20)** |
+| T1 pre-trained 2D ResNet vs WDCNN-style (tertiary): resnet2d − wdcnn | -0.4 (11/20) | -0.0 (10/20) | +4.1 (13/20) | **+6.3 (16/20)** | +5.6 (13/20) | +0.3 (10/20) | +1.7 (12/20) | +1.4 (11/20) | +4.8 (13/20) | -0.1 (10/20) | +1.4 (11/20) | +0.3 (9/20) | -0.1 (11/20) | +0.2 (11/20) |
+| T2 AdaBN vs WDCNN-style (tertiary): wdcnn_adabn − wdcnn | +0.7 (11/20) | +1.2 (15/20) | +1.7 (16/20) | **+5.4 (19/20)** | **+16.6 (19/20)** | +1.4 (14/20) | **+2.8 (19/20)** | **+6.4 (19/20)** | **+14.1 (19/20)** | +1.1 (14/20) | +2.0 (16/20) | **+4.5 (18/20)** | **+8.1 (17/20)** | +0.8 (13/20) |
 
-Per-class recall, clean (healthy / inner / outer): Standard 1D-CNN 17/51/30; Standard 1D-CNN + fixed filter 15/49/35; PAC w/o fixed filter 28/51/31; PAC-1DCNN (full) 24/53/30; WDCNN-style wide-kernel CNN 0/36/60; Envelope spectrum + Random Forest 0/82/45; Standard 1D-CNN + learnable filter 13/48/36; PAC single residual stream 14/46/36; Kinematic envelope features + Random Forest 6/74/51
+Per-class recall, clean (healthy / inner / outer): Standard 1D-CNN 17/51/30; Standard 1D-CNN + fixed filter 15/49/35; PAC w/o fixed filter 28/51/31; PAC-1DCNN (full) 24/53/30; WDCNN-style wide-kernel CNN 0/36/60; Envelope spectrum + Random Forest 0/82/45; Standard 1D-CNN + learnable filter 13/48/36; PAC single residual stream 14/46/36; Kinematic envelope features + Random Forest 6/74/51; Pre-trained ResNet-18 on spectrograms 3/59/34; WDCNN-style CNN + AdaBN 0/44/46
 
 ### Training noise: mixed
 
@@ -116,6 +128,8 @@ Per-class recall, clean (healthy / inner / outer): Standard 1D-CNN 17/51/30; Sta
 | Standard 1D-CNN + learnable filter | 38.9 ± 2.8 | 30.5 ± 5.3 | 31.5 ± 3.8 | 32.3 ± 4.9 | 29.6 ± 10.3 | 21.4 ± 11.1 | 31.5 ± 3.3 | 32.0 ± 6.4 | 28.6 ± 8.5 | 24.2 ± 6.1 | 30.4 ± 5.0 | 32.1 ± 5.3 | 28.7 ± 5.8 | 21.9 ± 2.7 | 30.6 ± 5.0 |
 | PAC single residual stream | 37.7 ± 4.8 | 31.5 ± 5.3 | 33.1 ± 5.2 | 35.1 ± 5.2 | 32.3 ± 5.7 | 23.3 ± 9.4 | 33.6 ± 5.0 | 33.8 ± 4.8 | 27.6 ± 5.8 | 23.0 ± 5.3 | 31.2 ± 4.4 | 31.2 ± 3.2 | 25.4 ± 4.9 | 21.7 ± 3.5 | 31.8 ± 5.3 |
 | Kinematic envelope features + Random Forest | 62.5 ± 0.5 | 42.8 ± 0.3 | 43.6 ± 0.4 | 43.2 ± 0.6 | 43.5 ± 0.6 | 40.9 ± 0.6 | 44.3 ± 0.5 | 43.8 ± 0.4 | 42.1 ± 0.4 | 36.4 ± 0.4 | 43.7 ± 0.5 | 43.5 ± 0.5 | 42.9 ± 0.4 | 40.6 ± 0.4 | 43.6 ± 0.4 |
+| Pre-trained ResNet-18 on spectrograms | 44.3 ± 8.3 | 30.3 ± 5.2 | 31.6 ± 5.2 | 36.8 ± 8.6 | 32.7 ± 10.7 | 22.0 ± 8.2 | 31.4 ± 4.9 | 31.5 ± 3.8 | 24.7 ± 8.1 | 19.4 ± 4.7 | 31.8 ± 5.9 | 33.9 ± 6.4 | 30.7 ± 8.2 | 24.3 ± 6.9 | 31.9 ± 6.1 |
+| WDCNN-style CNN + AdaBN | 43.1 ± 6.3 | 30.6 ± 2.7 | 30.9 ± 2.6 | 31.2 ± 2.4 | 31.5 ± 2.1 | 32.0 ± 1.5 | 30.8 ± 2.6 | 30.9 ± 2.3 | 30.8 ± 2.1 | 30.8 ± 1.4 | 30.6 ± 2.7 | 30.6 ± 2.4 | 30.4 ± 2.2 | 30.1 ± 1.6 | 30.8 ± 2.6 |
 
 Macro-F1 (%) per window unless stated.
 
@@ -131,6 +145,8 @@ Macro-F1 (%) per window unless stated.
 | S1 learnable vs fixed filter (secondary): baseline_lhp − baseline_hp | -0.7 (9/20) | -0.6 (8/20) | -0.5 (9/20) | -1.1 (10/20) | +0.7 (8/20) | -0.5 (9/20) | -0.7 (11/20) | -0.3 (9/20) | -1.2 (7/20) | -0.7 (9/20) | -0.6 (9/20) | +0.7 (13/20) | -0.2 (6/20) | -0.7 (9/20) |
 | S2 single residual stream vs PAC (secondary): no_dual − physics | -3.5 (5/20) | -4.0 (6/20) | -2.2 (6/20) | +3.9 (10/20) | +7.1 (14/20) | -2.4 (6/20) | -1.9 (7/20) | -0.4 (12/20) | +2.4 (10/20) | -1.4 (8/20) | +1.5 (13/20) | -0.6 (9/20) | -0.4 (7/20) | -3.4 (6/20) |
 | S3 kinematic vs spectral features (secondary): kin − rf | **+3.5 (20/20)** | **+6.9 (20/20)** | **+8.1 (20/20)** | **+8.9 (20/20)** | **+17.3 (20/20)** | **+6.8 (20/20)** | **+7.5 (20/20)** | **+4.3 (20/20)** | **+3.8 (19/20)** | **+4.4 (20/20)** | **+4.3 (20/20)** | **+4.9 (20/20)** | **+6.9 (20/20)** | **+5.0 (20/20)** |
+| T1 pre-trained 2D ResNet vs WDCNN-style (tertiary): resnet2d − wdcnn | +0.1 (11/20) | +1.6 (13/20) | +7.2 (15/20) | +6.4 (14/20) | +6.8 (13/20) | +1.6 (12/20) | +3.2 (14/20) | -0.6 (8/20) | +1.2 (9/20) | +1.8 (14/20) | +4.7 (17/20) | +3.4 (14/20) | +0.8 (10/20) | +1.8 (12/20) |
+| T2 AdaBN vs WDCNN-style (tertiary): wdcnn_adabn − wdcnn | +0.3 (11/20) | +0.8 (13/20) | **+1.6 (17/20)** | **+5.2 (20/20)** | **+16.8 (20/20)** | +1.0 (13/20) | **+2.5 (17/20)** | **+5.5 (20/20)** | **+12.6 (20/20)** | +0.7 (12/20) | +1.4 (14/20) | **+3.1 (17/20)** | **+6.6 (20/20)** | +0.7 (13/20) |
 
-Per-class recall, clean (healthy / inner / outer): Standard 1D-CNN 25/51/31; Standard 1D-CNN + fixed filter 23/49/33; PAC w/o fixed filter 31/50/32; PAC-1DCNN (full) 34/52/31; WDCNN-style wide-kernel CNN 0/38/58; Envelope spectrum + Random Forest 0/83/44; Standard 1D-CNN + learnable filter 20/48/33; PAC single residual stream 21/50/31; Kinematic envelope features + Random Forest 6/74/51
+Per-class recall, clean (healthy / inner / outer): Standard 1D-CNN 25/51/31; Standard 1D-CNN + fixed filter 23/49/33; PAC w/o fixed filter 31/50/32; PAC-1DCNN (full) 34/52/31; WDCNN-style wide-kernel CNN 0/38/58; Envelope spectrum + Random Forest 0/83/44; Standard 1D-CNN + learnable filter 20/48/33; PAC single residual stream 21/50/31; Kinematic envelope features + Random Forest 6/74/51; Pre-trained ResNet-18 on spectrograms 1/67/31; WDCNN-style CNN + AdaBN 1/44/45
 

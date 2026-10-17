@@ -33,11 +33,11 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 
 import config
-from common import set_seed, make_loaders, train_model, predict_logits, NOISE_SPECTRA
-from models import Baseline1DCNN, WideKernelCNN, PhysicsAugmentedCalibratedCNN
+from common import set_seed, make_loaders, train_model, predict_logits, adapt_batchnorm, epoch_logger, NOISE_SPECTRA
+from models import Baseline1DCNN, WideKernelCNN, PhysicsAugmentedCalibratedCNN, SpectrogramResNet
 from kinematic_features import kinematic_features, PADERBORN_ORDERS
 from preprocess_paderborn import PROCESSED_DIR, FS
-from run_robustness_study import (REGIMES, METRICS, TEST_SNR_DB, CLASSICAL, CONTRASTS, test_conditions,
+from run_robustness_study import (REGIMES, METRICS, TEST_SNR_DB, CLASSICAL, ADABN, CONTRASTS, test_conditions,
                                   impair_fixed, spectral_features, train_rf, score, contrast_rows)
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -69,6 +69,8 @@ MODEL_SPECS = {
                      lambda: Baseline1DCNN(1, 3, highpass_input=True, learnable_highpass=True)),
     "no_dual": ("PAC single residual stream", lambda: PhysicsAugmentedCalibratedCNN(1, 3, use_dual_stream=False)),
     "kin": ("Kinematic envelope features + Random Forest", None),
+    "resnet2d": ("Pre-trained ResNet-18 on spectrograms", lambda: SpectrogramResNet(1, 3)),
+    "wdcnn_adabn": ("WDCNN-style CNN + AdaBN", lambda: WideKernelCNN(1, 3, input_length=WINDOW)),
 }
 
 
@@ -181,7 +183,9 @@ def run_protocol(protocol, seeds, epochs, regimes, model_keys, settings, resume,
                     loader, _ = make_loaders(X_tr, y_tr, X_tr[:1], y_tr[:1], seed)
                     trained[(regime, seed, key)] = train_model(MODEL_SPECS[key][1](), loader, None, y_tr,
                                                                epochs=epochs, verbose=False,
-                                                               impairments=REGIMES[regime], seed=seed)
+                                                               impairments=REGIMES[regime], seed=seed,
+                                                               on_epoch_end=epoch_logger(
+                                                                   f"{key} {regime} seed {seed}", epochs))
                 n_done += 1
                 eta = (time.time() - t0) / n_done * (n_total - n_done) / 60
                 print(f"  trained {regime} seed {seed} ({n_done}/{n_total}) | ETA {eta:.0f} min", flush=True)
@@ -194,6 +198,8 @@ def run_protocol(protocol, seeds, epochs, regimes, model_keys, settings, resume,
             X_c = X_te if params is None else impair_fixed(X_te, config.BENCHMARK_NOISE_SEED + 1000 * fold_index + ci,
                                                            **params)
             for k, model in trained.items():
+                if k[2] in ADABN:
+                    model = adapt_batchnorm(model, X_c)
                 probs = F.softmax(predict_logits(model, X_c, calibrated=False), dim=1).numpy()
                 records[k]["test"][name] = full_score(probs, y_te, meas_te)
             for key in classical:
@@ -249,7 +255,8 @@ def summarize(results):
 def plot(all_results):
     colors = {"baseline": "#64748b", "baseline_hp": "#38bdf8", "no_residual": "#ef4444",
               "physics": "#059669", "wdcnn": "#a855f7", "rf": "#f59e0b",
-              "baseline_lhp": "#1d4ed8", "no_dual": "#84cc16", "kin": "#b45309"}
+              "baseline_lhp": "#1d4ed8", "no_dual": "#84cc16", "kin": "#b45309",
+              "resnet2d": "#0f766e", "wdcnn_adabn": "#db2777"}
     panels = [(p, reg) for p, (res, _) in all_results.items() for reg in res["header"]["regimes"]]
     fig, axes = plt.subplots(len(panels), len(NOISE_SPECTRA), figsize=(16, 4.2 * len(panels)), squeeze=False)
     x_labels = ["clean"] + [f"{s:g}" for s in TEST_SNR_DB]
@@ -289,7 +296,7 @@ def write_report(all_results):
                 "training (healthy bearings included). Noise conditions add only coloured noise; "
                 "`drift+spikes` adds only drift and spikes. Paired Wilcoxon signed-rank tests over (fold, seed) "
                 "pairs, Holm-corrected over all contrasts × conditions within each protocol, training regime and "
-                "contrast family (primary: Q1-Q4; secondary: S1-S3, the added models). "
+                "contrast family (primary: Q1-Q4; secondary: S1-S3 and tertiary: T1-T2, the added models). "
                 "`meas. acc.` = accuracy per 4-s measurement (mean of window probabilities).\n\n")
         for protocol, (res, models) in all_results.items():
             h = res["header"]

@@ -1,8 +1,8 @@
 # Robustness Study: Fault-Size Split, Noise Spectra, Stronger Baselines
 
-Split: fault-size hold-out (one of 0.007/0.014/0.021 in. per fold, all loads); Normal split by time at 80% with a 1% gap. 15 epochs, final epoch kept, no calibration. Values are mean ± std of macro-F1 (%) over 15 runs (3 folds × 5 seeds). Noise conditions add only coloured noise (no drift or spikes); `drift+spikes` adds only drift and spikes at the test probabilities. Contrasts use a paired Wilcoxon signed-rank test over the 15 (fold, seed) pairs, Holm-corrected over all contrasts × conditions within each training regime and contrast family (primary: Q1-Q4; secondary: S1-S3, the added models).
+Split: fault-size hold-out (one of 0.007/0.014/0.021 in. per fold, all loads); Normal split by time at 80% with a 1% gap. 15 epochs, final epoch kept, no calibration. Values are mean ± std of macro-F1 (%) over 15 runs (3 folds × 5 seeds). Noise conditions add only coloured noise (no drift or spikes); `drift+spikes` adds only drift and spikes at the test probabilities. Contrasts use a paired Wilcoxon signed-rank test over the 15 (fold, seed) pairs, Holm-corrected over all contrasts × conditions within each training regime and contrast family (primary: Q1-Q4; secondary: S1-S3 and tertiary: T1-T2, the added models).
 
-**Limitation:** CWRU has one healthy bearing, so Normal windows in train and test come from the same recordings (split by time). The WDCNN-style network follows Table 2 of Zhang et al. (2017) except for the input length (1024 samples) and AdaBN.
+**Limitation:** CWRU has one healthy bearing, so Normal windows in train and test come from the same recordings (split by time). The WDCNN-style network follows Table 2 of Zhang et al. (2017) except for the input length (1024 samples); with AdaBN it is a separate model (T2).
 
 ## Training noise: lowpass
 
@@ -17,6 +17,8 @@ Split: fault-size hold-out (one of 0.007/0.014/0.021 in. per fold, all loads); N
 | Standard 1D-CNN + learnable filter | 47.4 ± 15.0 | 48.8 ± 17.2 | 45.4 ± 21.0 | 31.2 ± 23.7 | 16.2 ± 18.6 | 47.1 ± 13.4 | 50.3 ± 13.6 | 30.3 ± 13.9 | 16.3 ± 5.9 | 47.0 ± 12.1 | 49.7 ± 11.5 | 23.9 ± 13.7 | 16.6 ± 5.7 | 47.8 ± 15.7 |
 | PAC single residual stream | 46.6 ± 11.9 | 47.0 ± 13.6 | 43.7 ± 17.3 | 34.3 ± 23.3 | 21.1 ± 20.7 | 46.7 ± 12.4 | 49.8 ± 12.4 | 28.4 ± 14.1 | 14.8 ± 4.9 | 47.0 ± 12.3 | 49.4 ± 10.9 | 25.3 ± 14.0 | 15.3 ± 5.0 | 46.7 ± 12.2 |
 | Kinematic envelope features + Random Forest | 49.3 ± 22.9 | 48.3 ± 22.5 | 47.1 ± 21.9 | 43.5 ± 20.7 | 36.1 ± 17.5 | 48.5 ± 23.0 | 44.9 ± 21.5 | 37.6 ± 18.6 | 20.3 ± 6.4 | 48.9 ± 23.1 | 47.2 ± 22.9 | 42.1 ± 21.7 | 28.7 ± 12.5 | 48.6 ± 22.6 |
+| Pre-trained ResNet-18 on spectrograms | 48.4 ± 12.2 | 47.8 ± 13.1 | 43.0 ± 14.5 | 30.0 ± 16.6 | 14.2 ± 11.2 | 46.0 ± 9.4 | 42.8 ± 12.4 | 36.0 ± 16.7 | 20.6 ± 13.0 | 43.6 ± 11.7 | 40.6 ± 12.7 | 29.1 ± 14.1 | 17.9 ± 11.2 | 48.5 ± 11.5 |
+| WDCNN-style CNN + AdaBN | 48.8 ± 11.3 | 49.5 ± 11.2 | 50.3 ± 11.0 | 51.3 ± 10.4 | 51.2 ± 9.1 | 49.4 ± 11.1 | 50.4 ± 10.8 | 52.2 ± 9.9 | 51.6 ± 8.4 | 49.3 ± 11.1 | 50.4 ± 10.7 | 52.2 ± 9.9 | 52.2 ± 8.2 | 48.9 ± 10.7 |
 
 ### Fault-class F1 (mean F1 of inner race, ball and outer race; healthy excluded)
 
@@ -31,6 +33,8 @@ Split: fault-size hold-out (one of 0.007/0.014/0.021 in. per fold, all loads); N
 | Standard 1D-CNN + learnable filter | 31.8 ± 18.5 | 34.6 ± 20.5 | 37.5 ± 20.4 | 28.8 ± 21.3 | 10.9 ± 15.7 | 32.2 ± 15.6 | 38.7 ± 14.4 | 22.1 ± 9.0 | 19.8 ± 5.9 | 32.0 ± 13.6 | 37.7 ± 9.9 | 22.0 ± 9.9 | 20.2 ± 4.9 | 32.5 ± 19.3 |
 | PAC single residual stream | 30.4 ± 14.4 | 32.0 ± 15.6 | 33.7 ± 15.4 | 29.9 ± 18.7 | 15.3 ± 17.0 | 32.0 ± 14.3 | 38.4 ± 14.1 | 23.0 ± 8.1 | 19.4 ± 5.8 | 32.1 ± 14.2 | 38.1 ± 10.9 | 24.4 ± 10.3 | 20.5 ± 6.7 | 30.7 ± 14.6 |
 | Kinematic envelope features + Random Forest | 50.9 ± 26.7 | 50.1 ± 26.3 | 48.5 ± 25.7 | 44.5 ± 24.7 | 38.0 ± 21.5 | 49.5 ± 26.6 | 45.9 ± 25.7 | 39.3 ± 22.8 | 20.4 ± 6.9 | 50.2 ± 26.9 | 47.9 ± 26.5 | 43.2 ± 25.8 | 29.9 ± 14.8 | 49.9 ± 26.4 |
+| Pre-trained ResNet-18 on spectrograms | 32.0 ± 14.6 | 31.7 ± 15.4 | 30.9 ± 14.5 | 28.4 ± 14.9 | 14.6 ± 13.6 | 29.0 ± 11.5 | 29.2 ± 11.1 | 25.8 ± 12.8 | 18.5 ± 13.3 | 28.8 ± 10.1 | 28.8 ± 10.1 | 22.9 ± 10.2 | 17.5 ± 12.9 | 32.5 ± 13.9 |
+| WDCNN-style CNN + AdaBN | 39.4 ± 16.4 | 40.4 ± 16.5 | 41.9 ± 16.3 | 44.6 ± 15.4 | 47.8 ± 12.9 | 40.4 ± 16.3 | 42.1 ± 16.0 | 45.7 ± 14.6 | 48.0 ± 11.1 | 40.2 ± 16.2 | 41.9 ± 15.9 | 45.3 ± 14.5 | 48.0 ± 11.0 | 39.5 ± 15.5 |
 
 ### Contrasts (macro-F1 difference a − b; significant after Holm correction in bold)
 
@@ -44,6 +48,8 @@ Split: fault-size hold-out (one of 0.007/0.014/0.021 in. per fold, all loads); N
 | S1 learnable vs fixed filter (secondary): baseline_lhp − baseline_hp | +1.3 (8/15) | +1.6 (10/15) | +2.6 (10/15) | -0.7 (7/15) | +0.4 (5/15) | +0.6 (10/15) | +3.0 (11/15) | +0.5 (8/15) | +0.2 (3/15) | -0.1 (7/15) | +2.5 (9/15) | +0.3 (6/15) | +0.7 (4/15) | +1.4 (8/15) |
 | S2 single residual stream vs PAC (secondary): no_dual − physics | +3.2 (9/15) | +3.9 (10/15) | **+7.6 (13/15)** | **+10.3 (15/15)** | **+13.9 (15/15)** | +3.4 (11/15) | +2.7 (8/15) | **-15.8 (1/15)** | -6.3 (1/15) | +3.3 (12/15) | +1.7 (9/15) | -14.6 (4/15) | -7.2 (5/15) | +3.3 (10/15) |
 | S3 kinematic vs spectral features (secondary): kin − rf | -10.8 (5/15) | -10.4 (5/15) | -10.7 (5/15) | **-10.7 (0/15)** | -8.2 (5/15) | -13.7 (5/15) | **-17.1 (1/15)** | -0.7 (10/15) | -0.6 (5/15) | -13.7 (5/15) | **-15.6 (1/15)** | +3.9 (10/15) | +3.8 (10/15) | -10.9 (5/15) |
+| T1 pre-trained 2D ResNet vs WDCNN-style (tertiary): resnet2d − wdcnn | +0.5 (8/15) | -0.3 (6/15) | -4.7 (6/15) | **-14.3 (2/15)** | **-19.4 (0/15)** | -2.7 (5/15) | -8.1 (3/15) | **-17.7 (2/15)** | -13.8 (4/15) | -5.1 (4/15) | -10.3 (2/15) | **-25.1 (0/15)** | **-15.6 (2/15)** | +0.0 (7/15) |
+| T2 AdaBN vs WDCNN-style (tertiary): wdcnn_adabn − wdcnn | +0.9 (7/15) | +1.4 (7/15) | +2.6 (8/15) | +7.0 (9/15) | **+17.7 (14/15)** | +0.7 (8/15) | -0.5 (7/15) | -1.5 (6/15) | **+17.3 (14/15)** | +0.6 (8/15) | -0.5 (8/15) | -1.9 (6/15) | **+18.7 (15/15)** | +0.4 (7/15) |
 
 Cell = mean difference (runs where a > b / total).
 
@@ -65,6 +71,8 @@ Cell = mean difference (runs where a > b / total).
 | Standard 1D-CNN + learnable filter | 45.1 ± 9.5 | 46.4 ± 12.2 | 42.6 ± 17.9 | 31.5 ± 25.6 | 16.4 ± 18.8 | 45.1 ± 10.9 | 49.0 ± 11.7 | 38.6 ± 8.3 | 21.3 ± 12.5 | 45.6 ± 10.8 | 48.8 ± 11.6 | 36.8 ± 16.4 | 19.8 ± 10.2 | 45.4 ± 10.1 |
 | PAC single residual stream | 46.4 ± 11.6 | 47.3 ± 14.0 | 43.4 ± 18.3 | 33.7 ± 23.9 | 21.7 ± 22.7 | 46.5 ± 13.3 | 48.3 ± 13.9 | 39.8 ± 13.6 | 15.1 ± 5.8 | 47.1 ± 13.3 | 48.7 ± 13.7 | 33.2 ± 15.1 | 14.9 ± 5.9 | 46.7 ± 12.0 |
 | Kinematic envelope features + Random Forest | 48.3 ± 22.2 | 47.5 ± 21.7 | 46.1 ± 21.1 | 42.8 ± 19.9 | 35.7 ± 17.0 | 47.5 ± 22.1 | 44.2 ± 20.7 | 37.3 ± 18.1 | 20.4 ± 6.3 | 47.9 ± 22.3 | 46.4 ± 22.0 | 41.6 ± 21.2 | 28.6 ± 12.2 | 47.7 ± 22.0 |
+| Pre-trained ResNet-18 on spectrograms | 45.8 ± 7.8 | 45.7 ± 10.5 | 43.2 ± 20.1 | 31.1 ± 23.9 | 11.8 ± 12.2 | 45.2 ± 8.3 | 46.0 ± 11.6 | 43.3 ± 17.2 | 17.5 ± 9.4 | 45.5 ± 8.5 | 44.0 ± 14.5 | 39.7 ± 19.6 | 18.8 ± 10.4 | 45.9 ± 9.4 |
+| WDCNN-style CNN + AdaBN | 45.6 ± 8.0 | 46.6 ± 8.3 | 48.0 ± 9.1 | 50.0 ± 9.5 | 50.9 ± 9.7 | 46.5 ± 8.1 | 48.2 ± 8.2 | 50.8 ± 8.2 | 51.2 ± 8.0 | 46.1 ± 7.8 | 47.8 ± 8.0 | 50.0 ± 7.8 | 51.7 ± 7.5 | 46.3 ± 8.1 |
 
 ### Fault-class F1 (mean F1 of inner race, ball and outer race; healthy excluded)
 
@@ -79,6 +87,8 @@ Cell = mean difference (runs where a > b / total).
 | Standard 1D-CNN + learnable filter | 28.7 ± 10.7 | 31.7 ± 13.2 | 34.9 ± 15.2 | 27.5 ± 20.8 | 9.8 ± 13.2 | 29.4 ± 12.2 | 36.8 ± 13.1 | 27.9 ± 8.3 | 21.6 ± 7.5 | 29.7 ± 12.3 | 35.1 ± 12.5 | 33.3 ± 12.8 | 21.4 ± 7.0 | 29.3 ± 11.4 |
 | PAC single residual stream | 30.2 ± 13.7 | 32.7 ± 15.6 | 34.6 ± 16.2 | 29.8 ± 19.2 | 16.3 ± 18.6 | 31.5 ± 15.1 | 36.9 ± 15.1 | 31.1 ± 12.2 | 19.4 ± 6.6 | 31.8 ± 15.5 | 35.4 ± 15.1 | 32.0 ± 11.1 | 19.5 ± 7.1 | 30.8 ± 14.2 |
 | Kinematic envelope features + Random Forest | 49.7 ± 25.8 | 48.9 ± 25.3 | 47.3 ± 24.6 | 43.6 ± 23.7 | 37.5 ± 20.9 | 48.2 ± 25.3 | 45.0 ± 24.6 | 38.8 ± 22.2 | 20.5 ± 6.7 | 48.8 ± 25.7 | 46.8 ± 25.2 | 42.5 ± 25.1 | 29.7 ± 14.4 | 48.7 ± 25.4 |
+| Pre-trained ResNet-18 on spectrograms | 29.5 ± 12.4 | 30.8 ± 15.1 | 33.9 ± 21.3 | 29.6 ± 23.3 | 11.8 ± 15.3 | 29.2 ± 12.7 | 31.6 ± 14.9 | 34.3 ± 19.9 | 17.5 ± 10.1 | 29.4 ± 13.0 | 31.6 ± 17.4 | 32.6 ± 19.9 | 16.6 ± 10.5 | 29.7 ± 13.0 |
+| WDCNN-style CNN + AdaBN | 37.0 ± 12.7 | 38.3 ± 13.4 | 40.3 ± 14.2 | 44.1 ± 14.4 | 47.9 ± 13.1 | 38.4 ± 12.9 | 40.8 ± 13.0 | 45.2 ± 12.4 | 48.1 ± 10.4 | 38.0 ± 12.6 | 40.5 ± 12.7 | 44.3 ± 11.9 | 48.1 ± 9.8 | 38.0 ± 12.8 |
 
 ### Contrasts (macro-F1 difference a − b; significant after Holm correction in bold)
 
@@ -92,6 +102,8 @@ Cell = mean difference (runs where a > b / total).
 | S1 learnable vs fixed filter (secondary): baseline_lhp − baseline_hp | -0.5 (8/15) | +0.1 (10/15) | +0.6 (8/15) | -0.4 (7/15) | -0.5 (4/15) | -0.4 (9/15) | +2.0 (9/15) | +1.2 (10/15) | -0.0 (7/15) | -0.8 (10/15) | +0.7 (7/15) | +0.4 (9/15) | +6.0 (10/15) | -0.5 (7/15) |
 | S2 single residual stream vs PAC (secondary): no_dual − physics | +1.5 (11/15) | +3.1 (13/15) | **+6.0 (15/15)** | **+7.8 (14/15)** | +15.7 (13/15) | +2.7 (13/15) | +2.0 (8/15) | -8.8 (4/15) | -9.2 (2/15) | +3.1 (13/15) | +3.1 (10/15) | -16.0 (4/15) | -13.1 (2/15) | +2.0 (12/15) |
 | S3 kinematic vs spectral features (secondary): kin − rf | -12.3 (5/15) | -11.4 (5/15) | -10.7 (5/15) | **-8.7 (0/15)** | **-12.5 (0/15)** | -13.1 (5/15) | -17.1 (4/15) | -6.4 (9/15) | -2.6 (2/15) | -12.9 (5/15) | -15.6 (5/15) | -5.0 (10/15) | +3.1 (10/15) | -12.2 (5/15) |
+| T1 pre-trained 2D ResNet vs WDCNN-style (tertiary): resnet2d − wdcnn | -1.7 (5/15) | -1.6 (5/15) | -3.4 (3/15) | -10.4 (2/15) | **-22.2 (3/15)** | -3.1 (3/15) | -4.0 (5/15) | -10.0 (2/15) | **-17.0 (1/15)** | -2.7 (4/15) | -5.9 (4/15) | **-14.4 (2/15)** | **-18.3 (2/15)** | -2.0 (6/15) |
+| T2 AdaBN vs WDCNN-style (tertiary): wdcnn_adabn − wdcnn | -1.9 (6/15) | -0.8 (7/15) | +1.3 (7/15) | +8.5 (9/15) | **+16.8 (14/15)** | -1.7 (6/15) | -1.8 (7/15) | -2.5 (4/15) | **+16.8 (14/15)** | -2.0 (7/15) | -2.1 (6/15) | -4.2 (5/15) | **+14.7 (15/15)** | -1.6 (7/15) |
 
 Cell = mean difference (runs where a > b / total).
 

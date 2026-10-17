@@ -1,4 +1,5 @@
 """Shared data, training, calibration and evaluation utilities."""
+import copy
 import os
 import random
 import time
@@ -172,6 +173,25 @@ def class_weights(y, num_classes=4):
 
 
 @torch.no_grad()
+def adapt_batchnorm(model, X, batch_size=256):
+    """
+    AdaBN, as used by WDCNN (Zhang et al. 2017): a copy of the trained model whose batch-norm
+    statistics are re-estimated on the unlabelled target windows X (cumulative average over all of
+    them); every learned weight stays as trained. Returns the adapted copy in eval mode.
+    """
+    adapted = copy.deepcopy(model).eval()
+    for m in adapted.modules():
+        if isinstance(m, nn.modules.batchnorm._BatchNorm):
+            m.reset_running_stats()
+            m.momentum = None  # cumulative moving average = plain mean over all batches
+            m.train()
+    device = next(adapted.parameters()).device
+    for i in range(0, len(X), batch_size):
+        adapted(torch.from_numpy(X[i:i + batch_size]).to(device))
+    return adapted.eval()
+
+
+@torch.no_grad()
 def predict_logits(model, X, calibrated=True, batch_size=256):
     model.eval()
     out = []
@@ -180,6 +200,14 @@ def predict_logits(model, X, calibrated=True, batch_size=256):
         logits, _, _ = model(xb, return_calibrated=calibrated)
         out.append(logits.cpu())
     return torch.cat(out)
+
+
+def epoch_logger(label, epochs):
+    """An on_epoch_end hook for train_model that prints one line per epoch (its mean training loss),
+    so a long study can be followed in its log."""
+    def log(epoch, model, loss):
+        print(f"    {label} | epoch {epoch + 1:02d}/{epochs} | train loss {loss:.4f}", flush=True)
+    return log
 
 
 def train_model(model, train_loader, val_loader, y_train, epochs=config.EPOCHS, lr=config.LR, verbose=True,

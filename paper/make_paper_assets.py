@@ -37,10 +37,10 @@ plt.rcParams.update({"font.family": "serif", "font.size": 8, "axes.titlesize": 8
                      "legend.fontsize": 6.5, "xtick.labelsize": 7, "ytick.labelsize": 7, "pdf.fonttype": 42})
 COLORS = {"baseline": "#475569", "baseline_hp": "#0ea5e9", "no_residual": "#dc2626", "physics": "#059669",
           "wdcnn": "#7c3aed", "rf": "#d97706", "no_dual": "#f97316", "no_attention": "#ca8a04",
-          "baseline_lhp": "#1d4ed8", "kin": "#92400e"}
+          "baseline_lhp": "#1d4ed8", "kin": "#92400e", "resnet2d": "#0f766e", "wdcnn_adabn": "#db2777"}
 SHORT = {"baseline": "CNN", "baseline_hp": "CNN+HP", "no_residual": "PAC$-$HP", "physics": "PAC",
          "wdcnn": "WDCNN-s", "rf": "Env-RF", "no_dual": "PAC$-$dual", "no_attention": "PAC$-$att",
-         "baseline_lhp": "CNN+LHP", "kin": "Kin-RF"}
+         "baseline_lhp": "CNN+LHP", "kin": "Kin-RF", "resnet2d": "ResNet-2D", "wdcnn_adabn": "WDCNN-s+AdaBN"}
 
 
 def put(key, value, fmt="{:.1f}"):
@@ -82,7 +82,7 @@ def rel_p(p):
 # Models: parameter counts (computed, not transcribed)
 # ---------------------------------------------------------------------------
 def model_table():
-    from models import Baseline1DCNN, WideKernelCNN, PhysicsAugmentedCalibratedCNN
+    from models import Baseline1DCNN, WideKernelCNN, PhysicsAugmentedCalibratedCNN, SpectrogramResNet
     count = lambda m: sum(p.numel() for p in m.parameters())
     # (key, name, group, purpose, protocols, constructor(channels, classes, window length));
     # CWRU: 2 ch, 4 classes, 1024 samples; PU: 1 ch, 3 classes, 2048 samples. None = random forest.
@@ -115,6 +115,12 @@ def model_table():
          "Classical classifier on generic spectral features", "P2--P4", None),
         ("kin", "Kinematic random forest (300 trees)", "Baseline",
          "Classical classifier on fault-frequency features", "P2--P4", None),
+        ("resnet2d", "ResNet-18 on spectrograms, ImageNet-pre-trained \\cite{he2016resnet}", "Baseline",
+         "Strongest network under the fault-size split of \\cite{hendriks2022cwru} (vs.\\ WDCNN-s)", "P2--P4",
+         lambda c, k, n: SpectrogramResNet(c, k, pretrained=False)),
+        ("wdcnn_adabn", "WDCNN-style CNN with AdaBN \\cite{li2018adabn}", "Baseline",
+         "Batch-norm statistics re-estimated on the test windows, as in \\cite{zhang2017wdcnn} (vs.\\ WDCNN-s)",
+         "P2--P4", lambda c, k, n: WideKernelCNN(c, k, input_length=n)),
     ]
     rows = []
     for key, name, group, purpose, protocols, make in specs:
@@ -155,17 +161,17 @@ LOLO_SNRS = ["clean", "10dB", "5dB", "0dB", "-5dB", "-10dB"]
 LOLO_MODELS = ["baseline", "physics", "no_residual", "no_dual", "no_attention"]
 
 
-def lolo():
-    b = load(os.path.join("results", "benchmark_metrics.json"))
-    if b is None:
-        return
-    runs = b["runs"]
-
+def lolo_vals(runs):
+    """vals(model, snr, metric, cal): one value per (test load, seed) run, in a fixed order."""
     def vals(model, snr, metric="macro_f1", cal="calibrated"):
         rs = sorted((r for r in runs if r["model"] == model), key=lambda r: (r["test_load"], r["seed"]))
         return np.array([r["test"][snr][cal][metric] for r in rs])
+    return vals
 
-    # Holm over all contrasts (each model vs PAC) x SNR conditions
+
+def lolo_tests(vals):
+    """Paired Wilcoxon of PAC-1DCNN against every other P1 model at every SNR (macro-F1), Holm over all
+    of them: [(model, snr, mean PAC - model, runs PAC better, n, p, Holm-adjusted p)]."""
     tests = []
     for m in LOLO_MODELS:
         if m == "physics":
@@ -176,8 +182,20 @@ def lolo():
             p = 1.0 if np.allclose(d, 0) else float(wilcoxon(p_, a).pvalue)
             tests.append((m, s, float(d.mean()), int((d > 0).sum()), len(d), p))
     adj = holm(np.array([t[5] for t in tests]))
+    return [t + (float(pa),) for t, pa in zip(tests, adj)]
+
+
+def lolo():
+    b = load(os.path.join("results", "benchmark_metrics.json"))
+    if b is None:
+        return
+    runs = b["runs"]
+    vals = lolo_vals(runs)
+
+    # Holm over all contrasts (each model vs PAC) x SNR conditions
+    tests = lolo_tests(vals)
     sig = {}
-    for (m, s, d, wins, n, p), pa in zip(tests, adj):
+    for m, s, d, wins, n, p, pa in tests:
         sig[(m, s)] = pa < 0.05
         k = f"lolo-{m}-{s}"
         put(k + "-delta", sgn(d))
@@ -269,6 +287,8 @@ def lolo():
 FS_CONDS = ["clean", "lowpass@0dB", "lowpass@-5dB", "white@0dB", "white@-5dB", "highpass@0dB", "highpass@-5dB",
             "drift+spikes"]
 FS_MODELS = ["baseline", "baseline_hp", "no_residual", "physics", "wdcnn", "rf"]
+CLASSICAL = ("rf", "kin")  # every other model is a network
+ADDED = ("resnet2d", "wdcnn_adabn")  # tertiary family; not run in the band-limit sensitivity check
 CONTRAST_LABELS = {("baseline_hp", "baseline"): "CNN+HP $-$ CNN",
                    ("physics", "no_residual"): "PAC $-$ (PAC$-$HP)",
                    ("physics", "baseline"): "PAC $-$ CNN",
@@ -291,7 +311,24 @@ def primary(rows):
 # Secondary analyses (added models): (added model, reference model, label)
 SECONDARY = [("baseline_lhp", "baseline_hp", "CNN+LHP $-$ CNN+HP"),
              ("no_dual", "physics", "PAC$-$dual $-$ PAC"),
-             ("kin", "rf", "Kin-RF $-$ Env-RF")]
+             ("kin", "rf", "Kin-RF $-$ Env-RF"),
+             ("resnet2d", "wdcnn", "ResNet-2D $-$ WDCNN-s"),            # tertiary family
+             ("wdcnn_adabn", "wdcnn", "WDCNN-s+AdaBN $-$ WDCNN-s")]
+
+
+def strong_noise_numbers(means, contrasts, regimes, conds, prefix):
+    """For the conditions at 0 and -5 dB (both regimes): how often each model has the highest mean
+    macro-F1, and the range of the AdaBN gain over WDCNN-s at -5 dB."""
+    low = [(reg, c) for reg in regimes for c in conds if c.endswith(("@0dB", "@-5dB"))]
+    put(f"{prefix}-nlow", len(low), "{:d}")
+    best = [max(means[reg], key=lambda m: means[reg][m][c]["macro_f1"]["mean"]) for reg, c in low]
+    for m in means[regimes[0]]:
+        put(f"{prefix}-nbest-low-{m}", best.count(m), "{:d}")
+    gain = [r["delta"] for reg in regimes for r in contrasts[reg]
+            if (r["a"], r["b"]) == ("wdcnn_adabn", "wdcnn") and r["condition"].endswith("@-5dB")]
+    if gain:
+        put(f"{prefix}-adabn-gain-5dB-min", min(gain))
+        put(f"{prefix}-adabn-gain-5dB-max", max(gain))
 
 
 def secondary_rows(means, contrasts, regimes, conds, prefix, title):
@@ -368,6 +405,7 @@ def fault_size():
     write("tab_faultsize_contrasts.tex", contrast_table(s["contrasts"], regimes, FS_CONDS, "fs"))
     SECONDARY_TABLE["P2"] = secondary_rows(s["means"], s["contrasts"], regimes, FS_CONDS, "fs",
                                            "P2: fault-size hold-out (CWRU)")
+    strong_noise_numbers(s["means"], s["contrasts"], regimes, FS_CONDS, "fs")
 
     n_tests = sum(len(primary(s["contrasts"][r])) for r in regimes)
     pac_cnn = [r for reg in regimes for r in s["contrasts"][reg] if r["a"] == "physics" and r["b"] == "baseline"]
@@ -424,14 +462,14 @@ def fault_size():
                                    if r["regime"] == regime and r["model"] == m])))
         # ranges quoted in the prose
         means = s["means"][regime]
-        nets = [means[m]["clean"]["macro_f1"]["mean"] for m in FS_MODELS if m != "rf"]
+        nets = [means[m]["clean"]["macro_f1"]["mean"] for m in means if m not in CLASSICAL]
         put(f"fs-{regime}-nets-clean-min", min(nets))
         put(f"fs-{regime}-nets-clean-max", max(nets))
         # fault-class F1 (healthy excluded; the healthy class leaks through the time split)
         if "fault_f1" in means["physics"]["clean"]:
             for m, v in means.items():
                 put(f"fs-{regime}-{m}-clean-faultf1", v["clean"]["fault_f1"]["mean"])
-            nets_ff = [means[m]["clean"]["fault_f1"]["mean"] for m in means if m not in ("rf", "kin")]
+            nets_ff = [means[m]["clean"]["fault_f1"]["mean"] for m in means if m not in CLASSICAL]
             put(f"fs-{regime}-nets-clean-faultf1-min", min(nets_ff))
             put(f"fs-{regime}-nets-clean-faultf1-max", max(nets_ff))
         rec = {m: np.mean([r["test"]["clean"]["recall_per_class"] for r in runs
@@ -573,6 +611,7 @@ def paderborn():
         SECONDARY_TABLE["P4" if protocol == "real_cv" else "P3"] = secondary_rows(
             means, contrasts, regimes, PU_CONDS + ["drift+spikes"], prefix,
             "P4: real-damage bearing cross-validation" if protocol == "real_cv" else "P3: artificial $\\rightarrow$ real damage")
+        strong_noise_numbers(means, contrasts, regimes, PU_CONDS, prefix)
         for regime in regimes:
             for m in means[regime]:
                 put(f"{prefix}-{regime}-{m}-measacc", means[regime][m]["clean"]["measurement_accuracy"]["mean"])
@@ -585,7 +624,7 @@ def paderborn():
                         put(f"{prefix}-{regime}-{m}-{cond_key(c)}-{short}",
                             float(np.mean([r["test"][c][metric] for r in res["runs"]
                                            if r["regime"] == regime and r["model"] == m])))
-        nets = [means[reg][m]["clean"]["macro_f1"]["mean"] for reg in regimes for m in models if m != "rf"]
+        nets = [means[reg][m]["clean"]["macro_f1"]["mean"] for reg in regimes for m in means[reg] if m not in CLASSICAL]
         put(f"{prefix}-nets-clean-min", min(nets))
         put(f"{prefix}-nets-clean-max", max(nets))
         all_rows = [r for reg in regimes for r in contrasts[reg]]
@@ -634,6 +673,10 @@ def paderborn_sanity():
         c = (s or {}).get("chance", {}).get(p)
         put(f"pu-chance-{p.replace('_', '')}-f1", c["random_macro_f1"] if c else TBD)
         put(f"pu-chance-{p.replace('_', '')}-majority", c["majority_measurement_accuracy"] if c else TBD)
+    # how far the best network lies above random guessing on clean data, over both protocols
+    above = [float(NUM[f"pu-{p}-nets-clean-max"]) - float(NUM[f"pu-chance-{p}-f1"]) for p in ("realcv", "a2r")
+             if NUM.get(f"pu-{p}-nets-clean-max", TBD) != TBD and NUM.get(f"pu-chance-{p}-f1", TBD) != TBD]
+    put("pu-nets-above-chance-max", max(above) if above else TBD, "{:.0f}")
     for key in ("leaky", "disjoint"):
         for stat in ("macro_f1_mean", "macro_f1_min", "macro_f1_max", "measurement_accuracy_mean",
                      "measurement_accuracy_min", "measurement_accuracy_max"):
@@ -743,6 +786,113 @@ def shortcut_numbers():
         put(f"shortcut-{tag}-line-absdb-max", max(v["line_abs_healthy_vs_faulty_db"] for v in loads), "{:.0f}")
 
 
+# ---------------------------------------------------------------------------
+# Sensitivity to the CWRU band limit (CWRU_VARIANT=sharp: elliptic low-pass, flat to 3.9 kHz)
+# ---------------------------------------------------------------------------
+def band_limit_headline(bench, rob):
+    """The CWRU quantities the paper's conclusions rest on, from one set of P1 and P2 results.
+    Each entry: (text for the table cell, significant after Holm, value for the keys)."""
+    vals = lolo_vals(bench["runs"])
+    tests = {(m, s): (d, wins, n, pa) for m, s, d, wins, n, p, pa in lolo_tests(vals)}
+    out = {}
+    for key, model, snr, flip in (("p1-pac-cnn-5dB", "baseline", "5dB", False),
+                                  ("p1-pac-cnn-0dB", "baseline", "0dB", False),
+                                  ("p1-pac-pachp-0dB", "no_residual", "0dB", False),
+                                  ("p1-dual-pac-0dB", "no_dual", "0dB", True),
+                                  ("p1-dual-pac--5dB", "no_dual", "-5dB", True)):
+        d, wins, n, pa = tests[(model, snr)]
+        diff = vals(model, snr) - vals("physics", snr) if flip else vals("physics", snr) - vals(model, snr)
+        out[key] = (f"{sgn(float(diff.mean()))} ({int((diff > 0).sum())}/{n})", pa < 0.05, float(diff.mean()))
+    out["p1-nsig"] = (f"{sum(t[3] < 0.05 for t in tests.values())} of {len(tests)}", False,
+                      sum(t[3] < 0.05 for t in tests.values()))
+
+    s = rob["summary"]
+    regimes = list(rob["protocol"]["regimes"])
+    rows = [r for reg in regimes for r in s["contrasts"][reg]]
+    pair = lambda a, b: [r for r in rows if r["a"] == a and r["b"] == b]
+    filt = pair("baseline_hp", "baseline") + pair("physics", "no_residual")
+    out["p2-filter-nsig"] = (f"{sum(r['p_holm'] < 0.05 for r in filt)} of {len(filt)}", False,
+                             sum(r["p_holm"] < 0.05 for r in filt))
+    for cond in ("lowpass@0dB", "white@0dB", "highpass@0dB"):
+        cells, sig_any = [], False
+        for reg in regimes:
+            r = next(r for r in s["contrasts"][reg]
+                     if r["a"] == "baseline_hp" and r["b"] == "baseline" and r["condition"] == cond)
+            cells.append(f"\\textbf{{{sgn(r['delta'])}}}" if r["p_holm"] < 0.05 else sgn(r["delta"]))
+            sig_any |= r["p_holm"] < 0.05
+        out[f"p2-hp-cnn-{cond_key(cond)}"] = (", ".join(cells), False, sig_any)
+    for key, a, b, better in (("p2-pac-cnn", "physics", "baseline", None),
+                              ("p2-wdcnn-pac", "physics", "wdcnn", -1),
+                              ("p2-rf-pac", "physics", "rf", -1)):
+        sub = pair(a, b)
+        n_sig = sum(r["p_holm"] < 0.05 and (better is None or np.sign(r["delta"]) == better) for r in sub)
+        out[key] = (f"{n_sig} of {len(sub)}", False, n_sig)
+    sub = pair("no_dual", "physics")
+    better = sum(r["p_holm"] < 0.05 and r["delta"] > 0 for r in sub)
+    worse = sum(r["p_holm"] < 0.05 and r["delta"] < 0 for r in sub)
+    out["p2-dual-pac"] = (f"{better} / {worse}", False, (better, worse))
+    means = s["means"]["mixed"]
+    nets = [m for m in means if m not in CLASSICAL + ADDED]  # the same ten models in both variants
+    for key, metric in (("p2-nets-f1", "macro_f1"), ("p2-nets-faultf1", "fault_f1")):
+        v = [means[m]["clean"][metric]["mean"] for m in nets]
+        out[key] = (f"{min(v):.1f}--{max(v):.1f}", False, (min(v), max(v)))
+    return out
+
+
+SENSITIVITY_ROWS = [
+    ("p1-pac-cnn-5dB", "P1, 5\\,dB: PAC $-$ CNN"),
+    ("p1-pac-cnn-0dB", "P1, 0\\,dB: PAC $-$ CNN"),
+    ("p1-pac-pachp-0dB", "P1, 0\\,dB: PAC $-$ PAC$-$HP"),
+    ("p1-dual-pac-0dB", "P1, 0\\,dB: PAC$-$dual $-$ PAC"),
+    ("p1-dual-pac--5dB", "P1, $-5$\\,dB: PAC$-$dual $-$ PAC"),
+    ("p1-nsig", "P1: significant contrasts"),
+    ("p2-filter-nsig", "P2: sig.\\ front-end contrasts"),
+    ("p2-hp-cnn-lowpass0dB", "P2, LP\\,0: CNN+HP $-$ CNN"),
+    ("p2-hp-cnn-white0dB", "P2, W\\,0: CNN+HP $-$ CNN"),
+    ("p2-hp-cnn-highpass0dB", "P2, HP\\,0: CNN+HP $-$ CNN"),
+    ("p2-pac-cnn", "P2: PAC vs CNN significant"),
+    ("p2-wdcnn-pac", "P2: WDCNN-s sig.\\ better"),
+    ("p2-rf-pac", "P2: Env-RF sig.\\ better"),
+    ("p2-dual-pac", "P2: PAC$-$dual sig.\\ better/worse"),
+    ("p2-nets-f1", "P2: networks, clean macro-F1"),
+    ("p2-nets-faultf1", "P2: networks, clean fault-F1"),
+]
+
+
+def sensitivity():
+    """Table and keys comparing the main CWRU results (3.6 kHz band limit) with the sharp-filter
+    variant (results/sensitivity_sharp, from CWRU_VARIANT=sharp)."""
+    sens = os.path.join("results", "sensitivity_sharp")
+    pairs = {"main": (load(os.path.join("results", "benchmark_metrics.json")),
+                      load(os.path.join("results", "robustness_metrics.json"))),
+             "sharp": (load(os.path.join(sens, "benchmark_metrics.json")),
+                       load(os.path.join(sens, "robustness_metrics.json")))}
+    sc = load(os.path.join(sens, "cwru_shortcut_check.json"))
+    if sc is not None:
+        loads = sc["with_band_limit"].values()
+        put("sens-sharp-pass-hz", config.SHARP_PASS_HZ, "{:d}")
+        put("sens-sharp-stop-hz", config.SHARP_STOP_HZ, "{:d}")
+        put("sens-sharp-line-cleansep-max", max(v["line_clean"] for v in loads), "{:.2f}")
+        put("sens-sharp-line-noisysep-max",
+            max(max(v["line_lowpass_15dB"], v["line_white_15dB"]) for v in loads), "{:.2f}")
+        put("sens-sharp-artefact-sep-max", max(max(v["edge_clean"], v["distinct_values"]) for v in loads), "{:.2f}")
+        shares = np.median([v["transition_share_pct"] for v in loads], axis=0)
+        for name, value in zip(("normal", "inner", "ball", "outer"), shares):
+            put(f"sens-sharp-transition-{name}-pct", float(value))
+    if any(x is None for pair in pairs.values() for x in pair) or any("summary" not in rob for _, rob in pairs.values()):
+        return  # a run is missing or still in progress (its results have no summary yet)
+    heads = {k: band_limit_headline(*v) for k, v in pairs.items()}
+    rows = []
+    for key, label in SENSITIVITY_ROWS:
+        cells = []
+        for variant in ("main", "sharp"):
+            text, sig, value = heads[variant][key]
+            cells.append(f"\\textbf{{{text}}}" if sig else text)
+            put(f"sens-{variant}-{key}", text.replace("\\textbf", ""))
+        rows.append(f"{label} & " + " & ".join(cells) + " \\\\")
+    write("tab_sensitivity.tex", "\n".join(rows) + "\n")
+
+
 def fold_numbers():
     """Fold-level view (fold_level_stats.py): for the contrasts that are significant at run level, how
     many folds agree in sign; for P4, how many contrasts the corrected resampled t-test confirms."""
@@ -836,6 +986,7 @@ if __name__ == "__main__":
     if sec:
         write("tab_secondary.tex", "\n".join(sec) + "\n")
     shortcut_numbers()
+    sensitivity()
     fold_numbers()
     curve_numbers()
     dataset_numbers()

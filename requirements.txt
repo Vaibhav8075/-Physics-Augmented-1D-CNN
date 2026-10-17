@@ -6,6 +6,7 @@ numpy>=2.0
 scipy>=1.13
 scikit-learn>=1.5
 torch>=2.4
+torchvision>=0.19        # pre-trained ResNet-18 baseline (SpectrogramResNet)
 matplotlib>=3.9
 seaborn>=0.13
 

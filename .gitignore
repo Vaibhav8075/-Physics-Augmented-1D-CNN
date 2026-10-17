@@ -12,6 +12,7 @@ __pycache__/
 cwru_fault_data/
 processed_data/*.npy
 processed_data/*.npz
+processed_data/*/
 
 # Environment
 .env

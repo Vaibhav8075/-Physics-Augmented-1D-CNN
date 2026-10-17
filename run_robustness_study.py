@@ -24,9 +24,15 @@ Secondary questions (added models, separate Holm family):
       beat the full model once bearings are held out?
   S3  Do bearing-kinematics features (fault frequencies x shaft speed) transfer better
       than generic spectral features, with the same Random Forest?
+Tertiary questions (models added after those, a third Holm family):
+  T1  Does a pre-trained ResNet-18 on spectrograms, the strongest network in the fault-size
+      benchmark of Hendriks et al. (MSSP 2022), generalise better than the WDCNN-style CNN?
+  T2  Does AdaBN, WDCNN's re-estimation of batch-norm statistics on the unlabelled test
+      windows, help the WDCNN-style CNN on unseen defect sizes?
 Paired Wilcoxon tests over (fold, seed) pairs, Holm-corrected within each training
-regime and contrast family (primary Q1-Q4, secondary S1-S3) over all its contrasts and
-test conditions.
+regime and contrast family (primary Q1-Q4, secondary S1-S3, tertiary T1-T2) over all its
+contrasts and test conditions. --add-models trains only the given models and merges them
+into the saved results (same protocol; the test noise depends only on fold and condition).
 """
 import os
 import sys
@@ -44,8 +50,8 @@ from sklearn.ensemble import RandomForestClassifier
 
 import config
 from common import (set_seed, make_loaders, train_model, predict_logits, classification_metrics,
-                    add_real_world_impairments, NOISE_SPECTRA)
-from models import Baseline1DCNN, WideKernelCNN, PhysicsAugmentedCalibratedCNN
+                    add_real_world_impairments, adapt_batchnorm, epoch_logger, NOISE_SPECTRA)
+from models import Baseline1DCNN, WideKernelCNN, PhysicsAugmentedCalibratedCNN, SpectrogramResNet
 from kinematic_features import kinematic_features, CWRU_DE_ORDERS
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -70,8 +76,11 @@ MODEL_SPECS = {
                      lambda: Baseline1DCNN(highpass_input=True, learnable_highpass=True)),
     "no_dual": ("PAC single residual stream", lambda: PhysicsAugmentedCalibratedCNN(use_dual_stream=False)),
     "kin": ("Kinematic envelope features + Random Forest", None),
+    "resnet2d": ("Pre-trained ResNet-18 on spectrograms", lambda: SpectrogramResNet()),
+    "wdcnn_adabn": ("WDCNN-style CNN + AdaBN", lambda: WideKernelCNN()),
 }
 CLASSICAL = ("rf", "kin")  # feature-based models, trained with train_rf
+ADABN = ("wdcnn_adabn",)   # batch-norm statistics re-estimated on each test condition's windows
 # (a, b, question, family): effect = mean(a - b); positive = a better. Holm runs per regime and family.
 CONTRASTS = [
     ("baseline_hp", "baseline", "Q1 filter at baseline capacity", "primary"),
@@ -82,6 +91,8 @@ CONTRASTS = [
     ("baseline_lhp", "baseline_hp", "S1 learnable vs fixed filter", "secondary"),
     ("no_dual", "physics", "S2 single residual stream vs PAC", "secondary"),
     ("kin", "rf", "S3 kinematic vs spectral features", "secondary"),
+    ("resnet2d", "wdcnn", "T1 pre-trained 2D ResNet vs WDCNN-style", "tertiary"),
+    ("wdcnn_adabn", "wdcnn", "T2 AdaBN vs WDCNN-style", "tertiary"),
 ]
 METRICS = ["macro_f1", "accuracy", "false_alarm_rate", "missed_fault_rate", "ece"]
 # Plus the mean F1 of the three fault classes: the healthy class leaks through the time split (one healthy bearing)
@@ -173,7 +184,7 @@ def score(probs, y):
     return {key: m[key] for key in CWRU_METRICS + ["recall_per_class", "confusion"]}
 
 
-def run(seeds, epochs, regimes, model_keys, folds=FAULT_SIZES, resume=False):
+def run(seeds, epochs, regimes, model_keys, folds=FAULT_SIZES, resume=False, add_models=False):
     os.makedirs(config.RESULTS_DIR, exist_ok=True)
     data = load_all()
     conds = test_conditions()
@@ -186,15 +197,22 @@ def run(seeds, epochs, regimes, model_keys, folds=FAULT_SIZES, resume=False):
         "test_noise_seed_base": config.BENCHMARK_NOISE_SEED,
     }, "runs": []}
 
-    if resume and os.path.exists(OUT_JSON):
-        # Keep finished folds from an interrupted run, but only if they used the same protocol
+    if (resume or add_models) and os.path.exists(OUT_JSON):
+        # Keep saved runs (other folds, or other models), but only if they used the same protocol
         with open(OUT_JSON, encoding="utf-8") as fh:
             saved = json.load(fh)
         if saved["protocol"] != results["protocol"]:
-            raise SystemExit(f"--resume: protocol in {OUT_JSON} differs from this run; refusing to merge.")
-        results["runs"] = [r for r in saved["runs"] if r["held_out_size"] not in folds]
-        kept = sorted({r["held_out_size"] for r in results["runs"]})
-        print(f"Resuming: keeping {len(results['runs'])} saved runs from folds {kept}, running folds {folds}")
+            raise SystemExit(f"--resume/--add-models: protocol in {OUT_JSON} differs from this run; refusing to merge.")
+        if add_models:  # rerun the listed folds for the given models only, replacing earlier runs of them
+            results["runs"] = [r for r in saved["runs"]
+                               if r["model"] not in model_keys or r["held_out_size"] not in folds]
+            print(f"Adding models {model_keys} to {len(results['runs'])} saved runs")
+        else:
+            results["runs"] = [r for r in saved["runs"] if r["held_out_size"] not in folds]
+            kept = sorted({r["held_out_size"] for r in results["runs"]})
+            print(f"Resuming: keeping {len(results['runs'])} saved runs from folds {kept}, running folds {folds}")
+    elif add_models:
+        raise SystemExit(f"--add-models needs saved results in {OUT_JSON}")
 
     nn_keys = [k for k in model_keys if k not in CLASSICAL]
     total = len(folds) * len(seeds) * len(regimes) * len(model_keys)
@@ -215,7 +233,9 @@ def run(seeds, epochs, regimes, model_keys, folds=FAULT_SIZES, resume=False):
                     loader, _ = make_loaders(X_tr, y_tr, X_tr[:1], y_tr[:1], seed)
                     trained[(regime, seed, key)] = train_model(MODEL_SPECS[key][1](), loader, None, y_tr,
                                                                epochs=epochs, verbose=False,
-                                                               impairments=REGIMES[regime], seed=seed)
+                                                               impairments=REGIMES[regime], seed=seed,
+                                                               on_epoch_end=epoch_logger(
+                                                                   f"{key} {regime} seed {seed}", epochs))
                     done += 1
                     eta = (time.time() - t0) / done * (total - done) / 60
                     print(f"[{done}/{total}] {held_out:02d} {regime:<7} seed {seed} {key:<12} trained | "
@@ -231,6 +251,8 @@ def run(seeds, epochs, regimes, model_keys, folds=FAULT_SIZES, resume=False):
             for key in classical:
                 test_feats[key][name] = cwru_featurizer(key, shaft_te)(X_c)
             for k, model in trained.items():
+                if k[2] in ADABN:
+                    model = adapt_batchnorm(model, X_c)
                 probs = F.softmax(predict_logits(model, X_c, calibrated=False), dim=1).numpy()
                 records[k]["test"][name] = score(probs, y_te)
             print(f"  evaluated {name:<16} | macro-F1 " + " ".join(
@@ -318,7 +340,8 @@ def summarize(results):
 def plot(summary, regimes, models, conds):
     colors = {"baseline": "#64748b", "baseline_hp": "#38bdf8", "no_residual": "#ef4444",
               "physics": "#059669", "wdcnn": "#a855f7", "rf": "#f59e0b",
-              "baseline_lhp": "#1d4ed8", "no_dual": "#84cc16", "kin": "#b45309"}
+              "baseline_lhp": "#1d4ed8", "no_dual": "#84cc16", "kin": "#b45309",
+              "resnet2d": "#0f766e", "wdcnn_adabn": "#db2777"}
     fig, axes = plt.subplots(len(regimes), len(NOISE_SPECTRA), figsize=(16, 4.3 * len(regimes)), squeeze=False)
     x_labels = ["clean"] + [f"{s:g}" for s in TEST_SNR_DB]
     for i, regime in enumerate(regimes):
@@ -358,10 +381,10 @@ def write_report(results, summary, regimes, models, conds):
                 f"`drift+spikes` adds only drift and spikes at the test probabilities. "
                 f"Contrasts use a paired Wilcoxon signed-rank test over the {n} (fold, seed) pairs, "
                 f"Holm-corrected over all contrasts × conditions within each training regime and contrast "
-                f"family (primary: Q1-Q4; secondary: S1-S3, the added models).\n\n"
+                f"family (primary: Q1-Q4; secondary: S1-S3 and tertiary: T1-T2, the added models).\n\n"
                 f"**Limitation:** CWRU has one healthy bearing, so Normal windows in train and test come from the "
                 f"same recordings (split by time). The WDCNN-style network follows Table 2 of Zhang et al. "
-                f"(2017) except for the input length (1024 samples) and AdaBN.\n\n")
+                f"(2017) except for the input length (1024 samples); with AdaBN it is a separate model (T2).\n\n")
         for regime in regimes:
             f.write(f"## Training noise: {regime}\n\n| Model | " + " | ".join(conds) + " |\n|"
                     + " :--- |" * (len(conds) + 1) + "\n")
@@ -406,10 +429,12 @@ if __name__ == "__main__":
                         help="held-out fault sizes (mils) to run")
     parser.add_argument("--resume", action="store_true",
                         help="keep saved runs for folds not listed in --folds (same protocol only)")
+    parser.add_argument("--add-models", action="store_true",
+                        help="train only --models on the --folds and merge them into the saved results")
     parser.add_argument("--summarize-only", action="store_true")
     args = parser.parse_args()
     if args.summarize_only:
         with open(OUT_JSON, encoding="utf-8") as fh:
             summarize(json.load(fh))
     else:
-        run(args.seeds, args.epochs, args.regimes, args.models, args.folds, args.resume)
+        run(args.seeds, args.epochs, args.regimes, args.models, args.folds, args.resume, args.add_models)

@@ -1,8 +1,23 @@
 """Single source of truth for experiment settings shared by every script."""
+import os
 
 DATA_DIR = "cwru_fault_data"
 PROCESSED_DIR = "processed_data"
 RESULTS_DIR = "results"
+
+# Sensitivity check of the CWRU band limit. With the environment variable CWRU_VARIANT=sharp every
+# CWRU recording is low-passed by a sharp elliptic filter instead of the band limit below: flat to
+# SHARP_PASS_HZ and closed from SHARP_STOP_HZ, where the interference near 4.2 kHz begins (its
+# lowest component lies near 4.03 kHz). It keeps most of the 3.6-4.0 kHz fault content that
+# BAND_LIMIT_HZ removes. Its data and results go to separate folders; the main results are untouched.
+CWRU_VARIANT = os.environ.get("CWRU_VARIANT", "")
+if CWRU_VARIANT not in ("", "sharp"):
+    raise ValueError(f"unknown CWRU_VARIANT {CWRU_VARIANT!r}; use 'sharp' or leave it unset")
+if CWRU_VARIANT:
+    PROCESSED_DIR = os.path.join(PROCESSED_DIR, CWRU_VARIANT)
+    RESULTS_DIR = os.path.join(RESULTS_DIR, f"sensitivity_{CWRU_VARIANT}")
+SHARP_PASS_HZ = 3900
+SHARP_STOP_HZ = 4000
 
 CLASS_NAMES = ["Normal (Healthy)", "Inner Race Fault", "Ball Fault", "Outer Race Fault"]
 
