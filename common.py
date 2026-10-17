@@ -1,4 +1,5 @@
 """Shared data, training, calibration and evaluation utilities."""
+import copy
 import os
 import random
 import time
@@ -169,6 +170,25 @@ def class_weights(y, num_classes=4):
     counts = np.bincount(y, minlength=num_classes).astype(np.float32)
     w = counts.sum() / (num_classes * np.maximum(counts, 1))
     return torch.tensor(w, dtype=torch.float32)
+
+
+@torch.no_grad()
+def adapt_batchnorm(model, X, batch_size=256):
+    """
+    AdaBN, as used by WDCNN (Zhang et al. 2017): a copy of the trained model whose batch-norm
+    statistics are re-estimated on the unlabelled target windows X (cumulative average over all of
+    them); every learned weight stays as trained. Returns the adapted copy in eval mode.
+    """
+    adapted = copy.deepcopy(model).eval()
+    for m in adapted.modules():
+        if isinstance(m, nn.modules.batchnorm._BatchNorm):
+            m.reset_running_stats()
+            m.momentum = None  # cumulative moving average = plain mean over all batches
+            m.train()
+    device = next(adapted.parameters()).device
+    for i in range(0, len(X), batch_size):
+        adapted(torch.from_numpy(X[i:i + batch_size]).to(device))
+    return adapted.eval()
 
 
 @torch.no_grad()
