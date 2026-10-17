@@ -126,6 +126,18 @@ def test_band_limit_is_flat_to_3500_hz_and_removes_the_interference_line():
     assert np.all(gain_db[2:] < -45)
 
 
+def test_sharp_variant_keeps_3_6_to_3_9_khz_and_removes_the_interference():
+    """The sensitivity variant must keep most of the band the main band limit removes, and still remove
+    the interference, whose components start near 4.03 kHz."""
+    from scipy.signal import sosfreqz
+    from preprocess_data import band_limit_sos
+    f = np.array([3600.0, 3800.0, 3900.0, 4000.0, 4030.0, 4264.0, 4500.0, 5200.0])
+    _, h = sosfreqz(band_limit_sos("sharp"), worN=f, fs=config.SAMPLING_RATE_HZ)
+    gain_db = 20 * np.log10(np.abs(h) ** 2)
+    assert np.all(np.abs(gain_db[:3]) < 0.2)
+    assert np.all(gain_db[3:] < -100)
+
+
 @pytest.mark.skipif(not HAS_RAW, reason="raw CWRU data not downloaded")
 @pytest.mark.parametrize("name", ["Normal_0.mat", "Normal_1.mat", "Normal_2.mat", "Normal_3.mat"])
 def test_interference_line_is_far_below_the_training_noise(name):
