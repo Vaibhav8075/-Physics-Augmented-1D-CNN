@@ -13,9 +13,10 @@ what every model sees during training: a difference buried under that noise cann
 
 A third cue is not created by the preprocessing but survives it: Smith and Randall (MSSP 2015,
 Sec. 6.1.1) report electromagnetic interference at harmonics of about 4.2 kHz in the CWRU data,
-attributed to the dynamometer controller. Its first harmonic lies just above the band limit,
-where the filter attenuates by only a few dB. The script reports the same statistics for the
-share of drive-end power in 4.0-4.4 kHz, and the median absolute (unstandardised) power there.
+attributed to the dynamometer controller. With the earlier 4.0 kHz band limit the 4.0-4.2 kHz band
+was attenuated by only 0-21 dB and still separated the classes under the training noise; the
+band limit now ends at 3.6 kHz (47-73 dB there). The script reports the same statistics for the share of
+drive-end power in 4.0-4.4 kHz, and the median absolute (unstandardised) power there.
 
 Writes results/cwru_shortcut_check.json.  Usage: python cwru_shortcut_check.py
 """
@@ -35,6 +36,7 @@ FS = config.SAMPLING_RATE_HZ
 FREQS = np.fft.rfftfreq(config.WINDOW_SIZE, 1.0 / FS)
 EDGE_BAND = (5200, 6000)
 LINE_BAND = (4000, 4400)
+TRANSITION_BAND = (3600, 4000)  # between the band limit's passband edge and the interference line
 # Blackman-Harris taper (side lobes ~ -92 dB): without it, leakage from the strong low-frequency
 # content (~ -40 dB) would hide the true level of the edge band.
 TAPER = scipy.signal.windows.blackmanharris(config.WINDOW_SIZE).astype(np.float64)
@@ -100,6 +102,15 @@ def check(band_limit, rng_seed=0):
             # absolute (unstandardised) power in the line band, healthy relative to faulty windows
             "line_abs_healthy_vs_faulty_db": float(10 * np.log10(np.median(line_abs[healthy]) / np.median(line_abs[~healthy]))),
         }
+        # what the band limit takes from each class: median share of window power in 3.6-4.0 kHz
+        transition = band_power(std[:, 0], TRANSITION_BAND)[1]
+        labels_arr = np.asarray(labels)
+        res["transition_share_pct"] = [float(100 * np.median(transition[labels_arr == c])) for c in range(4)]
+        # frequency of the strongest content above 2 kHz in each class's mean tapered spectrum
+        spec = np.abs(np.fft.rfft(std[:, 0] * TAPER, axis=-1)) ** 2
+        high = FREQS >= 2000
+        res["peak_above_2khz_hz"] = [float(FREQS[high][np.argmax(spec[labels_arr == c][:, high].mean(0))])
+                                     for c in range(4)]
         for spectrum in ("lowpass", "white"):
             noisy = np.stack([add_real_world_impairments(x, snr_db=config.IMPAIRMENTS["train"]["snr_db"],
                                                          drift_prob=0.0, impulse_prob=0.0, rng=rng,
@@ -108,7 +119,8 @@ def check(band_limit, rng_seed=0):
             res[f"line_{spectrum}_15dB"] = separability(line_fraction(noisy), healthy)
         out[f"load{load}"] = res
         print(f"  band limit {'on ' if band_limit else 'off'} | load {load} | "
-              + " | ".join(f"{k} {v:.3f}" for k, v in res.items()))
+              + " | ".join(f"{k} {v:.3f}" if np.isscalar(v) else f"{k} {np.round(v, 2).tolist()}"
+                           for k, v in res.items()))
     return out
 
 

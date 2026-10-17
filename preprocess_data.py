@@ -19,8 +19,9 @@ NATIVE_FS_HZ = {"097": 48000, "098": 48000, "099": 48000, "100": 48000}
 
 # That filter is flat to 4.8 kHz and then rolls off, while the 12 kHz fault recordings keep their
 # content up to 6 kHz, so the 4.8-6 kHz band alone would separate healthy from faulty windows.
-# Every recording is therefore low-passed to a common band limit (same filter family, zero phase),
-# which attenuates all of them by at least 56 dB above 4.8 kHz.
+# Every recording is therefore low-passed to a common band limit (same filter family, zero phase).
+# With the passband edge at 3.6 kHz (config.BAND_LIMIT_HZ) it attenuates all of them by 47 dB at
+# 4.0 kHz, 73 dB at the ~4.2 kHz interference line and over 140 dB above 4.8 kHz.
 BAND_LIMIT_SOS = scipy.signal.cheby1(8, 0.05, config.BAND_LIMIT_HZ / (config.SAMPLING_RATE_HZ / 2),
                                      output="sos")
 

@@ -29,8 +29,9 @@ Paderborn numbers need `results/paderborn_{real_cv,a2r}_metrics.json` (from
 `run_paderborn_study.py`) and `results/paderborn_sanity.json` (from
 `paderborn_sanity_check.py`). All CWRU numbers, including the ranges quoted in the prose,
 are generated keys; they were regenerated after the 48 kHz normal-baseline recordings were
-decimated to 12 kHz and all CWRU recordings were given a common 4 kHz band limit (see the main
-README). Fold-level statistics and the convergence check come from `fold_level_stats.py` and
+decimated to 12 kHz and all CWRU recordings were given a common band limit, and again (October
+2026) after that band limit was lowered from 4.0 to 3.6 kHz to remove the 4.2 kHz interference
+line (see the main README). Fold-level statistics and the convergence check come from `fold_level_stats.py` and
 `training_curves.py`. Values quoted from Lessmeier et al. (Tables 9
 and 11) are typed into `main.tex` by hand and were checked against the published PDF
 (Table 11 gives 98.3%, its running text 98.5%). Statements from Smith and Randall (2015) and
@@ -41,13 +42,10 @@ the published PDFs; `references.bib` records which section or table supports eac
 while `\reviewdrafttrue` is set; `check_paper.py --submission` reports it as a problem. The
 `\documentclass[conference]{IEEEtran}` layout is provisional. Open before submission:
 
-- target venue, its template and page limit (the draft is 11 pages plus references on a 12th;
-  the abstract is at 250 words);
+- target venue, its template and page limit (see `check_paper.py` for the current page count;
+  the abstract must stay within 250 words);
 - review mode: for double-blind review, replace the author block and anonymise the repository URL;
 - authorship and acknowledgements (the supervisor's role is not yet decided);
-- the 4.2 kHz interference line that survives the CWRU band limit (main README, "Known remaining
-  cue"): either repeat the CWRU experiments with a band limit below 4 kHz or keep it as the
-  stated limitation;
 - the repository URL opens `main`: merge each shared version into `main` first, and for
   submission consider citing a tagged release so the link matches the paper.
 

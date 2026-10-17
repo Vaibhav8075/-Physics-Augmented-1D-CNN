@@ -48,6 +48,16 @@ def test_ece_perfect_and_overconfident():
     assert compute_ece(wrong, labels) == pytest.approx(100.0)
 
 
+def test_fault_f1_ignores_the_healthy_class_but_counts_its_mistakes():
+    from common import classification_metrics
+    labels = np.array([0, 0, 1, 1, 2, 2, 3, 3])
+    preds = np.array([0, 0, 1, 1, 1, 1, 3, 0])  # healthy perfect; ball all wrong; one outer race called healthy
+    m = classification_metrics(np.eye(4)[preds], labels)
+    # F1 inner 2/3, ball 0, outer 2/3 (the window called healthy is a missed fault)
+    assert m["fault_f1"] == pytest.approx((2 / 3 + 0 + 2 / 3) / 3 * 100)
+    assert m["macro_f1"] > m["fault_f1"]
+
+
 def test_impairments_are_reproducible():
     x = np.random.default_rng(0).standard_normal((5, 2, config.WINDOW_SIZE)).astype(np.float32)
     assert np.array_equal(impair_array(x, "test", 42), impair_array(x, "test", 42))
@@ -103,6 +113,30 @@ def test_band_above_decimation_edge_is_empty_for_every_class(name):
     x = load_recording(os.path.join(config.DATA_DIR, name))[0].astype(np.float64)
     f, p = welch(x, fs=config.SAMPLING_RATE_HZ, window="blackmanharris", nperseg=1024)
     assert p[f >= 5200].sum() / p.sum() < 1e-9  # below -90 dB  # ~10-s recordings
+
+
+def test_band_limit_is_flat_to_3500_hz_and_removes_the_interference_line():
+    """Zero-phase filtering applies the filter twice, hence |H|^2."""
+    from scipy.signal import sosfreqz
+    from preprocess_data import BAND_LIMIT_SOS
+    f = np.array([3000.0, 3500.0, 4000.0, 4200.0])
+    _, h = sosfreqz(BAND_LIMIT_SOS, worN=f, fs=config.SAMPLING_RATE_HZ)
+    gain_db = 20 * np.log10(np.abs(h) ** 2)
+    assert np.all(np.abs(gain_db[:2]) < 0.2)
+    assert np.all(gain_db[2:] < -45)
+
+
+@pytest.mark.skipif(not HAS_RAW, reason="raw CWRU data not downloaded")
+@pytest.mark.parametrize("name", ["Normal_0.mat", "Normal_1.mat", "Normal_2.mat", "Normal_3.mat"])
+def test_interference_line_is_far_below_the_training_noise(name):
+    """The ~4.2 kHz interference line marked the healthy class (cwru_shortcut_check.py). After the
+    band limit its share of a healthy recording's power must be far below what 15 dB training noise
+    puts into 4.0-4.4 kHz (about -27 dB for white noise)."""
+    from scipy.signal import welch
+    from preprocess_data import load_recording
+    x = load_recording(os.path.join(config.DATA_DIR, name))[0].astype(np.float64)
+    f, p = welch(x, fs=config.SAMPLING_RATE_HZ, window="blackmanharris", nperseg=1024)
+    assert p[(f >= 4000) & (f < 4400)].sum() / p.sum() < 10 ** (-55 / 10)
 
 
 @pytest.mark.skipif(not HAS_DATA, reason="run preprocess_data.py first")

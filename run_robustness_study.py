@@ -84,6 +84,8 @@ CONTRASTS = [
     ("kin", "rf", "S3 kinematic vs spectral features", "secondary"),
 ]
 METRICS = ["macro_f1", "accuracy", "false_alarm_rate", "missed_fault_rate", "ece"]
+# Plus the mean F1 of the three fault classes: the healthy class leaks through the time split (one healthy bearing)
+CWRU_METRICS = METRICS + ["fault_f1"]
 
 
 # -------------------------------------------------------------
@@ -168,7 +170,7 @@ def score(probs, y):
     k = probs.shape[1]
     m["recall_per_class"] = [float((preds[y == c] == c).mean() * 100.0) for c in range(k)]
     m["confusion"] = np.bincount(y * k + preds, minlength=k * k).reshape(k, k).tolist()  # rows: true class
-    return {key: m[key] for key in METRICS + ["recall_per_class", "confusion"]}
+    return {key: m[key] for key in CWRU_METRICS + ["recall_per_class", "confusion"]}
 
 
 def run(seeds, epochs, regimes, model_keys, folds=FAULT_SIZES, resume=False):
@@ -304,7 +306,7 @@ def summarize(results):
         summary["means"][regime] = {
             m: {c: {met: {"mean": float(values(results, regime, m, c, met).mean()),
                           "std": float(values(results, regime, m, c, met).std(ddof=1))}
-                    for met in METRICS} for c in conds} for m in models}
+                    for met in CWRU_METRICS} for c in conds} for m in models}
         summary["contrasts"][regime] = contrast_rows(lambda m, c: values(results, regime, m, c), models, conds)
     results["summary"] = summary
     with open(OUT_JSON, "w", encoding="utf-8") as f:
@@ -366,6 +368,11 @@ def write_report(results, summary, regimes, models, conds):
             for m in models:
                 f.write(f"| {MODEL_SPECS[m][0]} | "
                         + " | ".join(fmt(summary["means"][regime][m][c]["macro_f1"]) for c in conds) + " |\n")
+            f.write("\n### Fault-class F1 (mean F1 of inner race, ball and outer race; healthy excluded)\n\n"
+                    "| Model | " + " | ".join(conds) + " |\n|" + " :--- |" * (len(conds) + 1) + "\n")
+            for m in models:
+                f.write(f"| {MODEL_SPECS[m][0]} | "
+                        + " | ".join(fmt(summary["means"][regime][m][c]["fault_f1"]) for c in conds) + " |\n")
             f.write("\n### Contrasts (macro-F1 difference a − b; significant after Holm correction in bold)\n\n"
                     "| Contrast | " + " | ".join(conds) + " |\n|" + " :--- |" * (len(conds) + 1) + "\n")
             rows = summary["contrasts"][regime]

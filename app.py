@@ -92,6 +92,21 @@ def load_test_data():
     return None, None
 
 @st.cache_data
+def per_class_recall():
+    """Recall of each class for the two loaded (seed-0) models on the fixed-seed impaired test split."""
+    x_path = os.path.join(PROCESSED_DIR, "X_test.npy")
+    y_path = os.path.join(PROCESSED_DIR, "y_test.npy")
+    if not (os.path.exists(x_path) and os.path.exists(y_path)):
+        return None
+    X, y = np.load(x_path), np.load(y_path)
+    table = {"Class": CLASS_NAMES}
+    for model, label in ((base_model, "Standard 1D-CNN"), (phys_model, "PAC-1DCNN")):
+        with torch.no_grad():
+            preds = model(torch.from_numpy(X))[0].argmax(1).numpy()
+        table[label] = [f"{100.0 * (preds[y == c] == c).mean():.1f}" for c in range(len(CLASS_NAMES))]
+    return table
+
+@st.cache_data
 def load_metrics():
     path = os.path.join(RESULTS_DIR, "metrics.json")
     if os.path.exists(path):
@@ -265,6 +280,13 @@ with tab3:
             rows[label] = [cell("accuracy"), cell("macro_f1"), cell("false_alarm_rate"),
                            cell("missed_fault_rate"), cell("ece"), f"{m['cpu_latency_batch1']['mean_ms']:.3f}"]
         st.table(rows)
+
+    recall = per_class_recall()
+    if recall is not None:
+        st.subheader("Recall per class (%), models shown in this console (seed 0)")
+        st.caption("Accuracy hides which faults are missed; a class with low recall here is mostly "
+                   "assigned to another class (see the confusion matrices below).")
+        st.table(recall)
 
     col_cm, col_saliency = st.columns(2)
     with col_cm:
