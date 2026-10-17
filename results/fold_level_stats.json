@@ -2018,6 +2018,426 @@
     ],
     "folds_agree": 2,
     "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "clean",
+    "delta": 0.4781107578044275,
+    "fold_deltas": [
+     -7.587,
+     8.783,
+     0.239
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@10dB",
+    "delta": -0.30516108832140293,
+    "fold_deltas": [
+     -5.522,
+     4.243,
+     0.364
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@5dB",
+    "delta": -4.712677786638857,
+    "fold_deltas": [
+     -11.405,
+     -0.047,
+     -2.686
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@0dB",
+    "delta": -14.330025785679785,
+    "fold_deltas": [
+     -20.874,
+     -10.476,
+     -11.64
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@-5dB",
+    "delta": -19.364568538415856,
+    "fold_deltas": [
+     -14.5,
+     -19.121,
+     -24.472
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@10dB",
+    "delta": -2.6740658454964645,
+    "fold_deltas": [
+     -13.352,
+     3.811,
+     1.519
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@5dB",
+    "delta": -8.09390201028704,
+    "fold_deltas": [
+     -16.919,
+     -6.976,
+     -0.387
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@0dB",
+    "delta": -17.740343778696637,
+    "fold_deltas": [
+     -18.381,
+     -23.027,
+     -11.814
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@-5dB",
+    "delta": -13.751614536886242,
+    "fold_deltas": [
+     -15.837,
+     -17.039,
+     -8.379
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@10dB",
+    "delta": -5.096477837152446,
+    "fold_deltas": [
+     -15.895,
+     -1.189,
+     1.795
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@5dB",
+    "delta": -10.26240431675427,
+    "fold_deltas": [
+     -21.41,
+     -6.129,
+     -3.248
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@0dB",
+    "delta": -25.054621722849117,
+    "fold_deltas": [
+     -27.844,
+     -29.428,
+     -17.892
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@-5dB",
+    "delta": -15.573336597744566,
+    "fold_deltas": [
+     -18.813,
+     -16.489,
+     -11.418
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "drift+spikes",
+    "delta": 0.012086146689685032,
+    "fold_deltas": [
+     -8.551,
+     8.449,
+     0.138
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "clean",
+    "delta": 0.8763701130790219,
+    "fold_deltas": [
+     -10.664,
+     9.872,
+     3.422
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@10dB",
+    "delta": 1.4340488856517861,
+    "fold_deltas": [
+     -10.265,
+     10.655,
+     3.912
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@5dB",
+    "delta": 2.631408788222386,
+    "fold_deltas": [
+     -9.449,
+     13.608,
+     3.735
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@0dB",
+    "delta": 6.952522113508119,
+    "fold_deltas": [
+     -4.527,
+     20.089,
+     5.295
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@-5dB",
+    "delta": 17.699516859318148,
+    "fold_deltas": [
+     20.033,
+     23.738,
+     9.327
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@10dB",
+    "delta": 0.7004351696327878,
+    "fold_deltas": [
+     -10.077,
+     8.414,
+     3.763
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@5dB",
+    "delta": -0.4782840825564681,
+    "fold_deltas": [
+     -8.836,
+     4.243,
+     3.159
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@0dB",
+    "delta": -1.5443251733478671,
+    "fold_deltas": [
+     -4.45,
+     -1.15,
+     0.966
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@-5dB",
+    "delta": 17.319982153340877,
+    "fold_deltas": [
+     14.745,
+     13.946,
+     23.268
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@10dB",
+    "delta": 0.5911846549794765,
+    "fold_deltas": [
+     -10.191,
+     8.17,
+     3.794
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@5dB",
+    "delta": -0.5229287745264509,
+    "fold_deltas": [
+     -9.507,
+     4.414,
+     3.524
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@0dB",
+    "delta": -1.9422185700482164,
+    "fold_deltas": [
+     -4.563,
+     -2.673,
+     1.409
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@-5dB",
+    "delta": 18.733570973272176,
+    "fold_deltas": [
+     19.162,
+     13.577,
+     23.462
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "drift+spikes",
+    "delta": 0.3674780759562542,
+    "fold_deltas": [
+     -12.261,
+     9.727,
+     3.637
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
    }
   ],
   "mixed": [
@@ -3699,6 +4119,426 @@
      15.851
     ],
     "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "clean",
+    "delta": -1.7228562006882082,
+    "fold_deltas": [
+     -11.665,
+     8.28,
+     -1.784
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@10dB",
+    "delta": -1.6313918929195523,
+    "fold_deltas": [
+     -7.56,
+     4.591,
+     -1.925
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@5dB",
+    "delta": -3.4164394102964337,
+    "fold_deltas": [
+     -0.35,
+     -3.241,
+     -6.658
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@0dB",
+    "delta": -10.432293382569958,
+    "fold_deltas": [
+     -5.234,
+     -10.643,
+     -15.42
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@-5dB",
+    "delta": -22.207490642114745,
+    "fold_deltas": [
+     -21.938,
+     -17.21,
+     -27.474
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@10dB",
+    "delta": -3.072820130380272,
+    "fold_deltas": [
+     -12.127,
+     5.539,
+     -2.631
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@5dB",
+    "delta": -4.039535808491036,
+    "fold_deltas": [
+     -8.766,
+     1.945,
+     -5.298
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@0dB",
+    "delta": -10.014300869680069,
+    "fold_deltas": [
+     -6.297,
+     -6.37,
+     -17.376
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@-5dB",
+    "delta": -16.968787602868783,
+    "fold_deltas": [
+     -20.109,
+     -12.905,
+     -17.892
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@10dB",
+    "delta": -2.6501367363661807,
+    "fold_deltas": [
+     -11.725,
+     5.437,
+     -1.662
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@5dB",
+    "delta": -5.899882504076229,
+    "fold_deltas": [
+     -9.67,
+     -0.207,
+     -7.823
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@0dB",
+    "delta": -14.39938932316125,
+    "fold_deltas": [
+     -11.196,
+     -15.954,
+     -16.048
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@-5dB",
+    "delta": -18.266366465211707,
+    "fold_deltas": [
+     -21.611,
+     -16.683,
+     -16.505
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "drift+spikes",
+    "delta": -2.028295562781954,
+    "fold_deltas": [
+     -10.154,
+     7.075,
+     -3.006
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "clean",
+    "delta": -1.8948586316442615,
+    "fold_deltas": [
+     -11.749,
+     5.68,
+     0.385
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@10dB",
+    "delta": -0.7527937911692627,
+    "fold_deltas": [
+     -10.934,
+     7.616,
+     1.06
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@5dB",
+    "delta": 1.2996851627707902,
+    "fold_deltas": [
+     -9.06,
+     12.408,
+     0.551
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@0dB",
+    "delta": 8.46745811224246,
+    "fold_deltas": [
+     -0.716,
+     21.862,
+     4.257
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@-5dB",
+    "delta": 16.812956082865757,
+    "fold_deltas": [
+     17.391,
+     22.887,
+     10.161
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@10dB",
+    "delta": -1.7344557079425182,
+    "fold_deltas": [
+     -11.57,
+     5.517,
+     0.849
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@5dB",
+    "delta": -1.836554223911835,
+    "fold_deltas": [
+     -10.613,
+     4.078,
+     1.026
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@0dB",
+    "delta": -2.498665070451691,
+    "fold_deltas": [
+     -6.888,
+     1.05,
+     -1.658
+    ],
+    "folds_agree": 2,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@-5dB",
+    "delta": 16.79605611630437,
+    "fold_deltas": [
+     19.557,
+     13.662,
+     17.169
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@10dB",
+    "delta": -2.0150210672522824,
+    "fold_deltas": [
+     -11.961,
+     5.211,
+     0.704
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@5dB",
+    "delta": -2.1407257652244076,
+    "fold_deltas": [
+     -10.84,
+     3.279,
+     1.139
+    ],
+    "folds_agree": 1,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@0dB",
+    "delta": -4.151674557541871,
+    "fold_deltas": [
+     -8.801,
+     -1.691,
+     -1.963
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@-5dB",
+    "delta": 14.701431321589864,
+    "fold_deltas": [
+     16.502,
+     9.583,
+     18.019
+    ],
+    "folds_agree": 3,
+    "n_folds": 3
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "drift+spikes",
+    "delta": -1.6050990527019902,
+    "fold_deltas": [
+     -11.718,
+     6.296,
+     0.607
+    ],
+    "folds_agree": 1,
     "n_folds": 3
    }
   ]
@@ -6392,6 +7232,678 @@
     "n_folds": 10,
     "p_nb": 0.9790766722138127,
     "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "clean",
+    "delta": 3.370437481874364,
+    "fold_deltas": [
+     -14.624,
+     -2.929,
+     1.513,
+     9.768,
+     16.098,
+     11.68,
+     1.595,
+     0.712,
+     7.163,
+     2.728
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.6646154037032798,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@10dB",
+    "delta": 5.244262239423922,
+    "fold_deltas": [
+     -10.938,
+     1.658,
+     5.384,
+     8.891,
+     9.76,
+     11.783,
+     5.107,
+     -2.874,
+     9.401,
+     14.27
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.4492261772151014,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@5dB",
+    "delta": 4.6218592322357726,
+    "fold_deltas": [
+     -4.153,
+     8.579,
+     2.141,
+     8.983,
+     -1.434,
+     11.406,
+     8.686,
+     -17.785,
+     16.039,
+     13.756
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.6166427052603171,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@0dB",
+    "delta": 4.88346100713901,
+    "fold_deltas": [
+     -13.525,
+     -10.183,
+     7.35,
+     26.49,
+     -6.264,
+     16.811,
+     7.578,
+     0.757,
+     18.827,
+     0.993
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.679777742444221,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@-5dB",
+    "delta": -0.4103203443311102,
+    "fold_deltas": [
+     1.348,
+     -10.021,
+     1.602,
+     1.81,
+     5.038,
+     7.649,
+     -11.742,
+     -1.106,
+     4.489,
+     -3.171
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.9425233561098116,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@10dB",
+    "delta": 4.360597467526515,
+    "fold_deltas": [
+     -17.963,
+     2.909,
+     3.919,
+     8.929,
+     11.976,
+     5.602,
+     6.602,
+     -3.082,
+     6.689,
+     18.023
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.6172931520109276,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@5dB",
+    "delta": 4.617954098320352,
+    "fold_deltas": [
+     -18.422,
+     2.102,
+     12.189,
+     13.83,
+     8.591,
+     -1.933,
+     3.855,
+     5.117,
+     3.851,
+     16.999
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.6092408423503429,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@0dB",
+    "delta": -1.9954513683711586,
+    "fold_deltas": [
+     2.838,
+     -16.678,
+     -8.475,
+     1.16,
+     -14.578,
+     6.279,
+     -3.137,
+     14.653,
+     12.657,
+     -14.674
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.8461182883969243,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@-5dB",
+    "delta": -3.7629441160190025,
+    "fold_deltas": [
+     -9.192,
+     -9.108,
+     0.0,
+     0.0,
+     -7.718,
+     -2.509,
+     -2.268,
+     -3.34,
+     4.564,
+     -8.059
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.3785209901167654,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@10dB",
+    "delta": 1.442175467415949,
+    "fold_deltas": [
+     -13.857,
+     -1.128,
+     9.103,
+     15.205,
+     8.954,
+     1.933,
+     -2.906,
+     -9.592,
+     2.533,
+     4.175
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.8554557069309258,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@5dB",
+    "delta": -3.206507551847305,
+    "fold_deltas": [
+     -13.041,
+     -1.359,
+     9.863,
+     21.947,
+     -1.83,
+     -4.164,
+     -5.127,
+     -24.177,
+     -1.313,
+     -12.862
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.7792454443371614,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@0dB",
+    "delta": -5.617479265134748,
+    "fold_deltas": [
+     -4.648,
+     -11.332,
+     -2.524,
+     0.765,
+     -24.963,
+     -5.172,
+     -2.16,
+     -4.923,
+     13.1,
+     -14.316
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.5364390453648543,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@-5dB",
+    "delta": 1.272708354157356,
+    "fold_deltas": [
+     12.818,
+     -9.783,
+     14.638,
+     0.0,
+     -9.499,
+     3.395,
+     -3.058,
+     -0.784,
+     13.39,
+     -8.39
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.882288098579982,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "drift+spikes",
+    "delta": 3.3906732221366354,
+    "fold_deltas": [
+     -12.043,
+     -0.834,
+     -0.055,
+     10.969,
+     10.2,
+     10.314,
+     2.149,
+     2.145,
+     5.439,
+     5.622
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.589809378443233,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "clean",
+    "delta": 4.291283749734051,
+    "fold_deltas": [
+     -2.705,
+     3.536,
+     7.123,
+     2.716,
+     9.162,
+     5.172,
+     -4.969,
+     2.754,
+     5.252,
+     14.872
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.4068248610722137,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@10dB",
+    "delta": 4.43803871766855,
+    "fold_deltas": [
+     -1.92,
+     5.943,
+     5.276,
+     4.793,
+     5.591,
+     4.674,
+     -3.954,
+     -0.356,
+     7.23,
+     17.104
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.4076752569428953,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@5dB",
+    "delta": 6.133508187439984,
+    "fold_deltas": [
+     2.578,
+     8.386,
+     6.559,
+     2.462,
+     0.643,
+     4.877,
+     -0.738,
+     5.754,
+     13.492,
+     17.322
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.2482852200255497,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@0dB",
+    "delta": 13.181976260187563,
+    "fold_deltas": [
+     18.853,
+     8.573,
+     26.192,
+     -2.276,
+     -1.011,
+     13.2,
+     3.242,
+     26.477,
+     21.883,
+     16.686
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.1922623632160938,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@-5dB",
+    "delta": 17.01493073140239,
+    "fold_deltas": [
+     29.289,
+     17.135,
+     33.531,
+     3.056,
+     11.234,
+     12.669,
+     4.758,
+     24.019,
+     17.569,
+     16.89
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.07954678618158584,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@10dB",
+    "delta": 4.494160110765296,
+    "fold_deltas": [
+     -5.328,
+     6.853,
+     5.296,
+     3.978,
+     6.181,
+     5.883,
+     -1.953,
+     0.604,
+     6.348,
+     17.078
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.4160277635096921,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@5dB",
+    "delta": 6.551671696868771,
+    "fold_deltas": [
+     -7.001,
+     10.149,
+     10.744,
+     3.238,
+     1.403,
+     7.512,
+     4.347,
+     4.715,
+     11.041,
+     19.37
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.315153668333828,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@0dB",
+    "delta": 15.327389954935208,
+    "fold_deltas": [
+     14.74,
+     9.34,
+     30.33,
+     -1.145,
+     0.996,
+     16.556,
+     12.993,
+     27.129,
+     26.185,
+     16.15
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.13162055632816327,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@-5dB",
+    "delta": 17.12215566509224,
+    "fold_deltas": [
+     20.992,
+     17.689,
+     33.944,
+     1.247,
+     13.335,
+     13.378,
+     14.305,
+     21.632,
+     17.087,
+     17.612
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.04117446393587199,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@10dB",
+    "delta": 4.447054044214224,
+    "fold_deltas": [
+     -3.766,
+     5.06,
+     4.745,
+     3.425,
+     6.165,
+     6.991,
+     -3.171,
+     1.625,
+     5.933,
+     17.463
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.413625522947587,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@5dB",
+    "delta": 5.134147874063496,
+    "fold_deltas": [
+     -3.867,
+     6.749,
+     4.694,
+     3.516,
+     3.221,
+     8.431,
+     -0.034,
+     1.089,
+     8.847,
+     18.695
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.3661663776974108,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@0dB",
+    "delta": 10.865314466693427,
+    "fold_deltas": [
+     7.343,
+     6.547,
+     18.15,
+     -3.284,
+     -1.476,
+     14.139,
+     8.841,
+     14.007,
+     23.528,
+     20.859
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.1991467562391941,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@-5dB",
+    "delta": 19.274888724857128,
+    "fold_deltas": [
+     21.607,
+     20.101,
+     38.296,
+     -1.523,
+     16.115,
+     20.208,
+     14.242,
+     19.731,
+     23.777,
+     20.194
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.05062217388360237,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "drift+spikes",
+    "delta": 4.115753469007382,
+    "fold_deltas": [
+     -0.795,
+     3.871,
+     6.102,
+     2.589,
+     9.081,
+     4.038,
+     -5.036,
+     1.757,
+     4.724,
+     14.827
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.4041448467067459,
+    "p_nb_holm": 1.0
    }
   ],
   "mixed": [
@@ -9081,6 +10593,678 @@
     "folds_agree": 4,
     "n_folds": 10,
     "p_nb": 0.9848210151878898,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "clean",
+    "delta": 0.28630222143852463,
+    "fold_deltas": [
+     -19.575,
+     -2.875,
+     -8.734,
+     9.842,
+     6.474,
+     10.929,
+     -9.195,
+     4.192,
+     6.03,
+     5.775
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.9745866337645688,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@10dB",
+    "delta": -0.9293507661473267,
+    "fold_deltas": [
+     -19.883,
+     6.224,
+     -7.736,
+     8.352,
+     -3.07,
+     1.536,
+     -8.704,
+     2.042,
+     7.087,
+     4.859
+    ],
+    "folds_agree": 4,
+    "n_folds": 10,
+    "p_nb": 0.9081823790005642,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@5dB",
+    "delta": -5.674931964497192,
+    "fold_deltas": [
+     -20.175,
+     2.291,
+     -17.845,
+     20.675,
+     -20.906,
+     -4.336,
+     -10.589,
+     -15.319,
+     8.935,
+     0.52
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.6502381430557503,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@0dB",
+    "delta": 0.404617708726504,
+    "fold_deltas": [
+     -0.96,
+     1.922,
+     -12.227,
+     26.03,
+     -6.266,
+     1.112,
+     -8.846,
+     -19.817,
+     11.975,
+     11.123
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.9731811496740469,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@-5dB",
+    "delta": 0.6006706669173028,
+    "fold_deltas": [
+     0.342,
+     3.526,
+     -7.674,
+     14.601,
+     5.755,
+     -1.053,
+     -1.066,
+     -8.28,
+     2.975,
+     -3.119
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.9206431215750569,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@10dB",
+    "delta": 0.501274187924837,
+    "fold_deltas": [
+     -24.022,
+     1.291,
+     -2.493,
+     8.335,
+     5.411,
+     11.686,
+     -7.689,
+     2.298,
+     4.09,
+     6.106
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.9564614157050675,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@5dB",
+    "delta": -7.515051745319175,
+    "fold_deltas": [
+     -22.859,
+     -18.25,
+     -14.456,
+     20.945,
+     -16.718,
+     -6.82,
+     -8.403,
+     -11.103,
+     -3.974,
+     6.488
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.525026709872362,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@0dB",
+    "delta": -16.08722279251041,
+    "fold_deltas": [
+     -25.643,
+     -14.606,
+     -30.636,
+     3.123,
+     -25.648,
+     -15.446,
+     -14.134,
+     -18.731,
+     -1.636,
+     -17.517
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.11336024537128994,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@-5dB",
+    "delta": -6.810902715820371,
+    "fold_deltas": [
+     -9.428,
+     -0.062,
+     -12.57,
+     1.428,
+     -7.793,
+     -9.452,
+     -12.048,
+     -10.474,
+     -1.061,
+     -6.649
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.16251983442008136,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@10dB",
+    "delta": 1.4315474146116518,
+    "fold_deltas": [
+     -23.481,
+     1.572,
+     -6.298,
+     12.508,
+     7.39,
+     17.334,
+     -6.91,
+     2.887,
+     1.324,
+     7.99
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.8908029008820592,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@5dB",
+    "delta": -4.725313135987838,
+    "fold_deltas": [
+     -18.783,
+     -8.618,
+     -24.231,
+     24.298,
+     -3.192,
+     2.182,
+     -10.742,
+     -9.041,
+     -7.439,
+     8.311
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.7051554456676028,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@0dB",
+    "delta": -13.566356059149081,
+    "fold_deltas": [
+     -20.011,
+     -20.474,
+     -31.366,
+     4.318,
+     -20.024,
+     -14.0,
+     -5.157,
+     -7.972,
+     -2.504,
+     -18.472
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.17881574107669426,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@-5dB",
+    "delta": -6.202531135891693,
+    "fold_deltas": [
+     -8.972,
+     -0.334,
+     -24.715,
+     1.919,
+     -7.348,
+     -15.12,
+     -5.984,
+     0.036,
+     8.627,
+     -10.134
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.47321735002944265,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "resnet2d",
+    "b": "wdcnn",
+    "question": "T1 pre-trained 2D ResNet vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "drift+spikes",
+    "delta": -0.6278592673233969,
+    "fold_deltas": [
+     -21.879,
+     -0.842,
+     -7.728,
+     9.49,
+     4.648,
+     7.294,
+     -8.447,
+     -0.247,
+     6.97,
+     4.463
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.9424552614385183,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "clean",
+    "delta": 1.828183111546594,
+    "fold_deltas": [
+     -7.51,
+     2.38,
+     -0.279,
+     4.59,
+     4.368,
+     5.741,
+     -2.419,
+     -2.236,
+     1.11,
+     12.537
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.7124527665049741,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@10dB",
+    "delta": 1.6380740478951288,
+    "fold_deltas": [
+     -1.847,
+     1.884,
+     -0.161,
+     5.715,
+     -0.753,
+     4.162,
+     -3.203,
+     -4.578,
+     2.775,
+     12.387
+    ],
+    "folds_agree": 5,
+    "n_folds": 10,
+    "p_nb": 0.7157786544130104,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@5dB",
+    "delta": 1.9063352807858849,
+    "fold_deltas": [
+     0.172,
+     4.614,
+     3.009,
+     4.384,
+     -7.776,
+     3.8,
+     -3.072,
+     -3.333,
+     5.816,
+     11.45
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.7021391118203858,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@0dB",
+    "delta": 9.838166672109764,
+    "fold_deltas": [
+     14.215,
+     14.498,
+     15.606,
+     1.095,
+     -2.907,
+     13.58,
+     -5.098,
+     9.1,
+     17.397,
+     20.896
+    ],
+    "folds_agree": 8,
+    "n_folds": 10,
+    "p_nb": 0.24368953988288752,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "lowpass@-5dB",
+    "delta": 16.07280431169861,
+    "fold_deltas": [
+     26.176,
+     27.949,
+     20.941,
+     4.578,
+     11.767,
+     12.425,
+     3.753,
+     17.039,
+     14.48,
+     21.62
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.05379715129340394,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@10dB",
+    "delta": 1.551720455359213,
+    "fold_deltas": [
+     -7.871,
+     2.488,
+     1.114,
+     4.271,
+     0.165,
+     5.966,
+     -0.576,
+     -4.653,
+     1.864,
+     12.749
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.7608693349052009,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@5dB",
+    "delta": 1.7724025230793743,
+    "fold_deltas": [
+     -9.114,
+     4.652,
+     5.016,
+     3.663,
+     -6.704,
+     5.827,
+     2.407,
+     -4.583,
+     4.154,
+     12.406
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.765086843256052,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@0dB",
+    "delta": 8.760620133244984,
+    "fold_deltas": [
+     4.89,
+     16.983,
+     14.929,
+     2.413,
+     -3.169,
+     10.019,
+     5.041,
+     10.466,
+     13.058,
+     12.976
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.14701268804420448,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "white@-5dB",
+    "delta": 14.641176904022108,
+    "fold_deltas": [
+     20.379,
+     28.44,
+     21.727,
+     3.745,
+     12.154,
+     8.355,
+     4.463,
+     14.571,
+     13.246,
+     19.333
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.06412743056597808,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@10dB",
+    "delta": 1.7423077865354977,
+    "fold_deltas": [
+     -6.38,
+     2.092,
+     -0.351,
+     4.008,
+     0.922,
+     5.941,
+     -1.678,
+     -3.274,
+     1.569,
+     14.575
+    ],
+    "folds_agree": 6,
+    "n_folds": 10,
+    "p_nb": 0.7363655793886605,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@5dB",
+    "delta": 1.7293714719616742,
+    "fold_deltas": [
+     -5.5,
+     1.857,
+     1.349,
+     2.717,
+     -4.578,
+     6.695,
+     0.277,
+     -3.668,
+     3.152,
+     14.994
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.7506716480556692,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@0dB",
+    "delta": 5.936454504260137,
+    "fold_deltas": [
+     4.86,
+     11.447,
+     4.88,
+     1.556,
+     -4.876,
+     6.287,
+     3.121,
+     5.871,
+     11.715,
+     14.503
+    ],
+    "folds_agree": 9,
+    "n_folds": 10,
+    "p_nb": 0.25788746780231697,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "highpass@-5dB",
+    "delta": 14.184555638741273,
+    "fold_deltas": [
+     23.238,
+     30.012,
+     14.46,
+     1.502,
+     13.726,
+     6.544,
+     1.219,
+     11.901,
+     21.36,
+     17.882
+    ],
+    "folds_agree": 10,
+    "n_folds": 10,
+    "p_nb": 0.11794331400868005,
+    "p_nb_holm": 1.0
+   },
+   {
+    "a": "wdcnn_adabn",
+    "b": "wdcnn",
+    "question": "T2 AdaBN vs WDCNN-style",
+    "family": "tertiary",
+    "condition": "drift+spikes",
+    "delta": 1.4879232738863089,
+    "fold_deltas": [
+     -6.804,
+     1.415,
+     0.465,
+     3.813,
+     3.154,
+     5.077,
+     -2.582,
+     -1.942,
+     1.321,
+     10.963
+    ],
+    "folds_agree": 7,
+    "n_folds": 10,
+    "p_nb": 0.7324897959542255,
     "p_nb_holm": 1.0
    }
   ]
