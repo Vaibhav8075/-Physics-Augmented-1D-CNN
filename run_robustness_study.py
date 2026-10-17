@@ -203,8 +203,9 @@ def run(seeds, epochs, regimes, model_keys, folds=FAULT_SIZES, resume=False, add
             saved = json.load(fh)
         if saved["protocol"] != results["protocol"]:
             raise SystemExit(f"--resume/--add-models: protocol in {OUT_JSON} differs from this run; refusing to merge.")
-        if add_models:  # rerun every fold for the given models only, replacing any earlier runs of them
-            results["runs"] = [r for r in saved["runs"] if r["model"] not in model_keys]
+        if add_models:  # rerun the listed folds for the given models only, replacing earlier runs of them
+            results["runs"] = [r for r in saved["runs"]
+                               if r["model"] not in model_keys or r["held_out_size"] not in folds]
             print(f"Adding models {model_keys} to {len(results['runs'])} saved runs")
         else:
             results["runs"] = [r for r in saved["runs"] if r["held_out_size"] not in folds]
@@ -427,7 +428,7 @@ if __name__ == "__main__":
     parser.add_argument("--resume", action="store_true",
                         help="keep saved runs for folds not listed in --folds (same protocol only)")
     parser.add_argument("--add-models", action="store_true",
-                        help="train only --models on every fold and merge them into the saved results")
+                        help="train only --models on the --folds and merge them into the saved results")
     parser.add_argument("--summarize-only", action="store_true")
     args = parser.parse_args()
     if args.summarize_only:
