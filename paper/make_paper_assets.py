@@ -287,6 +287,8 @@ def lolo():
 FS_CONDS = ["clean", "lowpass@0dB", "lowpass@-5dB", "white@0dB", "white@-5dB", "highpass@0dB", "highpass@-5dB",
             "drift+spikes"]
 FS_MODELS = ["baseline", "baseline_hp", "no_residual", "physics", "wdcnn", "rf"]
+CLASSICAL = ("rf", "kin")  # every other model is a network
+ADDED = ("resnet2d", "wdcnn_adabn")  # tertiary family; not run in the band-limit sensitivity check
 CONTRAST_LABELS = {("baseline_hp", "baseline"): "CNN+HP $-$ CNN",
                    ("physics", "no_residual"): "PAC $-$ (PAC$-$HP)",
                    ("physics", "baseline"): "PAC $-$ CNN",
@@ -312,6 +314,21 @@ SECONDARY = [("baseline_lhp", "baseline_hp", "CNN+LHP $-$ CNN+HP"),
              ("kin", "rf", "Kin-RF $-$ Env-RF"),
              ("resnet2d", "wdcnn", "ResNet-2D $-$ WDCNN-s"),            # tertiary family
              ("wdcnn_adabn", "wdcnn", "WDCNN-s+AdaBN $-$ WDCNN-s")]
+
+
+def strong_noise_numbers(means, contrasts, regimes, conds, prefix):
+    """For the conditions at 0 and -5 dB (both regimes): how often each model has the highest mean
+    macro-F1, and the range of the AdaBN gain over WDCNN-s at -5 dB."""
+    low = [(reg, c) for reg in regimes for c in conds if c.endswith(("@0dB", "@-5dB"))]
+    put(f"{prefix}-nlow", len(low), "{:d}")
+    best = [max(means[reg], key=lambda m: means[reg][m][c]["macro_f1"]["mean"]) for reg, c in low]
+    for m in means[regimes[0]]:
+        put(f"{prefix}-nbest-low-{m}", best.count(m), "{:d}")
+    gain = [r["delta"] for reg in regimes for r in contrasts[reg]
+            if (r["a"], r["b"]) == ("wdcnn_adabn", "wdcnn") and r["condition"].endswith("@-5dB")]
+    if gain:
+        put(f"{prefix}-adabn-gain-5dB-min", min(gain))
+        put(f"{prefix}-adabn-gain-5dB-max", max(gain))
 
 
 def secondary_rows(means, contrasts, regimes, conds, prefix, title):
@@ -388,6 +405,7 @@ def fault_size():
     write("tab_faultsize_contrasts.tex", contrast_table(s["contrasts"], regimes, FS_CONDS, "fs"))
     SECONDARY_TABLE["P2"] = secondary_rows(s["means"], s["contrasts"], regimes, FS_CONDS, "fs",
                                            "P2: fault-size hold-out (CWRU)")
+    strong_noise_numbers(s["means"], s["contrasts"], regimes, FS_CONDS, "fs")
 
     n_tests = sum(len(primary(s["contrasts"][r])) for r in regimes)
     pac_cnn = [r for reg in regimes for r in s["contrasts"][reg] if r["a"] == "physics" and r["b"] == "baseline"]
@@ -444,14 +462,14 @@ def fault_size():
                                    if r["regime"] == regime and r["model"] == m])))
         # ranges quoted in the prose
         means = s["means"][regime]
-        nets = [means[m]["clean"]["macro_f1"]["mean"] for m in FS_MODELS if m != "rf"]
+        nets = [means[m]["clean"]["macro_f1"]["mean"] for m in means if m not in CLASSICAL]
         put(f"fs-{regime}-nets-clean-min", min(nets))
         put(f"fs-{regime}-nets-clean-max", max(nets))
         # fault-class F1 (healthy excluded; the healthy class leaks through the time split)
         if "fault_f1" in means["physics"]["clean"]:
             for m, v in means.items():
                 put(f"fs-{regime}-{m}-clean-faultf1", v["clean"]["fault_f1"]["mean"])
-            nets_ff = [means[m]["clean"]["fault_f1"]["mean"] for m in means if m not in ("rf", "kin")]
+            nets_ff = [means[m]["clean"]["fault_f1"]["mean"] for m in means if m not in CLASSICAL]
             put(f"fs-{regime}-nets-clean-faultf1-min", min(nets_ff))
             put(f"fs-{regime}-nets-clean-faultf1-max", max(nets_ff))
         rec = {m: np.mean([r["test"]["clean"]["recall_per_class"] for r in runs
@@ -593,6 +611,7 @@ def paderborn():
         SECONDARY_TABLE["P4" if protocol == "real_cv" else "P3"] = secondary_rows(
             means, contrasts, regimes, PU_CONDS + ["drift+spikes"], prefix,
             "P4: real-damage bearing cross-validation" if protocol == "real_cv" else "P3: artificial $\\rightarrow$ real damage")
+        strong_noise_numbers(means, contrasts, regimes, PU_CONDS, prefix)
         for regime in regimes:
             for m in means[regime]:
                 put(f"{prefix}-{regime}-{m}-measacc", means[regime][m]["clean"]["measurement_accuracy"]["mean"])
@@ -605,7 +624,7 @@ def paderborn():
                         put(f"{prefix}-{regime}-{m}-{cond_key(c)}-{short}",
                             float(np.mean([r["test"][c][metric] for r in res["runs"]
                                            if r["regime"] == regime and r["model"] == m])))
-        nets = [means[reg][m]["clean"]["macro_f1"]["mean"] for reg in regimes for m in models if m != "rf"]
+        nets = [means[reg][m]["clean"]["macro_f1"]["mean"] for reg in regimes for m in means[reg] if m not in CLASSICAL]
         put(f"{prefix}-nets-clean-min", min(nets))
         put(f"{prefix}-nets-clean-max", max(nets))
         all_rows = [r for reg in regimes for r in contrasts[reg]]
@@ -654,6 +673,10 @@ def paderborn_sanity():
         c = (s or {}).get("chance", {}).get(p)
         put(f"pu-chance-{p.replace('_', '')}-f1", c["random_macro_f1"] if c else TBD)
         put(f"pu-chance-{p.replace('_', '')}-majority", c["majority_measurement_accuracy"] if c else TBD)
+    # how far the best network lies above random guessing on clean data, over both protocols
+    above = [float(NUM[f"pu-{p}-nets-clean-max"]) - float(NUM[f"pu-chance-{p}-f1"]) for p in ("realcv", "a2r")
+             if NUM.get(f"pu-{p}-nets-clean-max", TBD) != TBD and NUM.get(f"pu-chance-{p}-f1", TBD) != TBD]
+    put("pu-nets-above-chance-max", max(above) if above else TBD, "{:.0f}")
     for key in ("leaky", "disjoint"):
         for stat in ("macro_f1_mean", "macro_f1_min", "macro_f1_max", "measurement_accuracy_mean",
                      "measurement_accuracy_min", "measurement_accuracy_max"):
@@ -809,7 +832,7 @@ def band_limit_headline(bench, rob):
     worse = sum(r["p_holm"] < 0.05 and r["delta"] < 0 for r in sub)
     out["p2-dual-pac"] = (f"{better} / {worse}", False, (better, worse))
     means = s["means"]["mixed"]
-    nets = [m for m in means if m not in ("rf", "kin")]
+    nets = [m for m in means if m not in CLASSICAL + ADDED]  # the same ten models in both variants
     for key, metric in (("p2-nets-f1", "macro_f1"), ("p2-nets-faultf1", "fault_f1")):
         v = [means[m]["clean"][metric]["mean"] for m in nets]
         out[key] = (f"{min(v):.1f}--{max(v):.1f}", False, (min(v), max(v)))
