@@ -6,6 +6,7 @@ numpy==2.3.5
 scipy==1.17.1
 scikit-learn==1.8.0
 torch==2.9.0
+torchvision==0.24.0
 matplotlib==3.10.8
 seaborn==0.13.2
 onnx==1.22.0

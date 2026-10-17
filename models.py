@@ -81,6 +81,43 @@ class WideKernelCNN(nn.Module):
         return logits, None, None
 
 
+class SpectrogramResNet(nn.Module):
+    """
+    ResNet-18 pre-trained on ImageNet (torchvision weights IMAGENET1K_V1), applied to spectrograms,
+    following Hendriks et al. (MSSP 169:108732, 2022), who found such a network the strongest of
+    those they compared on CWRU once defect sizes were held out. Each sensor channel becomes one
+    image channel: log-magnitude short-time Fourier transform (Hann window of n_fft samples, hop
+    L / image_size), standardised per window and channel, resized to image_size x image_size. As in
+    their implementation, a learned 5x5 convolution maps the sensor channels to the three inputs
+    the pre-trained network expects; its last layer is replaced for K classes and all layers are
+    trained. Differences: 1024/2048-sample windows instead of their 11,500-sample segments, and a
+    128-pixel instead of a 224-pixel image.
+    """
+    def __init__(self, in_channels=2, num_classes=4, n_fft=128, image_size=128, pretrained=True):
+        super(SpectrogramResNet, self).__init__()
+        from torchvision.models import resnet18, ResNet18_Weights
+        self.n_fft, self.image_size = n_fft, image_size
+        self.register_buffer("window", torch.hann_window(n_fft))
+        self.to_rgb = nn.Conv2d(in_channels, 3, kernel_size=5, padding=2)
+        self.net = resnet18(weights=ResNet18_Weights.IMAGENET1K_V1 if pretrained else None)
+        self.net.fc = nn.Linear(self.net.fc.in_features, num_classes)
+        self.register_buffer("temperature", torch.ones(1))
+
+    def spectrogram(self, x):
+        b, c, length = x.shape
+        spec = torch.stft(x.reshape(b * c, length), self.n_fft, hop_length=max(1, length // self.image_size),
+                          window=self.window, return_complex=True)
+        spec = torch.log1p(spec.abs()).reshape(b, c, *spec.shape[-2:])
+        spec = (spec - spec.mean(dim=(-2, -1), keepdim=True)) / (spec.std(dim=(-2, -1), keepdim=True) + 1e-6)
+        return F.interpolate(spec, size=(self.image_size, self.image_size), mode="bilinear", align_corners=False)
+
+    def forward(self, x, return_calibrated=True):
+        logits = self.net(self.to_rgb(self.spectrogram(x)))
+        if return_calibrated:
+            logits = logits / self.temperature.clamp(min=1e-3)
+        return logits, None, None
+
+
 # -------------------------------------------------------------
 # 2. PAC-1DCNN: residual front end, dual stream, attention, temperature
 # -------------------------------------------------------------
