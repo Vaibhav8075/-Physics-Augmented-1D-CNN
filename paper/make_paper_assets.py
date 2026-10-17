@@ -772,7 +772,8 @@ def band_limit_headline(bench, rob):
     vals = lolo_vals(bench["runs"])
     tests = {(m, s): (d, wins, n, pa) for m, s, d, wins, n, p, pa in lolo_tests(vals)}
     out = {}
-    for key, model, snr, flip in (("p1-pac-cnn-0dB", "baseline", "0dB", False),
+    for key, model, snr, flip in (("p1-pac-cnn-5dB", "baseline", "5dB", False),
+                                  ("p1-pac-cnn-0dB", "baseline", "0dB", False),
                                   ("p1-pac-pachp-0dB", "no_residual", "0dB", False),
                                   ("p1-dual-pac-0dB", "no_dual", "0dB", True),
                                   ("p1-dual-pac--5dB", "no_dual", "-5dB", True)):
@@ -816,21 +817,22 @@ def band_limit_headline(bench, rob):
 
 
 SENSITIVITY_ROWS = [
+    ("p1-pac-cnn-5dB", "P1, 5\\,dB: PAC $-$ CNN"),
     ("p1-pac-cnn-0dB", "P1, 0\\,dB: PAC $-$ CNN"),
-    ("p1-pac-pachp-0dB", "P1, 0\\,dB: PAC $-$ (PAC$-$HP)"),
+    ("p1-pac-pachp-0dB", "P1, 0\\,dB: PAC $-$ PAC$-$HP"),
     ("p1-dual-pac-0dB", "P1, 0\\,dB: PAC$-$dual $-$ PAC"),
     ("p1-dual-pac--5dB", "P1, $-5$\\,dB: PAC$-$dual $-$ PAC"),
     ("p1-nsig", "P1: significant contrasts"),
-    ("p2-filter-nsig", "P2: significant front-end contrasts"),
-    ("p2-hp-cnn-lowpass0dB", "P2, LP\\,0: CNN+HP $-$ CNN (LP, mixed)"),
-    ("p2-hp-cnn-white0dB", "P2, W\\,0: CNN+HP $-$ CNN (LP, mixed)"),
-    ("p2-hp-cnn-highpass0dB", "P2, HP\\,0: CNN+HP $-$ CNN (LP, mixed)"),
+    ("p2-filter-nsig", "P2: sig.\\ front-end contrasts"),
+    ("p2-hp-cnn-lowpass0dB", "P2, LP\\,0: CNN+HP $-$ CNN"),
+    ("p2-hp-cnn-white0dB", "P2, W\\,0: CNN+HP $-$ CNN"),
+    ("p2-hp-cnn-highpass0dB", "P2, HP\\,0: CNN+HP $-$ CNN"),
     ("p2-pac-cnn", "P2: PAC vs CNN significant"),
-    ("p2-wdcnn-pac", "P2: WDCNN-s significantly better"),
-    ("p2-rf-pac", "P2: Env-RF significantly better"),
-    ("p2-dual-pac", "P2: PAC$-$dual sig.\\ better / worse"),
+    ("p2-wdcnn-pac", "P2: WDCNN-s sig.\\ better"),
+    ("p2-rf-pac", "P2: Env-RF sig.\\ better"),
+    ("p2-dual-pac", "P2: PAC$-$dual sig.\\ better/worse"),
     ("p2-nets-f1", "P2: networks, clean macro-F1"),
-    ("p2-nets-faultf1", "P2: networks, clean fault-class F1"),
+    ("p2-nets-faultf1", "P2: networks, clean fault-F1"),
 ]
 
 
