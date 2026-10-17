@@ -22,8 +22,20 @@ NATIVE_FS_HZ = {"097": 48000, "098": 48000, "099": 48000, "100": 48000}
 # Every recording is therefore low-passed to a common band limit (same filter family, zero phase).
 # With the passband edge at 3.6 kHz (config.BAND_LIMIT_HZ) it attenuates all of them by 47 dB at
 # 4.0 kHz, 73 dB at the ~4.2 kHz interference line and over 140 dB above 4.8 kHz.
-BAND_LIMIT_SOS = scipy.signal.cheby1(8, 0.05, config.BAND_LIMIT_HZ / (config.SAMPLING_RATE_HZ / 2),
-                                     output="sos")
+def band_limit_sos(variant=config.CWRU_VARIANT):
+    """
+    Second-order sections of the common CWRU low-pass. The "sharp" variant (a sensitivity check,
+    see config.CWRU_VARIANT) is an elliptic filter (order 11, 0.05 dB ripple, 60 dB per pass): after
+    the zero-phase double pass it is within 0.1 dB to 3.9 kHz and at least 120 dB down from 4.0 kHz.
+    """
+    if variant == "sharp":
+        order, edge = scipy.signal.ellipord(config.SHARP_PASS_HZ, config.SHARP_STOP_HZ, 0.05, 60,
+                                            fs=config.SAMPLING_RATE_HZ)
+        return scipy.signal.ellip(order, 0.05, 60, edge, fs=config.SAMPLING_RATE_HZ, output="sos")
+    return scipy.signal.cheby1(8, 0.05, config.BAND_LIMIT_HZ / (config.SAMPLING_RATE_HZ / 2), output="sos")
+
+
+BAND_LIMIT_SOS = band_limit_sos()
 
 
 def parse_filename(filename):
